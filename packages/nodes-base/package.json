@@ -16,9 +16,8 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "dev": "npm run watch",
-    "build": "node scripts/build.mjs && gulp build:icons build:translations && tsc nodes/**/*.ts --emitDeclarationOnly --declaration --outDir dist/nodes",
-    "build:mkdist": "unbuild",
-    "build:old": "tsc && gulp build:icons && gulp build:translations",
+    "build": "node scripts/build.mjs && gulp build:icons build:translations && npm run build:dts",
+    "build:dts": "tsc src/*.ts --emitDeclarationOnly --declaration --outDir dist/src",
     "build:translations": "gulp build:translations",
     "format": "cd ../.. && node_modules/prettier/bin-prettier.js packages/nodes-base/**/**.ts --write",
     "lint": "tslint -p tsconfig.json -c tslint.json",
