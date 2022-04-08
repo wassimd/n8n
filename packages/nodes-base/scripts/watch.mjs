@@ -7,8 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const listener = (event, path) => {
-	console.log(event, path);
-	// shell.exec('npm run build');
+	shell.exec('npm run build:esbuild');
 }
 
 chokidar.watch([

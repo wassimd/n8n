@@ -193,7 +193,7 @@ export class LocalFileTrigger implements INodeType {
 		}
 
 		const watcher = watch(path, {
-			ignored: options.ignored as undefined,
+			ignored: options.ignored,
 			persistent: true,
 			ignoreInitial: true,
 			followSymlinks: options.followSymlinks === undefined ? true : options.followSymlinks as boolean,
