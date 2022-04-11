@@ -1,5 +1,10 @@
 <template>
-	<div :class="{[$style['node-item']]: true, [$style.bordered]: bordered}">
+	<div
+		draggable
+		@dragstart="onDragStart"
+		@dragend="onDragEnd"
+		:class="{[$style['node-item']]: true, [$style.bordered]: bordered}"
+	>
 		<NodeIcon :class="$style['node-icon']" :nodeType="nodeType" />
 		<div>
 			<div :class="$style.details">
@@ -47,6 +52,23 @@ export default Vue.extend({
 	computed: {
 		shortNodeType() {
 			return this.$locale.shortNodeType(this.nodeType.name);
+		},
+	},
+	methods: {
+		onDragStart(event: DragEvent) {
+			this.$emit('dragstart', event);
+
+			const placeholder = document.createElement('div');
+			placeholder.innerText = 'DRAG MEEEE';
+			placeholder.style.position = "absolute";
+			document.body.appendChild(placeholder);
+
+			console.log(this.nodeType);
+
+			event.dataTransfer!.setDragImage(placeholder, 0, 0);
+		},
+		onDragEnd(event: Event) {
+			this.$emit('dragend', event);
 		},
 	},
 	// @ts-ignore
