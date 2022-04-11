@@ -16,7 +16,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "dev": "npm run watch",
-    "build": "npm-run-all build:esbuild build:assets build:dts",
+    "build": "npm-run-all --parallel build:esbuild build:assets build:dts",
     "build:esbuild": "node scripts/build.mjs",
     "build:assets": "gulp build:assets build:translations",
     "build:dts": "tsc --project tsconfig.build.json",
