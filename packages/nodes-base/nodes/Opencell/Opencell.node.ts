@@ -1,5 +1,8 @@
 import {
     IExecuteFunctions,
+		IExecuteSingleFunctions,
+		IHookFunctions,
+		ILoadOptionsFunctions,
 } from 'n8n-core';
 
 import {
@@ -7,12 +10,37 @@ import {
     INodeExecutionData,
     INodeType,
     INodeTypeDescription,
+		IHttpRequestOptions,
 } from 'n8n-workflow';
 
 import {
     OptionsWithUri,
 } from 'request';
 
+
+async function hubspotApiRequest(this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: string, endpoint: string, body: any = {}, query: IDataObject = {}, uri?: string): Promise<any> { // tslint:disable-line:no-any
+	let authenticationMethod = this.getNodeParameter('authentication', 0);
+
+	const options: OptionsWithUri = {
+		method,
+		qs: query,
+		headers: {},
+		uri: uri || `https://wda.d2.opencell.work/opencell`,
+		body,
+		json: true,
+		useQuerystring: true,
+	};
+
+	if (authenticationMethod === 'opencellApi'){
+		const credentials = await this.getCredentials('hubspotApi');
+		options.headers!['Authorization'] = `Basic ${credentials!.username}:${credentials!.password}`;
+	  options.uri = credentials!.host + ':' + credentials!.port+'/opencell';
+
+	}
+
+	return await this.helpers.request!(options);
+
+}
 export class Opencell implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'Opencell',
@@ -31,6 +59,15 @@ export class Opencell implements INodeType {
 					{
 						name: 'opencellApi',
 						required: true,
+						/*
+						displayOptions: {
+							show: {
+								authentication: [
+									'basicAuth',
+								],
+							},
+						},
+						*/
 					},
         ],
         properties: [
@@ -121,26 +158,19 @@ export class Opencell implements INodeType {
         ],
     };
 
-    async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
+		async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 			const items = this.getInputData();
 			let responseData;
 			const returnData = [];
 			const resource = this.getNodeParameter('resource', 0) as string;
 			const operation = this.getNodeParameter('operation', 0) as string;
 			//Get credentials the user provided for this node
-			const credentials = await this.getCredentials('opencellApi') as IDataObject;
+			const credentials = await this.getCredentials('opencellApi') ;
 
 			let url : string ;
 			for (let i = 0; i < items.length; i++) {
 										// Add credentials if any are set
 						// here we use basic auth
-			if (credentials !== undefined) {
-				requestOptions.auth = {
-					user: credentials.user as string,
-					pass: credentials.password as string,
-				};
-				url = credentials.host + ':' + credentials.port;
-			}
 
 				if (resource === 'contact') {
 					if (operation === 'create') {
@@ -160,10 +190,10 @@ export class Opencell implements INodeType {
 
 
 						//Make http request according to <https://sendgrid.com/docs/api-reference/>
-						const options: OptionsWithUri = {
+						const options: IHttpRequestOptions = {
 							headers: {
 								'Accept': 'application/json',
-								'Authorization': `Bearer ${credentials.username}`,
+								'Authorization': `Bearer ${credentials!.username}:${credentials!.password}`,
 							},
 							method: 'PUT',
 							body: {
@@ -171,11 +201,15 @@ export class Opencell implements INodeType {
 									data,
 								],
 							},
-							uri: `https://webhook.site/5dad15c6-d075-4144-bac6-6e234ef7481c`,
+							url: `https://webhook.site/319a03d1-5b87-4b28-bbe4-50a568458d32`,
 							json: true,
+							auth: {
+								username:credentials!.username as string,
+								password:credentials!.password as string,
+							}
 						};
 
-						responseData = await this.helpers.request(options);
+						responseData = await this.helpers.httpRequest(options);
 						returnData.push(responseData);
 					}
 				}
