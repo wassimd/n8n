@@ -17,8 +17,14 @@ import {
     OptionsWithUri,
 } from 'request';
 
+import {
+	customerHierarchyFields,
+	customerHierarchyOperations,
 
-async function hubspotApiRequest(this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: string, endpoint: string, body: any = {}, query: IDataObject = {}, uri?: string): Promise<any> { // tslint:disable-line:no-any
+} from './CustomerHierarchyDescription'
+
+
+async function opencellApiRequest(this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: string, endpoint: string, body: any = {}, query: IDataObject = {}, uri?: string): Promise<any> { // tslint:disable-line:no-any
 	let authenticationMethod = this.getNodeParameter('authentication', 0);
 
 	const options: OptionsWithUri = {
@@ -80,8 +86,12 @@ export class Opencell implements INodeType {
 								name: 'Contact',
 								value: 'contact',
 							},
+							{
+								name:'Customer Hierarchy',
+								value:'customerHierarchy',
+							},
 						],
-						default: 'contact',
+						default: 'customerHierarchy',
 						required: true,
 						description: 'Resource to consume',
 					},
@@ -155,6 +165,9 @@ export class Opencell implements INodeType {
 							},
 						],
 					},
+					// CUSTOMER HIERARCHY
+					...customerHierarchyOperations,
+					...customerHierarchyFields,
         ],
     };
 
@@ -165,9 +178,28 @@ export class Opencell implements INodeType {
 			const resource = this.getNodeParameter('resource', 0) as string;
 			const operation = this.getNodeParameter('operation', 0) as string;
 			//Get credentials the user provided for this node
-			const credentials = await this.getCredentials('opencellApi') ;
+			const httpBasicAuth = await this.getCredentials('opencellApi') ;
 
 			let url : string ;
+			let requestOptions: IHttpRequestOptions;
+
+			requestOptions = {
+				headers: {
+								'Accept': 'application/json',
+				},
+				url: '',
+				encoding: 'json',
+				json: true,
+			};
+
+			if (httpBasicAuth !== undefined) {
+				requestOptions.auth = {
+					username: httpBasicAuth.user as string,
+					password: httpBasicAuth.password as string,
+				};
+			}
+
+
 			for (let i = 0; i < items.length; i++) {
 										// Add credentials if any are set
 						// here we use basic auth
@@ -177,9 +209,6 @@ export class Opencell implements INodeType {
 						// get email input
 						const email = this.getNodeParameter('email', i) as string;
 
-						// i = 1 returns ricardo@n8n.io
-						// i = 2 returns hello@n8n.io
-
 						// get additional fields input
 						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
 						const data: IDataObject = {
@@ -188,26 +217,14 @@ export class Opencell implements INodeType {
 
 						Object.assign(data, additionalFields);
 
-
-						//Make http request according to <https://sendgrid.com/docs/api-reference/>
-						const options: IHttpRequestOptions = {
-							headers: {
-								'Accept': 'application/json',
-								'Authorization': `Bearer ${credentials!.username}:${credentials!.password}`,
-							},
-							method: 'PUT',
-							body: {
-								contacts: [
-									data,
-								],
-							},
-							url: `https://webhook.site/319a03d1-5b87-4b28-bbe4-50a568458d32`,
-							json: true,
-							auth: {
-								username:credentials!.username as string,
-								password:credentials!.password as string,
-							}
+						let options = requestOptions;
+						options.method = 'PUT';
+						options.body = {
+							contacts: [
+								data,
+							],
 						};
+						options.url = `https://webhook.site/319a03d1-5b87-4b28-bbe4-50a568458d32`;
 
 						responseData = await this.helpers.httpRequest(options);
 						returnData.push(responseData);
