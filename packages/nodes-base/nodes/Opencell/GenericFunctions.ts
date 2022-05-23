@@ -126,8 +126,9 @@ export async function opencellApi(this: IHookFunctions | IExecuteFunctions | IEx
 		requestOptions.qs = query;
 	}
 	let responseData = await this.helpers.httpRequest(requestOptions);
+
 	// To return an array when it is a generic API get list
-	if('POST' === method && Object.keys(responseData['data']).length){
+	if('POST' === method && responseData['data']){
 		returnData.push.apply(returnData, responseData['data']);
 		return returnData;
 	}
