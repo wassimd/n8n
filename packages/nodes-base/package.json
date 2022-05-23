@@ -331,6 +331,7 @@
     ],
     "nodes": [
       "dist/nodes/Opencell/Opencell.node.js",
+      "dist/nodes/Opencell/OpencellTrigger.node.js",
       "dist/nodes/ActionNetwork/ActionNetwork.node.js",
       "dist/nodes/ActiveCampaign/ActiveCampaign.node.js",
       "dist/nodes/ActiveCampaign/ActiveCampaignTrigger.node.js",

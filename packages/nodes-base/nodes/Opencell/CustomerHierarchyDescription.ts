@@ -153,8 +153,12 @@ export const customerHierarchyFields: INodeProperties[] = [
 			{
 				displayName: 'Title',
 				name: 'title',
-				type: 'string',
+				type: 'options',
 				default: '',
+				typeOptions: {
+					loadOptionsMethod: 'getTitles',
+				},
+				description: `Choose the title/civility of the customer.`,
 			},
 			{
 				displayName: 'First Name',
@@ -170,7 +174,6 @@ export const customerHierarchyFields: INodeProperties[] = [
 			},
 		],
 	},
-
 	{
 		displayName: 'Address',
 		name: 'address',
@@ -214,7 +217,6 @@ export const customerHierarchyFields: INodeProperties[] = [
 			},
 		],
 	},
-
 	{
 		displayName: 'Contact Information',
 		name: 'contactInformation',
@@ -267,7 +269,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 	},
 	{
 		displayName: 'paymentMethod',
-		name: 'email',
+		name: 'paymentMethod',
 		type: 'string',
 		default: '',
 	},
@@ -283,25 +285,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 		type: 'string',
 		default: '',
 	},
-	{
-		displayName: 'Billing Cycle',
-		name: 'billingCycle',
-		type: 'string',
-		default: '',
-	},
-	{
-		displayName: 'VAT Number',
-		name: 'vatNo',
-		type: 'string',
-		default: '',
-	},
-	{
-		displayName: 'Electronic Billing',
-		name: 'electronicBilling',
-		type: 'boolean',
-		default: '',
-	},
-	{
+/*	{
 		displayName: 'Metadata',
 		name: 'metadataUi',
 		placeholder: 'Add Metadata',
@@ -367,6 +351,43 @@ export const customerHierarchyFields: INodeProperties[] = [
 				default: ''
 			},
 
+		],
+	},*/
+	{
+		displayName: 'Additional Fields',
+		name: 'additionalFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
+		displayOptions: {
+			show: {
+				resource: [
+					'customerHierarchy',
+				],
+				operation: [
+					'upsert',
+				],
+			},
+		},
+		options: [
+			{
+				displayName: 'Billing Cycle',
+				name: 'billingCycle',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'VAT Number',
+				name: 'vatNo',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Electronic Billing',
+				name: 'electronicBilling',
+				type: 'boolean',
+				default: '',
+			},
 		],
 	},
 ];
