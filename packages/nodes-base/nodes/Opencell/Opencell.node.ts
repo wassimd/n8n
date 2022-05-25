@@ -25,72 +25,14 @@ import {
 } from 'request';
 
 import {
+	opencellApi,
+} from './GenericFunctions';
+
+import {
 	customerHierarchyFields,
 	customerHierarchyOperations,
 
 } from './CustomerHierarchyDescription'
-
-
-async function opencellApiRequest(this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, requestOptions: IHttpRequestOptions, method: IHttpRequestMethods, endpoint: string, body: any = {}, query: IDataObject = {}, uri?: string): Promise<any> { // tslint:disable-line:no-any
-	//let authenticationMethod = this.getNodeParameter('authentication', 0);
-
-	const options = requestOptions;
-
-	if (endpoint != '') {
-		options.url += endpoint;
-	}
-	options.method = method;
-	options.body = body;
-	if (query) {
-		options.qs = query;
-	}
-	/*
-		if (authenticationMethod === 'opencellApi'){
-			const credentials = await this.getCredentials('hubspotApi');
-			options.headers!['Authorization'] = `Basic ${credentials!.username}:${credentials!.password}`;
-			options.uri = credentials!.host + ':' + credentials!.port+'/opencell';
-
-		}
-	*/
-	return await this.helpers.httpRequest(options);
-
-}
-
-async function opencellApiGetAllItems(this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: IHttpRequestMethods, endpoint: string, body: any = {}, query: IDataObject = {}, uri?: string): Promise<any> { // tslint:disable-line:no-any
-	//let authenticationMethod = this.getNodeParameter('authentication', 0);
-	const returnData: IDataObject[] = [];
-	const httpBasicAuth = await this.getCredentials('opencellApi');
-	const requestOptions: IHttpRequestOptions = {
-		headers: {
-			'Accept': 'application/json',
-		},
-		url: '',
-		encoding: 'json',
-		json: true,
-	};
-
-	if (httpBasicAuth !== undefined) {
-		requestOptions.auth = {
-			username: httpBasicAuth.username as string,
-			password: httpBasicAuth.password as string,
-		};
-		requestOptions.url = `${httpBasicAuth.host}:${httpBasicAuth.port}`;
-	}
-
-	if (endpoint != '') {
-		requestOptions.url += endpoint;
-	}
-	requestOptions.method = method;
-	//if (body && body.length > 0) {
-	requestOptions.body = body;
-	//}
-	if (query) {
-		requestOptions.qs = query;
-	}
-	let responseData = await this.helpers.httpRequest(requestOptions);
-	returnData.push.apply(returnData, responseData['data']);
-	return returnData;
-}
 
 async function validateCredentials(this: ICredentialTestFunctions, decryptedCredentials: ICredentialDataDecryptedObject): Promise<any> { // tslint:disable-line:no-any
 	const credentials = decryptedCredentials;
@@ -110,14 +52,8 @@ async function validateCredentials(this: ICredentialTestFunctions, decryptedCred
 		};
 		requestOptions.url = `${credentials.host}:${credentials.port}`;
 	}
-
-
 	requestOptions.url += '/opencell/api/rest/catalog/version';
-
 	requestOptions.method = 'GET';
-	//if (body && body.length > 0) {
-	//requestOptions.body = body;
-	//}
 
 	let responseData = await this.helpers.httpRequest(requestOptions);
 	return responseData;
@@ -273,7 +209,7 @@ export class Opencell implements INodeType {
 			async getTitles(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const returnData: INodePropertyOptions[] = [];
 				const endpoint = '/opencell/api/rest/v2/generic/all/title';
-				const titles = await opencellApiGetAllItems.call(this, 'POST', endpoint, {});
+				const titles = await opencellApi.call(this, 'POST', endpoint, {});
 				for (const title of titles) {
 					//const contactName = `${contact.properties.firstname.value} ${contact.properties.lastname.value}`;
 					const titleId = title.id;
@@ -293,28 +229,6 @@ export class Opencell implements INodeType {
 		const returnData = [];
 		const resource = this.getNodeParameter('resource', 0) as string;
 		const operation = this.getNodeParameter('operation', 0) as string;
-		//Get credentials the user provided for this node
-		const httpBasicAuth = await this.getCredentials('opencellApi');
-
-		let url: string;
-		let requestOptions: IHttpRequestOptions;
-
-		requestOptions = {
-			headers: {
-				'Accept': 'application/json',
-			},
-			url: '',
-			encoding: 'json',
-			json: true,
-		};
-
-		if (httpBasicAuth !== undefined) {
-			requestOptions.auth = {
-				username: httpBasicAuth.user as string,
-				password: httpBasicAuth.password as string,
-			};
-		}
-
 
 		for (let i = 0; i < items.length; i++) {
 			// Add credentials if any are set
@@ -322,41 +236,20 @@ export class Opencell implements INodeType {
 
 			if (resource === 'contact') {
 				if (operation === 'create') {
-					// get email input
-					const email = this.getNodeParameter('email', i) as string;
 
-					// get additional fields input
-					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-					const data: IDataObject = {
-						email,
-					};
-
-					Object.assign(data, additionalFields);
-
-					let options = requestOptions;
-					options.method = 'PUT';
-					options.body = {
-						contacts: [
-							data,
-						],
-					};
-					options.url = `https://webhook.site/319a03d1-5b87-4b28-bbe4-50a568458d32`;
-
-					responseData = await this.helpers.httpRequest(options);
-					returnData.push(responseData);
 				}
 			}
 			else if (resource === 'customerHierarchy') {
 				if (operation === 'upsert') {
 
-					const url = `https://webhook.site/319a03d1-5b87-4b28-bbe4-50a568458d32`;
+					const url = `/opencell/api/rest/account/accountHierarchy/createOrUpdateCRMAccountHierarchy`;
 
 					const crmAccountType = this.getNodeParameter('crmAccountType', i) as string;
 					const crmParentCode = this.getNodeParameter('crmParentCode', i) as string;
-					const code = this.getNodeParameter('code', i) as string;
 					let body: any = {};
 					body.crmAccountType = crmAccountType as string;
 					body.crmParentCode = crmParentCode as string;
+					body.code = this.getNodeParameter('code', i) as string;
 					body.name = this.getNodeParameter('name', i);
 					body.address = this.getNodeParameter('address', i);
 					body.contactInformation = this.getNodeParameter('contactInformation', i);
@@ -390,12 +283,12 @@ export class Opencell implements INodeType {
 						body.electronicBilling = additionalFields.electronicBilling;
 					}
 
-					responseData = await opencellApiRequest.call(this, requestOptions, 'POST', url, body);
+					responseData = await opencellApi.call(this, 'POST', url, body);
+					returnData.push(responseData);
 				}
 			}
 		}
 
-		console.log(returnData);
 		// Map data to n8n data structure
 		return [this.helpers.returnJsonArray(returnData)];
 	}

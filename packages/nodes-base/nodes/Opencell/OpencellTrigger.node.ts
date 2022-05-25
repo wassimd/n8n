@@ -12,7 +12,6 @@ import {
 
 
 import {
-	opencellGenericApi,
 	opencellApi,
 } from './GenericFunctions';
 
@@ -108,7 +107,7 @@ export class OpencellTrigger implements INodeType {
 				};
 				//const { hooks: webhooks } = await opencellApi.call(this, 'GET', '/hooks');
 				// A voir si cette partie est nécessaire ou pas
-				const webhooks = await opencellGenericApi.call(this, 'POST', '/opencell/api/rest/v2/generic/all/webhook',body);
+				const webhooks = await opencellApi.call(this, 'POST', '/opencell/api/rest/v2/generic/all/webhook',body);
 				for (const webhook of webhooks) {
 					/*if (webhook.target_url === webhookUrl && webhook.event === snakeCase(entity)) {
 						webhookData.webhookId = webhook.hook_id;
@@ -180,7 +179,7 @@ export class OpencellTrigger implements INodeType {
 						code: webhookData.code as string,
 					},
 				};
-				const webhooks = await opencellGenericApi.call(this, 'POST', '/opencell/api/rest/v2/generic/all/webhook',body2);
+				const webhooks = await opencellApi.call(this, 'POST', '/opencell/api/rest/v2/generic/all/webhook',body2);
 				if(webhooks.length == 1){
 					console.log("webhooks.length == 1");
 					webhookData.id = webhooks[0].id;
