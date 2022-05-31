@@ -1,7 +1,5 @@
 import {
 	IExecuteFunctions,
-	IExecuteSingleFunctions,
-	IHookFunctions,
 	ILoadOptionsFunctions,
 } from 'n8n-core';
 
@@ -11,7 +9,6 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	IHttpRequestOptions,
-	IHttpRequestMethods,
 	ICredentialsDecrypted,
 	ICredentialTestFunctions,
 	INodePropertyOptions,
@@ -19,10 +16,6 @@ import {
 	ICredentialDataDecryptedObject,
 	JsonObject,
 } from 'n8n-workflow';
-
-import {
-	OptionsWithUri,
-} from 'request';
 
 import {
 	opencellApi,
@@ -33,6 +26,12 @@ import {
 	customerHierarchyOperations,
 
 } from './CustomerHierarchyDescription'
+
+import {
+	genericApiFields,
+	genericApiOperations,
+} from './GenericApiComponent'
+import { incidentNoteOperations } from '../PagerDuty/IncidentNoteDescription';
 
 async function validateCredentials(this: ICredentialTestFunctions, decryptedCredentials: ICredentialDataDecryptedObject): Promise<any> { // tslint:disable-line:no-any
 	const credentials = decryptedCredentials;
@@ -101,6 +100,10 @@ export class Opencell implements INodeType {
 					{
 						name: 'Customer Hierarchy',
 						value: 'customerHierarchy',
+					},
+					{
+						name: 'Generic API',
+						value: 'genericApi',
 					},
 				],
 				default: 'customerHierarchy',
@@ -180,6 +183,9 @@ export class Opencell implements INodeType {
 			// CUSTOMER HIERARCHY
 			...customerHierarchyOperations,
 			...customerHierarchyFields,
+			// GENERIC API
+			...genericApiOperations,
+			...genericApiFields,
 		],
 	};
 
@@ -219,6 +225,42 @@ export class Opencell implements INodeType {
 					});
 				}
 				return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
+			},
+			async getEntities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const returnData: INodePropertyOptions[] = [];
+				const endpoint = '/opencell/api/rest/v2/generic/entities';
+				const response = await opencellApi.call(this, 'GET', endpoint, {});
+				for (const entity of response.entities) {
+					//const contactName = `${contact.properties.firstname.value} ${contact.properties.lastname.value}`;
+					returnData.push({
+						name: entity,
+						value: entity,
+					});
+				}
+				return returnData.sort((a, b) => a < b ? 0 : 1);
+			},
+			async getNestedEntities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const returnData: INodePropertyOptions[] = [];
+				const entity = this.getNodeParameter('entity') as string;
+				const endpoint = `/opencell/api/rest/v2/generic/entities/${entity}`;
+				const response = await opencellApi.call(this, 'GET', endpoint, {});
+				for (let key of Object.keys(response)) {
+					let attribute = response[key];
+					if(attribute.isEntity == "true"){
+						returnData.push({
+							 		name: key,//attribute.shortTypeName,
+							 		value: key,
+							});
+					}
+				}
+				// for (const entity of response.entities) {
+				// 	//const contactName = `${contact.properties.firstname.value} ${contact.properties.lastname.value}`;
+				// 	returnData.push({
+				// 		name: entity,
+				// 		value: entity,
+				// 	});
+				// }
+				return returnData.sort((a, b) => a < b ? 0 : 1);
 			},
 		},
 	};
@@ -284,6 +326,25 @@ export class Opencell implements INodeType {
 					}
 
 					responseData = await opencellApi.call(this, 'POST', url, body);
+					returnData.push(responseData);
+				}
+			}
+
+			else if(resource === 'genericApi'){
+				if (operation === 'get') {
+					const entity = this.getNodeParameter('entity', i) as string;
+					const entiyId = this.getNodeParameter('id', i) as number;
+					const url = `/opencell/api/rest/v2/generic/${entity}/${entiyId}`;
+
+					// Update body if nested entities are set
+					const nestedEntities = this.getNodeParameter('nestedEntities', i) as string[];
+					const body : IDataObject = {};
+					if(nestedEntities.length > 0){
+						body.nestedEntities = nestedEntities;
+					}
+					console.log(body);
+					responseData = await opencellApi.call(this, 'POST', url, body);
+					//console.log(responseData);
 					returnData.push(responseData);
 				}
 			}

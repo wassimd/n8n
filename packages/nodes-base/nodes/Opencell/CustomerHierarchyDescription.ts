@@ -254,36 +254,96 @@ export const customerHierarchyFields: INodeProperties[] = [
 		name: 'email',
 		type: 'string',
 		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'customerHierarchy',
+				],
+				operation: [
+					'upsert',
+				],
+			},
+		},
 	},
 	{
 		displayName: 'Language',
 		name: 'language',
 		type: 'string',
 		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'customerHierarchy',
+				],
+				operation: [
+					'upsert',
+				],
+			},
+		},
 	},
 	{
 		displayName: 'Country',
 		name: 'country',
 		type: 'string',
 		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'customerHierarchy',
+				],
+				operation: [
+					'upsert',
+				],
+			},
+		},
 	},
 	{
 		displayName: 'paymentMethod',
 		name: 'paymentMethod',
 		type: 'string',
 		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'customerHierarchy',
+				],
+				operation: [
+					'upsert',
+				],
+			},
+		},
 	},
 	{
 		displayName: 'Customer Category',
 		name: 'customerCategory',
 		type: 'string',
 		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'customerHierarchy',
+				],
+				operation: [
+					'upsert',
+				],
+			},
+		},
 	},
 	{
 		displayName: 'Currency',
 		name: 'currency',
 		type: 'string',
 		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'customerHierarchy',
+				],
+				operation: [
+					'upsert',
+				],
+			},
+		},
 	},
 /*	{
 		displayName: 'Metadata',

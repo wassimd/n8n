@@ -49,14 +49,16 @@ export async function opencellApi(this: IHookFunctions | IWebhookFunctions | IEx
 	}
 	try {
 		let responseData = await this.helpers.httpRequest(requestOptions);
+		console.log(responseData);
 
 		// To return an array when it is a generic API get list
-		if ('POST' === method && responseData['data']) {
+		if ('POST' === method && responseData['data'] && responseData['data'].length != null) {
 			returnData.push.apply(returnData, responseData['data']);
 			return returnData;
 		}
 		return responseData;
 	} catch (error) {
+		console.log(error);
 		if (error.response) {
 			const errorMessage = error.response.data.message || error.response.data.errorCode || error.response.data.status;
 			throw new Error(`Opencell error response [${error.response.status}]: ${errorMessage}`);
