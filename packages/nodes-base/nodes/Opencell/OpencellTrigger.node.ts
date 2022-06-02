@@ -16,7 +16,7 @@ import {
 } from './GenericFunctions';
 
 import {
-	 snakeCase,
+	snakeCase,
 } from 'change-case';
 
 
@@ -85,7 +85,7 @@ export class OpencellTrigger implements INodeType {
 					},
 					{
 						name: 'Update',
-						value: 'Updated',
+						value: 'UPDATED',
 					},
 				],
 			},
@@ -100,24 +100,24 @@ export class OpencellTrigger implements INodeType {
 				const entity = this.getNodeParameter('entity') as string;
 				const eventType = this.getNodeParameter('eventType') as string;
 				const body: IDataObject = {
-					genericFields:["id","code"],
-					filters:{
+					genericFields: ["id", "code"],
+					filters: {
 						code: webhookData.code as string,
 					},
 				};
 				//const { hooks: webhooks } = await opencellApi.call(this, 'GET', '/hooks');
 				// A voir si cette partie est nécessaire ou pas
-				const webhooks = await opencellApi.call(this, 'POST', '/opencell/api/rest/v2/generic/all/webhook',body);
+				const webhooks = await opencellApi.call(this, 'POST', '/opencell/api/rest/v2/generic/all/webhook', body);
 				for (const webhook of webhooks) {
 					/*if (webhook.target_url === webhookUrl && webhook.event === snakeCase(entity)) {
 						webhookData.webhookId = webhook.hook_id;
 						return true;
 					}*/
-					if(webhookData.code === webhook.code){
+					if (webhookData.code === webhook.code) {
 						webhookData.id = webhook.id;
 						return true;
 					}
-					else if(webhookData.id === webhook.id){
+					else if (webhookData.id === webhook.id) {
 						console.log(">>>> webhookData.id === webhook.id");
 					}
 				}
@@ -130,18 +130,18 @@ export class OpencellTrigger implements INodeType {
 				const index = entity.lastIndexOf('.');
 				const eventType = this.getNodeParameter('eventType') as string;
 				let url;
-				if(webhookUrl){
+				if (webhookUrl) {
 					url = new URL(webhookUrl);
 				}
 				let port;
-				if(url?.port.length === 0){
+				if (url?.port.length === 0) {
 					port = url.port;
 				}
-				else{
-					if('HTTP' === url?.protocol.toUpperCase().slice(0, -1)){
+				else {
+					if ('HTTP' === url?.protocol.toUpperCase().slice(0, -1)) {
 						port = '80'
 					}
-					else if('HTTPS' === url?.protocol.toUpperCase().slice(0, -1)){
+					else if ('HTTPS' === url?.protocol.toUpperCase().slice(0, -1)) {
 						port = '443'
 					}
 					else {
@@ -151,14 +151,14 @@ export class OpencellTrigger implements INodeType {
 
 				const body: IDataObject = {
 					code: snakeCase(entity.substring(index) + eventType),
-					classNameFilter:entity,
+					classNameFilter: entity,
 					host: url?.hostname,
 					page: url?.pathname,
 					httpMethod: "HTTP_POST",
 					eventTypeFilter: eventType,
-					bodyEl:`{
-						'id':#{event.id},
-						'code':'#{event.code}'
+					bodyEl: `{
+						"id":#{event.id},
+						"code":"#{event.code}"
 					}`,
 					headers: {
 						"Content-Type": "application/json"
@@ -167,20 +167,20 @@ export class OpencellTrigger implements INodeType {
 					port: port,
 				};
 				const webhook = await opencellApi.call(this, 'POST', '/opencell/api/rest/notification/webhook/createOrUpdate', body);
-				if(webhook.status != 'SUCCESS'){
+				if (webhook.status != 'SUCCESS') {
 					console.log("ERROR CREATING A WEBHOOK")
 					return false;
 				}
 				webhookData.code = snakeCase(entity.substring(index) + eventType);
 				// GET ID and Code
 				const body2: IDataObject = {
-					genericFields:["id","code"],
-					filters:{
+					genericFields: ["id", "code"],
+					filters: {
 						code: webhookData.code as string,
 					},
 				};
-				const webhooks = await opencellApi.call(this, 'POST', '/opencell/api/rest/v2/generic/all/webhook',body2);
-				if(webhooks.length == 1){
+				const webhooks = await opencellApi.call(this, 'POST', '/opencell/api/rest/v2/generic/all/webhook', body2);
+				if (webhooks.length == 1) {
 					console.log("webhooks.length == 1");
 					webhookData.id = webhooks[0].id;
 				}
@@ -200,8 +200,11 @@ export class OpencellTrigger implements INodeType {
 	};
 
 	async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
+		const req = this.getRequestObject();
 		return {
-			workflowData: [],
+			workflowData: [
+				this.helpers.returnJsonArray(req.body),
+			],
 		};
 	}
 }
