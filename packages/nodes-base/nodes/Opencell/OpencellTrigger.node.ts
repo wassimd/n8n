@@ -70,6 +70,10 @@ export class OpencellTrigger implements INodeType {
 						name: 'Account Operation',
 						value: 'org.meveo.model.payments.AccountOperation',
 					},
+					{
+						name: 'Customer',
+						value: 'org.meveo.model.crm.Customer',
+					},
 				],
 			},
 			{
