@@ -48,7 +48,7 @@ async function validateCredentials(this: ICredentialTestFunctions ,decryptedCred
 			username: credentials.username as string,
 			password: credentials.password as string,
 		};
-		requestOptions.url = `${credentials.host}`; //`${credentials.host}:${credentials.port}`;
+		requestOptions.url = `${credentials.host}:${credentials.port}`;
 	} else {
 		throw 'Les credentials ne sont pas définis'
 	}
