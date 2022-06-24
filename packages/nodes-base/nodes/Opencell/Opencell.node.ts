@@ -77,7 +77,6 @@ export class Opencell implements INodeType {
 				name: 'opencellApi',
 				required: true,
 				testedBy: 'opencellApiTest',
-				/*
 				displayOptions: {
 					show: {
 						authentication: [
@@ -85,10 +84,37 @@ export class Opencell implements INodeType {
 						],
 					},
 				},
-			*/
+			},
+			{
+				name: 'opencellOAuth2Api',
+				required: true,
+				displayOptions: {
+					show: {
+						authentication: [
+							'oAuth2',
+						],
+					},
+				},
 			},
 		],
 		properties: [
+			{
+				displayName: 'Authentication',
+				name: 'authentication',
+				type: 'options',
+				options: [
+					{
+						name: 'Basic Authentication',
+						value: 'basicAuth',
+					},
+					{
+						name: 'OAuth2',
+						value: 'oAuth2',
+					},
+				],
+				default: 'basicAuth',
+				description: 'The method of authentication.',
+			},
 			{
 				displayName: 'Resource',
 				name: 'resource',
