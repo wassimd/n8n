@@ -159,7 +159,6 @@ export class Opencell implements INodeType {
 					},
 				],
 				default: 'create',
-				description: 'The operation to perform',
 			},
 			{
 				displayName: 'Email',

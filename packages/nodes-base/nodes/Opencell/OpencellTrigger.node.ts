@@ -116,7 +116,7 @@ export class OpencellTrigger implements INodeType {
 				name: 'eventType',
 				type: 'options',
 				default: 'CREATED',
-				description: `Choose the event class.`,
+				description: 'Choose the event class',
 				options: [
 					{
 						name: 'Create',

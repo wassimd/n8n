@@ -25,7 +25,7 @@ export const customerHierarchyOperations: INodeProperties[] = [
 			{
 				name: 'Create/Update',
 				value: 'upsert',
-				description: 'Create/Update a contact',
+				description: 'Create or Update a contact',
 			},
 			{
 				name: 'Delete',
@@ -54,7 +54,6 @@ export const customerHierarchyOperations: INodeProperties[] = [
 			},
 		],
 		default: 'upsert',
-		description: 'The operation to perform.',
 	},
 ];
 
@@ -96,7 +95,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 			// to complete
 		],
 		default: 'C_UA',
-		description: `Specify which form hierarchy would you create/update.`,
+		description: 'Specify which form hierarchy would you create/update',
 	},
 	{
 		displayName: 'Parent Code',
@@ -159,7 +158,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				typeOptions: {
 					loadOptionsMethod: 'getTitles',
 				},
-				description: `Choose the title/civility of the customer.`,
+				description: 'Choose the title/civility of the customer',
 			},
 			{
 				displayName: 'First Name',
@@ -365,14 +364,14 @@ export const customerHierarchyFields: INodeProperties[] = [
 						displayName: 'Name',
 						name: 'name',
 						type: 'string',
-						default: 'Name of the metadata key to add.',
+						default: 'Name of the metadata key to add',
 					},
 					{
 						displayName: 'Value',
 						name: 'value',
 						type: 'string',
 						default: '',
-						description: 'Value to set for the metadata key.',
+						description: 'Value to set for the metadata key',
 					},
 				],
 			},
