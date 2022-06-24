@@ -40,6 +40,24 @@ export class OpencellTrigger implements INodeType {
 				name: 'opencellApi',
 				required: true,
 				testedBy: 'opencellApiTest',
+				displayOptions: {
+					show: {
+						authentication: [
+							'basicAuth',
+						],
+					},
+				},
+			},
+			{
+				name: 'opencellOAuth2Api',
+				required: true,
+				displayOptions: {
+					show: {
+						authentication: [
+							'oAuth2',
+						],
+					},
+				},
 			},
 		],
 		webhooks: [
@@ -52,11 +70,28 @@ export class OpencellTrigger implements INodeType {
 		],
 		properties: [
 			{
+				displayName: 'Authentication',
+				name: 'authentication',
+				type: 'options',
+				options: [
+					{
+						name: 'Basic Authentication',
+						value: 'basicAuth',
+					},
+					{
+						name: 'OAuth2',
+						value: 'oAuth2',
+					},
+				],
+				default: 'basicAuth',
+				description: 'The method of authentication',
+			},
+			{
 				displayName: 'Entity',
 				name: 'entity',
 				type: 'options',
 				required: true,
-				default: '',
+				default: 'org.meveo.model.billing.Subscription',
 				options: [
 					{
 						name: 'Subscription',
@@ -80,7 +115,7 @@ export class OpencellTrigger implements INodeType {
 				displayName: 'Event',
 				name: 'eventType',
 				type: 'options',
-				default: '',
+				default: 'CREATED',
 				description: `Choose the event class.`,
 				options: [
 					{
