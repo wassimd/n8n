@@ -65,6 +65,7 @@ export class Opencell implements INodeType {
 		icon: 'file:opencell.svg',
 		group: ['transform'],
 		version: 1,
+		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Consume Opencell API',
 		defaults: {
 			name: 'Opencell',
@@ -113,12 +114,13 @@ export class Opencell implements INodeType {
 					},
 				],
 				default: 'basicAuth',
-				description: 'The method of authentication.',
+				description: 'The method of authentication',
 			},
 			{
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Contact',
@@ -140,6 +142,7 @@ export class Opencell implements INodeType {
 			{
 				displayName: 'Operation',
 				name: 'operation',
+				noDataExpression: true,
 				type: 'options',
 				displayOptions: {
 					show: {
@@ -156,7 +159,6 @@ export class Opencell implements INodeType {
 					},
 				],
 				default: 'create',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Email',
@@ -312,78 +314,86 @@ export class Opencell implements INodeType {
 		const operation = this.getNodeParameter('operation', 0) as string;
 
 		for (let i = 0; i < items.length; i++) {
-			// Add credentials if any are set
-			// here we use basic auth
+			try {
+				// Add credentials if any are set
+				// here we use basic auth
 
-			if (resource === 'contact') {
-				if (operation === 'create') {
+				if (resource === 'contact') {
+					if (operation === 'create') {
 
+					}
 				}
-			}
-			else if (resource === 'customerHierarchy') {
-				if (operation === 'upsert') {
+				else if (resource === 'customerHierarchy') {
+					if (operation === 'upsert') {
 
-					const url = `/opencell/api/rest/account/accountHierarchy/createOrUpdateCRMAccountHierarchy`;
+						const url = `/opencell/api/rest/account/accountHierarchy/createOrUpdateCRMAccountHierarchy`;
 
-					const crmAccountType = this.getNodeParameter('crmAccountType', i) as string;
-					const crmParentCode = this.getNodeParameter('crmParentCode', i) as string;
-					let body: any = {};
-					body.crmAccountType = crmAccountType as string;
-					body.crmParentCode = crmParentCode as string;
-					body.code = this.getNodeParameter('code', i) as string;
-					body.name = this.getNodeParameter('name', i);
-					body.address = this.getNodeParameter('address', i);
-					body.contactInformation = this.getNodeParameter('contactInformation', i);
-					body.contactInformation = this.getNodeParameter('contactInformation', i);
-					if (this.getNodeParameter('email', i)) {
-						body.email = this.getNodeParameter('email', i);
-					}
-					if (this.getNodeParameter('language', i)) {
-						body.language = this.getNodeParameter('language', i);
-					}
-					if (this.getNodeParameter('country', i)) {
-						body.country = this.getNodeParameter('country', i);
-					}
-					if (this.getNodeParameter('paymentMethod', i)) {
-						body.paymentMethod = this.getNodeParameter('paymentMethod', i);
-					}
-					if (this.getNodeParameter('customerCategory', i)) {
-						body.customerCategory = this.getNodeParameter('customerCategory', i);
-					}
-					if (this.getNodeParameter('currency', i)) {
-						body.currency = this.getNodeParameter('currency', i);
-					}
-					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-					if (additionalFields.billingCycle) {
-						body.billingCycle = additionalFields.billingCycle;
-					}
-					if (additionalFields.vatNo) {
-						body.vatNo = additionalFields.vatNo;
-					}
-					if (additionalFields.electronicBilling) {
-						body.electronicBilling = additionalFields.electronicBilling;
-					}
+						const crmAccountType = this.getNodeParameter('crmAccountType', i) as string;
+						const crmParentCode = this.getNodeParameter('crmParentCode', i) as string;
+						let body: any = {};
+						body.crmAccountType = crmAccountType as string;
+						body.crmParentCode = crmParentCode as string;
+						body.code = this.getNodeParameter('code', i) as string;
+						body.name = this.getNodeParameter('name', i);
+						body.address = this.getNodeParameter('address', i);
+						body.contactInformation = this.getNodeParameter('contactInformation', i);
+						body.contactInformation = this.getNodeParameter('contactInformation', i);
+						if (this.getNodeParameter('email', i)) {
+							body.email = this.getNodeParameter('email', i);
+						}
+						if (this.getNodeParameter('language', i)) {
+							body.language = this.getNodeParameter('language', i);
+						}
+						if (this.getNodeParameter('country', i)) {
+							body.country = this.getNodeParameter('country', i);
+						}
+						if (this.getNodeParameter('paymentMethod', i)) {
+							body.paymentMethod = this.getNodeParameter('paymentMethod', i);
+						}
+						if (this.getNodeParameter('customerCategory', i)) {
+							body.customerCategory = this.getNodeParameter('customerCategory', i);
+						}
+						if (this.getNodeParameter('currency', i)) {
+							body.currency = this.getNodeParameter('currency', i);
+						}
+						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+						if (additionalFields.billingCycle) {
+							body.billingCycle = additionalFields.billingCycle;
+						}
+						if (additionalFields.vatNo) {
+							body.vatNo = additionalFields.vatNo;
+						}
+						if (additionalFields.electronicBilling) {
+							body.electronicBilling = additionalFields.electronicBilling;
+						}
 
-					responseData = await opencellApi.call(this, 'POST', url, body);
-					returnData.push(responseData);
+						responseData = await opencellApi.call(this, 'POST', url, body);
+						returnData.push(responseData);
+					}
 				}
-			}
 
-			else if(resource === 'genericApi'){
-				if (operation === 'get') {
-					const entity = this.getNodeParameter('entity', i) as string;
-					const entiyId = this.getNodeParameter('id', i) as number;
-					const url = `/opencell/api/rest/v2/generic/${entity}/${entiyId}`;
+				else if(resource === 'genericApi'){
+					if (operation === 'get') {
+						const entity = this.getNodeParameter('entity', i) as string;
+						const entiyId = this.getNodeParameter('id', i) as number;
+						const url = `/opencell/api/rest/v2/generic/${entity}/${entiyId}`;
 
-					// Update body if nested entities are set
-					const nestedEntities = this.getNodeParameter('nestedEntities', i) as string[];
-					const body : IDataObject = {};
-					if(nestedEntities.length > 0){
-						body.nestedEntities = nestedEntities;
+						// Update body if nested entities are set
+						const nestedEntities = this.getNodeParameter('nestedEntities', i) as string[];
+						const body : IDataObject = {};
+						if(nestedEntities.length > 0){
+							body.nestedEntities = nestedEntities;
+						}
+						responseData = await opencellApi.call(this, 'POST', url, body);
+						returnData.push(responseData);
 					}
-					responseData = await opencellApi.call(this, 'POST', url, body);
-					returnData.push(responseData);
 				}
+			} catch (error) {
+				if (this.continueOnFail()) {
+					returnData.push({ error: error.message });
+					continue;
+				}
+				throw error;
 			}
 		}
 
