@@ -65,6 +65,7 @@ export class Opencell implements INodeType {
 		icon: 'file:opencell.svg',
 		group: ['transform'],
 		version: 1,
+		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Consume Opencell API',
 		defaults: {
 			name: 'Opencell',
@@ -113,12 +114,13 @@ export class Opencell implements INodeType {
 					},
 				],
 				default: 'basicAuth',
-				description: 'The method of authentication.',
+				description: 'The method of authentication',
 			},
 			{
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Contact',
@@ -140,6 +142,7 @@ export class Opencell implements INodeType {
 			{
 				displayName: 'Operation',
 				name: 'operation',
+				noDataExpression: true,
 				type: 'options',
 				displayOptions: {
 					show: {
@@ -156,7 +159,7 @@ export class Opencell implements INodeType {
 					},
 				],
 				default: 'create',
-				description: 'The operation to perform.',
+				description: 'The operation to perform',
 			},
 			{
 				displayName: 'Email',

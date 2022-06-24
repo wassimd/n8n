@@ -12,6 +12,7 @@ export const customerHierarchyOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
+		noDataExpression: true,
 		type: 'options',
 		displayOptions: {
 			show: {
@@ -201,7 +202,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				displayName: 'Zip Code',
 				name: 'zipCode',
 				type: 'number',
-				default: '',
+				default: 0,
 			},
 			{
 				displayName: 'City',
@@ -235,13 +236,13 @@ export const customerHierarchyFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'E-mail',
+				displayName: 'EMAIL',
 				name: 'email',
 				type: 'string',
 				default: '',
 			},
 			{
-				displayName: 'Mobile',
+				displayName: 'MOBILE',
 				name: 'mobile',
 				type: 'string',
 				default: '',
@@ -250,7 +251,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 	},
 
 	{
-		displayName: 'E-mail',
+		displayName: 'EMAIL',
 		name: 'email',
 		type: 'string',
 		default: '',
@@ -446,7 +447,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				displayName: 'Electronic Billing',
 				name: 'electronicBilling',
 				type: 'boolean',
-				default: '',
+				default: false,
 			},
 		],
 	},
