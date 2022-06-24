@@ -33,14 +33,13 @@ import {
 } from './GenericApiComponent'
 import { incidentNoteOperations } from '../PagerDuty/IncidentNoteDescription';
 
-async function validateCredentials(this: ICredentialTestFunctions, decryptedCredentials: ICredentialDataDecryptedObject): Promise<any> { // tslint:disable-line:no-any
+async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<any> {
+
 	const credentials = decryptedCredentials;
 	const requestOptions: IHttpRequestOptions = {
-		headers: {
-			'Accept': 'application/json',
-		},
+		method: 'GET',
+		headers: {Accept: 'application/json',},
 		url: '',
-		encoding: 'json',
 		json: true,
 	};
 
@@ -50,12 +49,14 @@ async function validateCredentials(this: ICredentialTestFunctions, decryptedCred
 			password: credentials.password as string,
 		};
 		requestOptions.url = `${credentials.host}:${credentials.port}`;
+	} else {
+		throw 'Les credentials ne sont pas définis'
 	}
+
 	requestOptions.url += '/opencell/api/rest/catalog/version';
 	requestOptions.method = 'GET';
 
-	let responseData = await this.helpers.httpRequest(requestOptions);
-	return responseData;
+	return await this.helpers.request(requestOptions);
 }
 export class Opencell implements INodeType {
 	description: INodeTypeDescription = {
@@ -84,7 +85,7 @@ export class Opencell implements INodeType {
 						],
 					},
 				},
-				*/
+			*/
 			},
 		],
 		properties: [
@@ -196,16 +197,27 @@ export class Opencell implements INodeType {
 				try {
 					await validateCredentials.call(this, credential.data as ICredentialDataDecryptedObject);
 				} catch (error) {
-					const err = error as JsonObject;
-					if (err.statusCode === 401) {
+					if(error.statusCode) {
 						return {
 							status: 'Error',
-							message: `Invalid credentials`,
+							message: `Username/password error. Error code : ${error.statusCode}`,
+						};
+					}
+					else if (error.cause) {
+						return {
+							status: 'Error',
+							message: `Host error. Error code : ${error.cause.code}`,
+						};
+					}
+					else {
+						return {
+							status: 'Error',
+							message: `Invalid credentials (unknown error)`,
 						};
 					}
 				}
 				return {
-					status: 'OK',
+					status: 'OK', //OK
 					message: 'Authentication successful',
 				};
 			},
@@ -266,6 +278,7 @@ export class Opencell implements INodeType {
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
+
 		const items = this.getInputData();
 		let responseData;
 		const returnData = [];
@@ -342,9 +355,7 @@ export class Opencell implements INodeType {
 					if(nestedEntities.length > 0){
 						body.nestedEntities = nestedEntities;
 					}
-					console.log(body);
 					responseData = await opencellApi.call(this, 'POST', url, body);
-					//console.log(responseData);
 					returnData.push(responseData);
 				}
 			}
