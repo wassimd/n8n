@@ -38,7 +38,7 @@ import {
 	genericApiOperations,
 } from './GenericApiComponent';
 
-async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<any> {
+async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<INodeCredentialTestResult> {
 
 	const credentials = decryptedCredentials;
 	const requestOptions: IHttpRequestOptions = {
@@ -374,7 +374,7 @@ export class Opencell implements INodeType {
 
 						const crmAccountType = this.getNodeParameter('crmAccountType', i) as string;
 						const crmParentCode = this.getNodeParameter('crmParentCode', i) as string;
-						const body: any = {};
+						const body: IDataObject = {};
 						body.crmAccountType = crmAccountType as string;
 						body.crmParentCode = crmParentCode as string;
 						body.code = this.getNodeParameter('code', i) as string;
