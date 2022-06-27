@@ -415,47 +415,48 @@ export class Opencell implements INodeType {
 						returnData.push(responseData);
 					}
 				}
-			// GENERIC API
-			else if (resource === 'genericApi') {
-				if (operation === 'get') {
-					const entity = this.getNodeParameter('entity', i) as string;
-					const entiyId = this.getNodeParameter('id', i) as number;
-					const url = `/opencell/api/rest/v2/generic/${entity}/${entiyId}`;
+				// GENERIC API
+				else if (resource === 'genericApi') {
+					if (operation === 'get') {
+						const entity = this.getNodeParameter('entity', i) as string;
+						const entiyId = this.getNodeParameter('id', i) as number;
+						const url = `/opencell/api/rest/v2/generic/${entity}/${entiyId}`;
 
-					// Update body if nested entities are set
-					const nestedEntities = this.getNodeParameter('nestedEntities', i) as string[];
-					const body: IDataObject = {};
-					if (nestedEntities.length > 0) {
-						body.nestedEntities = nestedEntities;
-					}
-					responseData = await opencellApi.call(this, 'POST', url, body);
-					returnData.push(responseData);
-				}
-				else if (operation === 'search') {
-					const entity = this.getNodeParameter('entity', i) as string;
-					const url = `/opencell/api/rest/v2/generic/all/${entity}`;
-					const filters = this.getNodeParameter('filters', i) as IDataObject;
-					const body: IDataObject = {};
-					if (filters) {
-						const filterValues = (filters as IDataObject).filterValues as IDataObject[];
-						if (filterValues) {
-							const bodyFilters = {} as IDataObject;
-							console.log(filterValues);
-							for (const filterValue of filterValues) {
-								if (filterValue.key) {
-									console.log(filterValue);
-									const key: string = filterValue.key as string;
-									bodyFilters[key] = filterValue.value;
-								}
-							}
-							body.filters = bodyFilters;
+						// Update body if nested entities are set
+						const nestedEntities = this.getNodeParameter('nestedEntities', i) as string[];
+						const body: IDataObject = {};
+						if (nestedEntities.length > 0) {
+							body.nestedEntities = nestedEntities;
 						}
-
-						console.log(body);
-
+						responseData = await opencellApi.call(this, 'POST', url, body);
+						returnData.push(responseData);
 					}
-					responseData = await opencellApi.call(this, 'POST', url, body);
-					returnData.push(responseData);
+					else if (operation === 'search') {
+						const entity = this.getNodeParameter('entity', i) as string;
+						const url = `/opencell/api/rest/v2/generic/all/${entity}`;
+						const filters = this.getNodeParameter('filters', i) as IDataObject;
+						const body: IDataObject = {};
+						if (filters) {
+							const filterValues = (filters as IDataObject).filterValues as IDataObject[];
+							if (filterValues) {
+								const bodyFilters = {} as IDataObject;
+								console.log(filterValues);
+								for (const filterValue of filterValues) {
+									if (filterValue.key) {
+										console.log(filterValue);
+										const key: string = filterValue.key as string;
+										bodyFilters[key] = filterValue.value;
+									}
+								}
+								body.filters = bodyFilters;
+							}
+
+							console.log(body);
+
+						}
+						responseData = await opencellApi.call(this, 'POST', url, body);
+						returnData.push(responseData);
+					}
 				}
 			} catch (error) {
 				if (this.continueOnFail()) {
