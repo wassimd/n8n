@@ -4,16 +4,16 @@ import {
 } from 'n8n-core';
 
 import {
-	IDataObject,
-	INodeExecutionData,
-	INodeType,
-	INodeTypeDescription,
-	IHttpRequestOptions,
+	ICredentialDataDecryptedObject,
 	ICredentialsDecrypted,
 	ICredentialTestFunctions,
-	INodePropertyOptions,
+	IDataObject,
+	IHttpRequestOptions,
 	INodeCredentialTestResult,
-	ICredentialDataDecryptedObject,
+	INodeExecutionData,
+	INodePropertyOptions,
+	INodeType,
+	INodeTypeDescription,
 	JsonObject,
 } from 'n8n-workflow';
 
@@ -28,17 +28,17 @@ import {
 } from './CustomerHierarchyDescription';
 
 import {
-	subscriptionOperations,
 	subscriptionFields,
+	subscriptionOperations,
 
-} from './SubscriptionDescription'
+} from './SubscriptionDescription';
 
 import {
 	genericApiFields,
 	genericApiOperations,
-} from './GenericApiComponent'
+} from './GenericApiComponent';
 
-async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<any> {
+async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<INodeCredentialTestResult> {
 
 	const credentials = decryptedCredentials;
 	const requestOptions: IHttpRequestOptions = {
@@ -55,7 +55,7 @@ async function validateCredentials(this: ICredentialTestFunctions ,decryptedCred
 		};
 		requestOptions.url = `${credentials.host}:${credentials.port}`;
 	} else {
-		throw 'Les credentials ne sont pas définis'
+		throw new Error('Credentials undefined');
 	}
 
 	requestOptions.url += '/opencell/api/rest/catalog/version';
@@ -296,9 +296,9 @@ export class Opencell implements INodeType {
 				const entity = this.getNodeParameter('entity') as string;
 				const endpoint = `/opencell/api/rest/v2/generic/entities/${entity}`;
 				const response = await opencellApi.call(this, 'GET', endpoint, {});
-				for (let key of Object.keys(response)) {
-					let attribute = response[key];
-					if (attribute.isEntity == "true") {
+				for (const key of Object.keys(response)) {
+					const attribute = response[key];
+					if (attribute.isEntity === 'true') {
 						returnData.push({
 							name: key,//attribute.shortTypeName,
 							value: key,
@@ -317,7 +317,7 @@ export class Opencell implements INodeType {
 			async getUserAccounts(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const returnData: INodePropertyOptions[] = [];
 				const endpoint = '/opencell/api/rest/v2/generic/all/userAccount';
-				const userAccounts = await opencellApi.call(this, 'POST', endpoint, {"genericFields": ["code"]});
+				const userAccounts = await opencellApi.call(this, 'POST', endpoint, {'genericFields': ['code']});
 				for (const userAccount of userAccounts) {
 					//const contactName = `${contact.properties.firstname.value} ${contact.properties.lastname.value}`;
 					const userAccountId = userAccount.id;
@@ -331,7 +331,7 @@ export class Opencell implements INodeType {
 			async getOfferTemplates(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const returnData: INodePropertyOptions[] = [];
 				const endpoint = '/opencell/api/rest/v2/generic/all/offerTemplate';
-				const offerTemplates = await opencellApi.call(this, 'POST', endpoint, {"genericFields": ["code"]});
+				const offerTemplates = await opencellApi.call(this, 'POST', endpoint, {'genericFields': ['code']});
 				for (const offerTemplate of offerTemplates) {
 					//const contactName = `${contact.properties.firstname.value} ${contact.properties.lastname.value}`;
 					const userAccountId = offerTemplate.id;
@@ -374,7 +374,7 @@ export class Opencell implements INodeType {
 
 						const crmAccountType = this.getNodeParameter('crmAccountType', i) as string;
 						const crmParentCode = this.getNodeParameter('crmParentCode', i) as string;
-						let body: any = {};
+						const body: IDataObject = {};
 						body.crmAccountType = crmAccountType as string;
 						body.crmParentCode = crmParentCode as string;
 						body.code = this.getNodeParameter('code', i) as string;

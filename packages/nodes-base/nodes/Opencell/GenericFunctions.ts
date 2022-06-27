@@ -11,9 +11,9 @@ import {
 import {
 	IDataObject,
 	IHookFunctions,
-	IWebhookFunctions,
-	IHttpRequestOptions,
 	IHttpRequestMethods,
+	IHttpRequestOptions,
+	IWebhookFunctions,
 } from 'n8n-workflow';
 
 export async function opencellApi(this: IHookFunctions | IWebhookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: IHttpRequestMethods, endpoint: string, body: any = {}, query: IDataObject = {}, uri?: string): Promise<any> { // tslint:disable-line:no-any
@@ -37,7 +37,7 @@ export async function opencellApi(this: IHookFunctions | IWebhookFunctions | IEx
 		requestOptions.url = `${httpBasicAuth.host}:${httpBasicAuth.port}`;
 	}
 
-	if (endpoint != '') {
+	if (endpoint !== '') {
 		requestOptions.url += endpoint;
 	}
 	requestOptions.method = method;
@@ -48,7 +48,7 @@ export async function opencellApi(this: IHookFunctions | IWebhookFunctions | IEx
 		requestOptions.qs = query;
 	}
 	try {
-		let responseData = await this.helpers.httpRequest(requestOptions);
+		const responseData = await this.helpers.httpRequest(requestOptions);
 		console.log(responseData);
 
 		// To return an array when it is a generic API get list
