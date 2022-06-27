@@ -55,7 +55,7 @@ async function validateCredentials(this: ICredentialTestFunctions ,decryptedCred
 		};
 		requestOptions.url = `${credentials.host}:${credentials.port}`;
 	} else {
-		throw new Error('Les credentials ne sont pas définis');
+		throw new Error('Credentials undefined');
 	}
 
 	requestOptions.url += '/opencell/api/rest/catalog/version';
