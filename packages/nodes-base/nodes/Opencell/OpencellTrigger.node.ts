@@ -139,7 +139,7 @@ export class OpencellTrigger implements INodeType {
 				const entity = this.getNodeParameter('entity') as string;
 				const eventType = this.getNodeParameter('eventType') as string;
 				const body: IDataObject = {
-					genericFields: ["id", "code"],
+					genericFields: ['id', 'code'],
 					filters: {
 						code: webhookData.code as string,
 					},
@@ -157,7 +157,7 @@ export class OpencellTrigger implements INodeType {
 						return true;
 					}
 					else if (webhookData.id === webhook.id) {
-						console.log(">>>> webhookData.id === webhook.id");
+						console.log('>>>> webhookData.id === webhook.id');
 					}
 				}
 				return false;
@@ -178,10 +178,10 @@ export class OpencellTrigger implements INodeType {
 				}
 				else {
 					if ('HTTP' === url?.protocol.toUpperCase().slice(0, -1)) {
-						port = '80'
+						port = '80';
 					}
 					else if ('HTTPS' === url?.protocol.toUpperCase().slice(0, -1)) {
-						port = '443'
+						port = '443';
 					}
 					else {
 						console.log(`Unknown port number : ${url?.port} in url ${webhookUrl}.`);
@@ -193,34 +193,34 @@ export class OpencellTrigger implements INodeType {
 					classNameFilter: entity,
 					host: url?.hostname,
 					page: url?.pathname,
-					httpMethod: "HTTP_POST",
+					httpMethod: 'HTTP_POST',
 					eventTypeFilter: eventType,
 					bodyEl: `{
-						"id":#{event.id},
-						"code":"#{event.code}"
+						'id':#{event.id},
+						'code':'#{event.code}'
 					}`,
 					headers: {
-						"Content-Type": "application/json"
+						'Content-Type': 'application/json',
 					},
 					httpProtocol: url ? url.protocol.toUpperCase().slice(0, -1) : 'HTTP',
-					port: port,
+					port: '{port}',
 				};
 				const webhook = await opencellApi.call(this, 'POST', '/opencell/api/rest/notification/webhook/createOrUpdate', body);
-				if (webhook.status != 'SUCCESS') {
-					console.log("ERROR CREATING A WEBHOOK")
+				if (webhook.status !== 'SUCCESS') {
+					console.log('ERROR CREATING A WEBHOOK');
 					return false;
 				}
 				webhookData.code = snakeCase(entity.substring(index) + eventType);
 				// GET ID and Code
 				const body2: IDataObject = {
-					genericFields: ["id", "code"],
+					genericFields: ['id', 'code'],
 					filters: {
 						code: webhookData.code as string,
 					},
 				};
 				const webhooks = await opencellApi.call(this, 'POST', '/opencell/api/rest/v2/generic/all/webhook', body2);
-				if (webhooks.length == 1) {
-					console.log("webhooks.length == 1");
+				if (webhooks.length === 1) {
+					console.log('webhooks.length == 1');
 					webhookData.id = webhooks[0].id;
 				}
 				return true;

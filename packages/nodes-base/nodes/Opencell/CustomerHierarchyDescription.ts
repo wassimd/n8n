@@ -81,12 +81,12 @@ export const customerHierarchyFields: INodeProperties[] = [
 			{
 				name: 'Cust 2 UA',
 				value: 'C_UA',
-				description: 'Creates Customer, Customer Account, Billing Account, User Account'
+				description: 'Creates Customer, Customer Account, Billing Account, User Account',
 			},
 			{
 				name: 'S and  C',
 				value: 'S_C',
-				description: 'Creates Seller and Customer'
+				description: 'Creates Seller and Customer',
 			},
 			{
 				name: 'Customer',
@@ -127,7 +127,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				operation: [
 					'upsert',
 					'delete',
-					'get'
+					'get',
 				],
 			},
 		},
