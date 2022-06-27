@@ -25,13 +25,18 @@ import {
 	customerHierarchyFields,
 	customerHierarchyOperations,
 
-} from './CustomerHierarchyDescription'
+} from './CustomerHierarchyDescription';
+
+import {
+	subscriptionOperations,
+	subscriptionFields,
+
+} from './SubscriptionDescription'
 
 import {
 	genericApiFields,
 	genericApiOperations,
 } from './GenericApiComponent'
-import { incidentNoteOperations } from '../PagerDuty/IncidentNoteDescription';
 
 async function validateCredentials(this: ICredentialTestFunctions, decryptedCredentials: ICredentialDataDecryptedObject): Promise<any> { // tslint:disable-line:no-any
 	const credentials = decryptedCredentials;
@@ -104,6 +109,10 @@ export class Opencell implements INodeType {
 					{
 						name: 'Generic API',
 						value: 'genericApi',
+					},
+					{
+						name: 'Subscription',
+						value: 'subscription',
 					},
 				],
 				default: 'customerHierarchy',
@@ -186,6 +195,9 @@ export class Opencell implements INodeType {
 			// GENERIC API
 			...genericApiOperations,
 			...genericApiFields,
+			// SUBSCRIPTION
+			...subscriptionOperations,
+			...subscriptionFields,
 		],
 	};
 
@@ -246,11 +258,11 @@ export class Opencell implements INodeType {
 				const response = await opencellApi.call(this, 'GET', endpoint, {});
 				for (let key of Object.keys(response)) {
 					let attribute = response[key];
-					if(attribute.isEntity == "true"){
+					if (attribute.isEntity == "true") {
 						returnData.push({
-							 		name: key,//attribute.shortTypeName,
-							 		value: key,
-							});
+							name: key,//attribute.shortTypeName,
+							value: key,
+						});
 					}
 				}
 				// for (const entity of response.entities) {
@@ -262,6 +274,34 @@ export class Opencell implements INodeType {
 				// }
 				return returnData.sort((a, b) => a < b ? 0 : 1);
 			},
+			async getUserAccounts(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const returnData: INodePropertyOptions[] = [];
+				const endpoint = '/opencell/api/rest/v2/generic/all/userAccount';
+				const userAccounts = await opencellApi.call(this, 'POST', endpoint, {"genericFields": ["code"]});
+				for (const userAccount of userAccounts) {
+					//const contactName = `${contact.properties.firstname.value} ${contact.properties.lastname.value}`;
+					const userAccountId = userAccount.id;
+					returnData.push({
+						name: userAccount.code,
+						value: userAccount.code,
+					});
+				}
+				return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
+			},
+			async getOfferTemplates(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const returnData: INodePropertyOptions[] = [];
+				const endpoint = '/opencell/api/rest/v2/generic/all/offerTemplate';
+				const offerTemplates = await opencellApi.call(this, 'POST', endpoint, {"genericFields": ["code"]});
+				for (const offerTemplate of offerTemplates) {
+					//const contactName = `${contact.properties.firstname.value} ${contact.properties.lastname.value}`;
+					const userAccountId = offerTemplate.id;
+					returnData.push({
+						name: offerTemplate.code,
+						value: offerTemplate.code,
+					});
+				}
+				return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
+			},
 		},
 	};
 
@@ -271,6 +311,10 @@ export class Opencell implements INodeType {
 		const returnData = [];
 		const resource = this.getNodeParameter('resource', 0) as string;
 		const operation = this.getNodeParameter('operation', 0) as string;
+
+		// type filters = {
+		// 	[key: string]: string
+		// }
 
 		for (let i = 0; i < items.length; i++) {
 			// Add credentials if any are set
@@ -330,7 +374,8 @@ export class Opencell implements INodeType {
 				}
 			}
 
-			else if(resource === 'genericApi'){
+			// GENERIC API
+			else if (resource === 'genericApi') {
 				if (operation === 'get') {
 					const entity = this.getNodeParameter('entity', i) as string;
 					const entiyId = this.getNodeParameter('id', i) as number;
@@ -338,11 +383,38 @@ export class Opencell implements INodeType {
 
 					// Update body if nested entities are set
 					const nestedEntities = this.getNodeParameter('nestedEntities', i) as string[];
-					const body : IDataObject = {};
-					if(nestedEntities.length > 0){
+					const body: IDataObject = {};
+					if (nestedEntities.length > 0) {
 						body.nestedEntities = nestedEntities;
 					}
-					console.log(body);
+					//console.log(body);
+					responseData = await opencellApi.call(this, 'POST', url, body);
+					//console.log(responseData);
+					returnData.push(responseData);
+				}
+				else if (operation === 'search') {
+					const entity = this.getNodeParameter('entity', i) as string;
+					const url = `/opencell/api/rest/v2/generic/all/${entity}`;
+					const filters = this.getNodeParameter('filters', i) as IDataObject;
+					const body: IDataObject = {};
+					if (filters) {
+						const filterValues = (filters as IDataObject).filterValues as IDataObject[];
+						if (filterValues) {
+							const bodyFilters = {} as IDataObject;
+							console.log(filterValues);
+							for (const filterValue of filterValues) {
+								if (filterValue.key) {
+									console.log(filterValue);
+									const key: string = filterValue.key as string;
+									bodyFilters[key] = filterValue.value;
+								}
+							}
+							body.filters = bodyFilters;
+						}
+
+						console.log(body);
+
+					}
 					responseData = await opencellApi.call(this, 'POST', url, body);
 					//console.log(responseData);
 					returnData.push(responseData);
