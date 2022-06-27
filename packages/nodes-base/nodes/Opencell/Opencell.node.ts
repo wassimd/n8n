@@ -38,14 +38,13 @@ import {
 	genericApiOperations,
 } from './GenericApiComponent'
 
-async function validateCredentials(this: ICredentialTestFunctions, decryptedCredentials: ICredentialDataDecryptedObject): Promise<any> { // tslint:disable-line:no-any
+async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<any> {
+
 	const credentials = decryptedCredentials;
 	const requestOptions: IHttpRequestOptions = {
-		headers: {
-			'Accept': 'application/json',
-		},
+		method: 'GET',
+		headers: {Accept: 'application/json',},
 		url: '',
-		encoding: 'json',
 		json: true,
 	};
 
@@ -55,12 +54,14 @@ async function validateCredentials(this: ICredentialTestFunctions, decryptedCred
 			password: credentials.password as string,
 		};
 		requestOptions.url = `${credentials.host}:${credentials.port}`;
+	} else {
+		throw 'Les credentials ne sont pas définis'
 	}
+
 	requestOptions.url += '/opencell/api/rest/catalog/version';
 	requestOptions.method = 'GET';
 
-	let responseData = await this.helpers.httpRequest(requestOptions);
-	return responseData;
+	return await this.helpers.request(requestOptions);
 }
 export class Opencell implements INodeType {
 	description: INodeTypeDescription = {
@@ -69,6 +70,7 @@ export class Opencell implements INodeType {
 		icon: 'file:opencell.svg',
 		group: ['transform'],
 		version: 1,
+		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Consume Opencell API',
 		defaults: {
 			name: 'Opencell',
@@ -81,7 +83,6 @@ export class Opencell implements INodeType {
 				name: 'opencellApi',
 				required: true,
 				testedBy: 'opencellApiTest',
-				/*
 				displayOptions: {
 					show: {
 						authentication: [
@@ -89,14 +90,42 @@ export class Opencell implements INodeType {
 						],
 					},
 				},
-				*/
+			},
+			{
+				name: 'opencellOAuth2Api',
+				required: true,
+				displayOptions: {
+					show: {
+						authentication: [
+							'oAuth2',
+						],
+					},
+				},
 			},
 		],
 		properties: [
 			{
+				displayName: 'Authentication',
+				name: 'authentication',
+				type: 'options',
+				options: [
+					{
+						name: 'Basic Authentication',
+						value: 'basicAuth',
+					},
+					{
+						name: 'OAuth2',
+						value: 'oAuth2',
+					},
+				],
+				default: 'basicAuth',
+				description: 'The method of authentication',
+			},
+			{
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Contact',
@@ -122,6 +151,7 @@ export class Opencell implements INodeType {
 			{
 				displayName: 'Operation',
 				name: 'operation',
+				noDataExpression: true,
 				type: 'options',
 				displayOptions: {
 					show: {
@@ -138,7 +168,6 @@ export class Opencell implements INodeType {
 					},
 				],
 				default: 'create',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Email',
@@ -208,16 +237,27 @@ export class Opencell implements INodeType {
 				try {
 					await validateCredentials.call(this, credential.data as ICredentialDataDecryptedObject);
 				} catch (error) {
-					const err = error as JsonObject;
-					if (err.statusCode === 401) {
+					if(error.statusCode) {
 						return {
 							status: 'Error',
-							message: `Invalid credentials`,
+							message: `Username/password error. Error code : ${error.statusCode}`,
+						};
+					}
+					else if (error.cause) {
+						return {
+							status: 'Error',
+							message: `Host error. Error code : ${error.cause.code}`,
+						};
+					}
+					else {
+						return {
+							status: 'Error',
+							message: `Invalid credentials (unknown error)`,
 						};
 					}
 				}
 				return {
-					status: 'OK',
+					status: 'OK', //OK
 					message: 'Authentication successful',
 				};
 			},
@@ -306,6 +346,7 @@ export class Opencell implements INodeType {
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
+
 		const items = this.getInputData();
 		let responseData;
 		const returnData = [];
@@ -317,63 +358,63 @@ export class Opencell implements INodeType {
 		// }
 
 		for (let i = 0; i < items.length; i++) {
-			// Add credentials if any are set
-			// here we use basic auth
+			try {
+				// Add credentials if any are set
+				// here we use basic auth
 
-			if (resource === 'contact') {
-				if (operation === 'create') {
+				if (resource === 'contact') {
+					if (operation === 'create') {
 
+					}
 				}
-			}
-			else if (resource === 'customerHierarchy') {
-				if (operation === 'upsert') {
+				else if (resource === 'customerHierarchy') {
+					if (operation === 'upsert') {
 
-					const url = `/opencell/api/rest/account/accountHierarchy/createOrUpdateCRMAccountHierarchy`;
+						const url = `/opencell/api/rest/account/accountHierarchy/createOrUpdateCRMAccountHierarchy`;
 
-					const crmAccountType = this.getNodeParameter('crmAccountType', i) as string;
-					const crmParentCode = this.getNodeParameter('crmParentCode', i) as string;
-					let body: any = {};
-					body.crmAccountType = crmAccountType as string;
-					body.crmParentCode = crmParentCode as string;
-					body.code = this.getNodeParameter('code', i) as string;
-					body.name = this.getNodeParameter('name', i);
-					body.address = this.getNodeParameter('address', i);
-					body.contactInformation = this.getNodeParameter('contactInformation', i);
-					body.contactInformation = this.getNodeParameter('contactInformation', i);
-					if (this.getNodeParameter('email', i)) {
-						body.email = this.getNodeParameter('email', i);
-					}
-					if (this.getNodeParameter('language', i)) {
-						body.language = this.getNodeParameter('language', i);
-					}
-					if (this.getNodeParameter('country', i)) {
-						body.country = this.getNodeParameter('country', i);
-					}
-					if (this.getNodeParameter('paymentMethod', i)) {
-						body.paymentMethod = this.getNodeParameter('paymentMethod', i);
-					}
-					if (this.getNodeParameter('customerCategory', i)) {
-						body.customerCategory = this.getNodeParameter('customerCategory', i);
-					}
-					if (this.getNodeParameter('currency', i)) {
-						body.currency = this.getNodeParameter('currency', i);
-					}
-					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-					if (additionalFields.billingCycle) {
-						body.billingCycle = additionalFields.billingCycle;
-					}
-					if (additionalFields.vatNo) {
-						body.vatNo = additionalFields.vatNo;
-					}
-					if (additionalFields.electronicBilling) {
-						body.electronicBilling = additionalFields.electronicBilling;
-					}
+						const crmAccountType = this.getNodeParameter('crmAccountType', i) as string;
+						const crmParentCode = this.getNodeParameter('crmParentCode', i) as string;
+						let body: any = {};
+						body.crmAccountType = crmAccountType as string;
+						body.crmParentCode = crmParentCode as string;
+						body.code = this.getNodeParameter('code', i) as string;
+						body.name = this.getNodeParameter('name', i);
+						body.address = this.getNodeParameter('address', i);
+						body.contactInformation = this.getNodeParameter('contactInformation', i);
+						body.contactInformation = this.getNodeParameter('contactInformation', i);
+						if (this.getNodeParameter('email', i)) {
+							body.email = this.getNodeParameter('email', i);
+						}
+						if (this.getNodeParameter('language', i)) {
+							body.language = this.getNodeParameter('language', i);
+						}
+						if (this.getNodeParameter('country', i)) {
+							body.country = this.getNodeParameter('country', i);
+						}
+						if (this.getNodeParameter('paymentMethod', i)) {
+							body.paymentMethod = this.getNodeParameter('paymentMethod', i);
+						}
+						if (this.getNodeParameter('customerCategory', i)) {
+							body.customerCategory = this.getNodeParameter('customerCategory', i);
+						}
+						if (this.getNodeParameter('currency', i)) {
+							body.currency = this.getNodeParameter('currency', i);
+						}
+						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+						if (additionalFields.billingCycle) {
+							body.billingCycle = additionalFields.billingCycle;
+						}
+						if (additionalFields.vatNo) {
+							body.vatNo = additionalFields.vatNo;
+						}
+						if (additionalFields.electronicBilling) {
+							body.electronicBilling = additionalFields.electronicBilling;
+						}
 
-					responseData = await opencellApi.call(this, 'POST', url, body);
-					returnData.push(responseData);
+						responseData = await opencellApi.call(this, 'POST', url, body);
+						returnData.push(responseData);
+					}
 				}
-			}
-
 			// GENERIC API
 			else if (resource === 'genericApi') {
 				if (operation === 'get') {
@@ -387,9 +428,7 @@ export class Opencell implements INodeType {
 					if (nestedEntities.length > 0) {
 						body.nestedEntities = nestedEntities;
 					}
-					//console.log(body);
 					responseData = await opencellApi.call(this, 'POST', url, body);
-					//console.log(responseData);
 					returnData.push(responseData);
 				}
 				else if (operation === 'search') {
@@ -416,9 +455,14 @@ export class Opencell implements INodeType {
 
 					}
 					responseData = await opencellApi.call(this, 'POST', url, body);
-					//console.log(responseData);
 					returnData.push(responseData);
 				}
+			} catch (error) {
+				if (this.continueOnFail()) {
+					returnData.push({ error: error.message });
+					continue;
+				}
+				throw error;
 			}
 		}
 

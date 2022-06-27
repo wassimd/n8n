@@ -31,6 +31,7 @@
   "n8n": {
     "credentials": [
       "dist/credentials/OpencellApi.credentials.js",
+      "dist/credentials/OpencellOAuth2Api.credentials.js",
       "dist/credentials/ActionNetworkApi.credentials.js",
       "dist/credentials/ActiveCampaignApi.credentials.js",
       "dist/credentials/AcuitySchedulingApi.credentials.js",
