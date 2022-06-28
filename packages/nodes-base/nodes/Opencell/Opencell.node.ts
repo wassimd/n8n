@@ -32,6 +32,7 @@ import {
 	genericApiOperations,
 } from './GenericApiComponent'
 import { incidentNoteOperations } from '../PagerDuty/IncidentNoteDescription';
+import { threadId } from 'worker_threads';
 
 async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<any> {
 
@@ -265,6 +266,7 @@ export class Opencell implements INodeType {
 				return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
 			},
 			async getEntities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				console.log("Coucou je getEntities là");
 				const returnData: INodePropertyOptions[] = [];
 				const endpoint = '/opencell/api/rest/v2/generic/entities';
 				const response = await opencellApi.call(this, 'GET', endpoint, {});
@@ -275,6 +277,10 @@ export class Opencell implements INodeType {
 						value: entity,
 					});
 				}
+
+				const currentNodeParameters = this.getCurrentNodeParameters();
+				console.log(currentNodeParameters);
+
 				return returnData.sort((a, b) => a < b ? 0 : 1);
 			},
 			async getNestedEntities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
