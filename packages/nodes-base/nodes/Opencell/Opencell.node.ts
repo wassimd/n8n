@@ -364,7 +364,120 @@ export class Opencell implements INodeType {
 					if (additionalFields.electronicBilling) {
 						body.electronicBilling = additionalFields.electronicBilling;
 					}
-
+					if (this.getNodeParameter('description', i)) {
+						body.description= this.getNodeParameter('description', i);
+					}
+					if (this.getNodeParameter('externalRef1', i)) {
+							body.externalRef1= this.getNodeParameter('externalRef1', i);
+					}
+					if (this.getNodeParameter('externalRef2', i)) {
+							body.externalRef2= this.getNodeParameter('externalRef2', i);
+					}
+					if (this.getNodeParameter('jobTitle', i)) {
+							body.jobTitle= this.getNodeParameter('jobTitle', i);
+					}
+					if (this.getNodeParameter('terminationReason', i)) {
+							body.terminationReason= this.getNodeParameter('terminationReason', i);
+					}
+					if (this.getNodeParameter('subscriptionDate', i)) {
+							body.subscriptionDate= this.getNodeParameter('subscriptionDate', i);
+					}
+					if (this.getNodeParameter('terminationDate', i)) {
+							body.terminationDate= this.getNodeParameter('terminationDate', i);
+					}
+					if (this.getNodeParameter('customerBrand', i)) {
+							body.customerBrand= this.getNodeParameter('customerBrand', i);
+					}
+					if (this.getNodeParameter('registrationNo', i)) {
+							body.registrationNo= this.getNodeParameter('registrationNo', i);
+					}
+					if (this.getNodeParameter('vatNo', i)) {
+							body.vatNo= this.getNodeParameter('vatNo', i);
+					}
+					if (this.getNodeParameter('seller', i)) {
+							body.seller= this.getNodeParameter('seller', i);
+					}
+					if (this.getNodeParameter('mandateIdentification', i)) {
+							body.mandateIdentification= this.getNodeParameter('mandateIdentification', i);
+					}
+					if (this.getNodeParameter('mandateDate', i)) {
+							body.mandateDate= this.getNodeParameter('mandateDate', i);
+					}
+					if (this.getNodeParameter('caStatus', i)) {
+							body.caStatus= this.getNodeParameter('caStatus', i);
+					}
+					if (this.getNodeParameter('creditCategory', i)) {
+							body.creditCategory= this.getNodeParameter('creditCategory', i);
+					}
+					if (this.getNodeParameter('dateStatus', i)) {
+							body.dateStatus= this.getNodeParameter('dateStatus', i);
+					}
+					if (this.getNodeParameter('dateDunningLevel', i)) {
+							body.dateDunningLevel= this.getNodeParameter('dateDunningLevel', i);
+					}
+					if (this.getNodeParameter('dunningLevel', i)) {
+							body.dunningLevel= this.getNodeParameter('dunningLevel', i);
+					}
+					if (this.getNodeParameter('paymentTerms', i)) {
+							body.paymentTerms= this.getNodeParameter('paymentTerms', i);
+					}
+					if (this.getNodeParameter('billingCycle', i)) {
+							body.billingCycle= this.getNodeParameter('billingCycle', i);
+					}
+					if (this.getNodeParameter('nextInvoiceDate', i)) {
+							body.nextInvoiceDate= this.getNodeParameter('nextInvoiceDate', i);
+					}
+					if (this.getNodeParameter('electronicBilling', i)) {
+							body.electronicBilling= this.getNodeParameter('electronicBilling', i);
+					}
+					if (this.getNodeParameter('baStatus', i)) {
+							body.baStatus= this.getNodeParameter('baStatus', i);
+					}
+					if (this.getNodeParameter('invoicingThreshold', i)) {
+							body.invoicingThreshold= this.getNodeParameter('invoicingThreshold', i);
+					}
+					if (this.getNodeParameter('uaStatus', i)) {
+							body.uaStatus= this.getNodeParameter('uaStatus', i);
+					}
+					if (this.getNodeParameter('mailingType', i)) {
+							body.mailingType= this.getNodeParameter('mailingType', i);
+					}
+					if (this.getNodeParameter('emailTemplate', i)) {
+							body.emailTemplate= this.getNodeParameter('emailTemplate', i);
+					}
+					if (this.getNodeParameter('ccedEmails', i)) {
+							body.ccedEmails= this.getNodeParameter('ccedEmails', i);
+					}
+					if (this.getNodeParameter('customerInvoicingThreshold', i)) {
+							body.customerInvoicingThreshold= this.getNodeParameter('customerInvoicingThreshold', i);
+					}
+					if (this.getNodeParameter('customerAccountInvoicingThreshold', i)) {
+							body.customerAccountInvoicingThreshold= this.getNodeParameter('customerAccountInvoicingThreshold', i);
+					}
+					if (this.getNodeParameter('checkThreshold', i)) {
+							body.checkThreshold= this.getNodeParameter('checkThreshold', i);
+					}
+					if (this.getNodeParameter('customerAccountCheckThreshold', i)) {
+							body.customerAccountCheckThreshold= this.getNodeParameter('customerAccountCheckThreshold', i);
+					}
+					if (this.getNodeParameter('customerCheckThreshold', i)) {
+							body.customerCheckThreshold= this.getNodeParameter('customerCheckThreshold', i);
+					}
+					if (this.getNodeParameter('taxCategoryCode', i)) {
+							body.taxCategoryCode= this.getNodeParameter('taxCategoryCode', i);
+					}
+					if (this.getNodeParameter('thresholdPerEntity', i)) {
+							body.thresholdPerEntity= this.getNodeParameter('thresholdPerEntity', i);
+					}
+					if (this.getNodeParameter('customerAccountThresholdPerEntity', i)) {
+							body.customerAccountThresholdPerEntity= this.getNodeParameter('customerAccountThresholdPerEntity', i);
+					}
+					if (this.getNodeParameter('customerThresholdPerEntity', i)) {
+							body.customerThresholdPerEntity= this.getNodeParameter('customerThresholdPerEntity', i);
+					}
+					if (this.getNodeParameter('company', i)) {
+							body.company= this.getNodeParameter('company', i);
+					}
 					responseData = await opencellApi.call(this, 'POST', url, body);
 					returnData.push(responseData);
 				}

@@ -1,5 +1,8 @@
 import {
+	IDataObject,
 	INodeProperties,
+	INodePropertyOptions,
+	INodePropertyCollection,
 } from 'n8n-workflow';
 
 type name = {
@@ -300,7 +303,37 @@ export const customerHierarchyFields: INodeProperties[] = [
 	{
 		displayName: 'paymentMethod',
 		name: 'paymentMethod',
-		type: 'string',
+		type: 'options',
+					options: [
+						{
+							name: 'Check',
+							value: 'CHECK',
+						},
+						{
+							name: 'Direct Debit',
+							value: 'DIRECTDEBIT',
+						},
+						{
+							name: 'Wire Transfer',
+							value: 'WIRETRANSFER',
+						},
+						{
+							name: 'Credit Card',
+							value: 'CARD',
+						},
+						{
+							name: 'PayPal',
+							value: 'PAYPAL',
+						},
+						{
+							name: 'Stripe',
+							value: 'STRIPE',
+						},
+						{
+							name: 'Cash',
+							value: 'CASH',
+						},
+					],
 		default: '',
 		displayOptions: {
 			show: {
@@ -430,26 +463,366 @@ export const customerHierarchyFields: INodeProperties[] = [
 			},
 		},
 		options: [
-
-
+			// Auto generated
 			{
-				displayName: 'Billing Cycle',
-				name: 'billingCycle',
+				displayName: 'Description',
+				name: 'description',
 				type: 'string',
 				default: '',
 			},
 			{
-				displayName: 'VAT Number',
-				name: 'vatNo',
-				type: 'string',
-				default: '',
+					displayName: 'External Reference 1',
+					name: 'externalRef1',
+					type: 'string',
+					default: '',
 			},
 			{
-				displayName: 'Electronic Billing',
-				name: 'electronicBilling',
-				type: 'boolean',
-				default: '',
+					displayName: 'External Reference 2',
+					name: 'externalRef2',
+					type: 'string',
+					default: '',
 			},
+			{
+					displayName: 'Job Title',
+					name: 'jobTitle',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Termination Reason',
+					name: 'terminationReason',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Subscription Date',
+					name: 'subscriptionDate',
+					type: 'dateTime',
+					default: '',
+			},
+			{
+					displayName: 'Termination Date',
+					name: 'terminationDate',
+					type: 'dateTime',
+					default: '',
+			},
+			{
+					displayName: 'Customer Brand',
+					name: 'customerBrand',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Registration Number',
+					name: 'registrationNo',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'VAT Number',
+					name: 'vatNo',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Seller',
+					name: 'seller',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Mandate Identification',
+					name: 'mandateIdentification',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Mandate Date',
+					name: 'mandateDate',
+					type: 'dateTime',
+					default: '',
+			},
+			{
+					displayName: 'CA Status',
+					name: 'caStatus',
+					type: 'options',
+					options: [
+						{
+							name: 'Active',
+							value: 'ACTIVE',
+						},
+						{
+							name: 'Close',
+							value: 'CLOSE',
+						},
+					],
+					default: '',
+			},
+			{
+					displayName: 'Credit Category',
+					name: 'creditCategory',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Date Status',
+					name: 'dateStatus',
+					type: 'dateTime',
+					default: '',
+			},
+			{
+					displayName: 'Date Dunning Level',
+					name: 'dateDunningLevel',
+					type: 'dateTime',
+					default: '',
+			},
+			{
+					displayName: 'Dunning Level',
+					name: 'dunningLevel',
+					type: 'options',
+					options: [
+						{
+							name: '0',
+							value: 'R0',
+						},
+						{
+							name: '1',
+							value: 'R1',
+						},
+						{
+							name: '2',
+							value: 'R2',
+						},
+						{
+							name: '3',
+							value: 'R3',
+						},
+						{
+							name: '4',
+							value: 'R4',
+						},
+						{
+							name: '5',
+							value: 'R5',
+						},
+						{
+							name: '6',
+							value: 'R6',
+						},
+					],
+					default: '',
+			},
+			{
+					displayName: 'Payment Terms',
+					name: 'paymentTerms',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Billing Cycle',
+					name: 'billingCycle',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Next Invoice Date',
+					name: 'nextInvoiceDate',
+					type: 'dateTime',
+					default: '',
+			},
+			{
+					displayName: 'Electronic Billing',
+					name: 'electronicBilling',
+					type: 'boolean',
+					default: '',
+			},
+			{
+					displayName: 'BA Status',
+					name: 'baStatus',
+					type: 'options',
+					options: [
+						{
+							name:'Active',
+							value:'ACTIVE',
+						},
+						{
+							name:'Canceled',
+							value:'CANCELED',
+						},
+						{
+							name:'Terminated',
+							value:'TERMINATED',
+						},
+						{
+							name:'Closed',
+							value:'CLOSED',
+						},
+					],
+					default: '',
+			},
+			{
+					displayName: 'Invoicing Threshold',
+					name: 'invoicingThreshold',
+					type: 'number',
+					default: '',
+			},
+			{
+					displayName: 'UA Status',
+					name: 'uaStatus',
+					type: 'options',
+					options: [
+						{
+							name:'Active',
+							value:'ACTIVE',
+						},
+						{
+							name:'Canceled',
+							value:'CANCELED',
+						},
+						{
+							name:'Terminated',
+							value:'TERMINATED',
+						},
+						{
+							name:'Closed',
+							value:'CLOSED',
+						},
+					],
+					default: '',
+			},
+			{
+					displayName: 'Mailing Type',
+					name: 'mailingType',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Email Template',
+					name: 'emailTemplate',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'CCED Emails',
+					name: 'ccedEmails',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Customer Invoicing Threshold',
+					name: 'customerInvoicingThreshold',
+					type: 'number',
+					default: '',
+			},
+			{
+					displayName: 'Customer Account Invoicing Threshold',
+					name: 'customerAccountInvoicingThreshold',
+					type: 'number',
+					default: '',
+			},
+			{
+					displayName: 'Check Threshold',
+					name: 'checkThreshold',
+					type: 'options',
+					options: [
+						{
+							name:'Before Discount',
+							value:'BEFORE_DISCOUNT',
+						},
+						{
+							name:'After Discount',
+							value:'AFTER_DISCOUNT',
+						},
+						{
+							name:'Positive RT',
+							value:'POSITIVE_RT',
+						},
+						{
+							name:'Positive IL',
+							value:'POSITIVE_IL',
+						},
+					],
+					default: '',
+			},
+			{
+					displayName: 'Customer Account Check Threshold',
+					name: 'customerAccountCheckThreshold',
+					type: 'options',
+					options: [
+						{
+							name:'Before Discount',
+							value:'BEFORE_DISCOUNT',
+						},
+						{
+							name:'After Discount',
+							value:'AFTER_DISCOUNT',
+						},
+						{
+							name:'Positive RT',
+							value:'POSITIVE_RT',
+						},
+						{
+							name:'Positive IL',
+							value:'POSITIVE_IL',
+						},
+					],
+					default: '',
+			},
+			{
+					displayName: 'Customer Check Threshold',
+					name: 'customerCheckThreshold',
+					type: 'options',
+					options: [
+						{
+							name:'Before Discount',
+							value:'BEFORE_DISCOUNT',
+						},
+						{
+							name:'After Discount',
+							value:'AFTER_DISCOUNT',
+						},
+						{
+							name:'Positive RT',
+							value:'POSITIVE_RT',
+						},
+						{
+							name:'Positive IL',
+							value:'POSITIVE_IL',
+						},
+					],
+					default: '',
+			},
+			{
+					displayName: 'Tax Category Code',
+					name: 'taxCategoryCode',
+					type: 'string',
+					default: '',
+			},
+			{
+					displayName: 'Threshold Per Entity',
+					name: 'thresholdPerEntity',
+					type: 'boolean',
+					default: '',
+			},
+			{
+					displayName: 'Customer Account Threshold Per Entity',
+					name: 'customerAccountThresholdPerEntity',
+					type: 'boolean',
+					default: '',
+			},
+			{
+					displayName: 'Customer Threshold Per Entity',
+					name: 'customerThresholdPerEntity',
+					type: 'boolean',
+					default: '',
+			},
+			{
+					displayName: 'Company',
+					name: 'company',
+					type: 'boolean',
+					default: '',
+			},
+		// End of auto generated fields
 		],
 	},
 ];
