@@ -10,23 +10,21 @@ type name = {
 
 export const genericApiOperations: INodeProperties[] = [
 	{
-
-			displayName: 'Entity',
-			name: 'entity',
-			type: 'options',
-			displayOptions: {
-				show: {
-					resource: [
-						'genericApi',
-					],
-				},
+		displayName: 'Entity',
+		name: 'entity',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'genericApi',
+				],
 			},
-			default: '',
-			typeOptions: {
-				loadOptionsMethod: 'getEntities',
-			},
-			description: `Choose the Entity.`,
-
+		},
+		default: '',
+		typeOptions: {
+			loadOptionsMethod: 'getEntities',
+		},
+		description: `Choose the Entity.`,
 	},
 	{
 		displayName: 'Operation',
@@ -98,6 +96,7 @@ export const genericApiFields: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getNestedEntities',
+			loadOptionsDependsOn: ['entity'],
 		},
 		default: [],
 	},
