@@ -734,11 +734,11 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value:'AFTER_DISCOUNT',
 						},
 						{
-							name:'Positive RT',
+							name:'Positive Rated Transaction',
 							value:'POSITIVE_RT',
 						},
 						{
-							name:'Positive IL',
+							name:'Positive Invoice Line',
 							value:'POSITIVE_IL',
 						},
 					],
@@ -758,11 +758,11 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value:'AFTER_DISCOUNT',
 						},
 						{
-							name:'Positive RT',
+							name:'Positive Rated Transaction',
 							value:'POSITIVE_RT',
 						},
 						{
-							name:'Positive IL',
+							name:'Positive Invoice Line',
 							value:'POSITIVE_IL',
 						},
 					],
@@ -782,11 +782,11 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value:'AFTER_DISCOUNT',
 						},
 						{
-							name:'Positive RT',
+							name:'Positive Rated Transaction',
 							value:'POSITIVE_RT',
 						},
 						{
-							name:'Positive IL',
+							name:'Positive Invoice Line',
 							value:'POSITIVE_IL',
 						},
 					],
