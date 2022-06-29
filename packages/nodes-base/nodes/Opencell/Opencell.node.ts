@@ -336,7 +336,6 @@ export class Opencell implements INodeType {
 					body.name = this.getNodeParameter('name', i);
 					body.address = this.getNodeParameter('address', i);
 					body.contactInformation = this.getNodeParameter('contactInformation', i);
-					body.contactInformation = this.getNodeParameter('contactInformation', i);
 					if (this.getNodeParameter('email', i)) {
 						body.email = this.getNodeParameter('email', i);
 					}

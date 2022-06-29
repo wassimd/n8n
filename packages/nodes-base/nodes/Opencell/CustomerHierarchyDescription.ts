@@ -430,6 +430,8 @@ export const customerHierarchyFields: INodeProperties[] = [
 			},
 		},
 		options: [
+
+
 			{
 				displayName: 'Billing Cycle',
 				name: 'billingCycle',
