@@ -1,8 +1,8 @@
 import {
 	IDataObject,
 	INodeProperties,
-	INodePropertyOptions,
 	INodePropertyCollection,
+	INodePropertyOptions,
 } from 'n8n-workflow';
 import { threadId } from 'worker_threads';
 
