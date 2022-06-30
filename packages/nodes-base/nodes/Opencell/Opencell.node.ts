@@ -475,6 +475,9 @@ export class Opencell implements INodeType {
 					if (additionalFields.company) {
 						body.company = additionalFields.company;
 					}
+					if (additionalFields.customFields) {
+						body.customFields = additionalFields.customFields;
+					}
 
 					responseData = await opencellApi.call(this, 'POST', url, body);
 					returnData.push(responseData);
