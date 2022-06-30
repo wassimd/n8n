@@ -86,12 +86,12 @@ export const customerHierarchyFields: INodeProperties[] = [
 			{
 				name: 'Cust 2 UA',
 				value: 'C_UA',
-				description: 'Creates Customer, Customer Account, Billing Account, User Account'
+				description: 'Creates Customer, Customer Account, Billing Account, User Account',
 			},
 			{
 				name: 'S and  C',
 				value: 'S_C',
-				description: 'Creates Seller and Customer'
+				description: 'Creates Seller and Customer',
 			},
 			{
 				name: 'Customer',
@@ -132,7 +132,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				operation: [
 					'upsert',
 					'delete',
-					'get'
+					'get',
 				],
 			},
 		},
@@ -243,30 +243,6 @@ export const customerHierarchyFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Email',
-				name: 'email',
-				type: 'string',
-				default: '',
-			},
-			{
-				displayName: 'Phone',
-				name: 'phone',
-				type: 'string',
-				default: '',
-			},
-			{
-				displayName: 'Mobile',
-				name: 'mobile',
-				type: 'string',
-				default: '',
-			},
-			{
-				displayName: 'Fax',
-				name: 'fax',
-				type: 'string',
-				default: '',
-			},
-			{
 				displayName: 'Contact Address',
 				name:'address',
 				type:'collection',
@@ -298,11 +274,35 @@ export const customerHierarchyFields: INodeProperties[] = [
 					},
 				],
 			},
+			{
+				displayName: 'Email',
+				name: 'email',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Fax',
+				name: 'fax',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Mobile',
+				name: 'mobile',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Phone',
+				name: 'phone',
+				type: 'string',
+				default: '',
+			},
 		],
 	},
 
 	{
-		displayName: 'E-mail',
+		displayName: 'Email',
 		name: 'email',
 		type: 'string',
 		required: true,
@@ -359,20 +359,20 @@ export const customerHierarchyFields: INodeProperties[] = [
 		type: 'options',
 					options: [
 						{
+							name: 'Cash',
+							value: 'CASH',
+						},
+						{
 							name: 'Check',
 							value: 'CHECK',
 						},
 						{
-							name: 'Direct Debit',
-							value: 'DIRECTDEBIT',
-						},
-						{
-							name: 'Wire Transfer',
-							value: 'WIRETRANSFER',
-						},
-						{
 							name: 'Credit Card',
 							value: 'CARD',
+						},
+						{
+							name: 'Direct Debit',
+							value: 'DIRECTDEBIT',
 						},
 						{
 							name: 'PayPal',
@@ -383,11 +383,11 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value: 'STRIPE',
 						},
 						{
-							name: 'Cash',
-							value: 'CASH',
+							name: 'Wire Transfer',
+							value: 'WIRETRANSFER',
 						},
 					],
-		default: {},
+		default: 'CASH',
 		displayOptions: {
 			show: {
 				resource: [
@@ -524,16 +524,6 @@ export const customerHierarchyFields: INodeProperties[] = [
 				name: 'bankCoordinates',
 				type: 'collection',
 				default: {},
-				displayOptions: {
-					show: {
-						resource: [
-							'customerHierarchy',
-						],
-						operation: [
-							'upsert',
-						],
-					},
-				},
 				options: [
 					{
 						displayName: 'Account Number',
@@ -620,16 +610,6 @@ export const customerHierarchyFields: INodeProperties[] = [
 				name: 'minimumAmountEl',
 				type: 'collection',
 				default: {},
-				displayOptions: {
-					show: {
-						resource: [
-							'customerHierarchy',
-						],
-						operation: [
-							'upsert',
-						],
-					},
-				},
 				options: [
 					{
 						displayName: 'Customer Minimum Amount',
@@ -810,7 +790,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value: 'CLOSE',
 						},
 					],
-					default: {},
+					default: 'ACTIVE',
 			},
 			{
 					displayName: 'Credit Category',

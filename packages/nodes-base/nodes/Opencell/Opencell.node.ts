@@ -329,7 +329,7 @@ export class Opencell implements INodeType {
 
 					const crmAccountType = this.getNodeParameter('crmAccountType', i) as string;
 					const crmParentCode = this.getNodeParameter('crmParentCode', i) as string;
-					let body: any = {};
+					let body: IDataObject = {};
 					body.crmAccountType = crmAccountType as string;
 					body.crmParentCode = crmParentCode as string;
 					body.code = this.getNodeParameter('code', i) as string;
