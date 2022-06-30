@@ -4,6 +4,7 @@ import {
 	INodePropertyOptions,
 	INodePropertyCollection,
 } from 'n8n-workflow';
+import { threadId } from 'worker_threads';
 
 type name = {
 	title: string,
@@ -244,11 +245,31 @@ export const customerHierarchyFields: INodeProperties[] = [
 				default: '',
 			},
 			{
+				displayName: 'Phone',
+				name: 'phone',
+				type: 'string',
+				default: '',
+			},
+			{
 				displayName: 'Mobile',
 				name: 'mobile',
 				type: 'string',
 				default: '',
 			},
+			{
+				displayName: 'Fax',
+				name: 'fax',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Contact Address',
+				name:'address',
+				type:'collection',
+				default: {},
+				// @ts-ignore
+				options: this.findWhere({ displayName: 'Address'}),
+			}
 		],
 	},
 

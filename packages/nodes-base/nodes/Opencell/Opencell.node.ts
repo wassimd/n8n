@@ -355,129 +355,121 @@ export class Opencell implements INodeType {
 						body.currency = this.getNodeParameter('currency', i);
 					}
 					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-					if (additionalFields.billingCycle) {
-						body.billingCycle = additionalFields.billingCycle;
+					if (additionalFields.description) {
+						body.description = additionalFields.description;
+					}
+					if (additionalFields.externalRef1) {
+							body.externalRef1 = additionalFields.externalRef1;
+					}
+					if (additionalFields.externalRef2) {
+							body.externalRef2 = additionalFields.externalRef2;
+					}
+					if (additionalFields.jobTitle) {
+							body.jobTitle = additionalFields.jobTitle;
+					}
+					if (additionalFields.terminationReason) {
+							body.terminationReason = additionalFields.terminationReason;
+					}
+					if (additionalFields.subscriptionDate) {
+							body.subscriptionDate = additionalFields.subscriptionDate;
+					}
+					if (additionalFields.terminationDate) {
+							body.terminationDate = additionalFields.terminationDate;
+					}
+					if (additionalFields.customerBrand) {
+							body.customerBrand = additionalFields.customerBrand;
+					}
+					if (additionalFields.registrationNo) {
+							body.registrationNo = additionalFields.registrationNo;
 					}
 					if (additionalFields.vatNo) {
-						body.vatNo = additionalFields.vatNo;
+							body.vatNo = additionalFields.vatNo;
+					}
+					if (additionalFields.seller) {
+							body.seller = additionalFields.seller;
+					}
+					if (additionalFields.mandateIdentification) {
+							body.mandateIdentification = additionalFields.mandateIdentification;
+					}
+					if (additionalFields.mandateDate) {
+							body.mandateDate = additionalFields.mandateDate;
+					}
+					if (additionalFields.caStatus) {
+							body.caStatus = additionalFields.caStatus;
+					}
+					if (additionalFields.creditCategory) {
+							body.creditCategory = additionalFields.creditCategory;
+					}
+					if (additionalFields.dateStatus) {
+							body.dateStatus = additionalFields.dateStatus;
+					}
+					if (additionalFields.dateDunningLevel) {
+							body.dateDunningLevel = additionalFields.dateDunningLevel;
+					}
+					if (additionalFields.dunningLevel) {
+							body.dunningLevel = additionalFields.dunningLevel;
+					}
+					if (additionalFields.paymentTerms) {
+							body.paymentTerms = additionalFields.paymentTerms;
+					}
+					if (additionalFields.billingCycle) {
+							body.billingCycle = additionalFields.billingCycle;
+					}
+					if (additionalFields.nextInvoiceDate) {
+							body.nextInvoiceDate = additionalFields.nextInvoiceDate;
 					}
 					if (additionalFields.electronicBilling) {
-						body.electronicBilling = additionalFields.electronicBilling;
+							body.electronicBilling = additionalFields.electronicBilling;
 					}
-					if (this.getNodeParameter('description', i)) {
-						body.description= this.getNodeParameter('description', i);
+					if (additionalFields.baStatus) {
+							body.baStatus = additionalFields.baStatus;
 					}
-					if (this.getNodeParameter('externalRef1', i)) {
-							body.externalRef1= this.getNodeParameter('externalRef1', i);
+					if (additionalFields.invoicingThreshold) {
+							body.invoicingThreshold = additionalFields.invoicingThreshold;
 					}
-					if (this.getNodeParameter('externalRef2', i)) {
-							body.externalRef2= this.getNodeParameter('externalRef2', i);
+					if (additionalFields.uaStatus) {
+							body.uaStatus = additionalFields.uaStatus;
 					}
-					if (this.getNodeParameter('jobTitle', i)) {
-							body.jobTitle= this.getNodeParameter('jobTitle', i);
+					if (additionalFields.mailingType) {
+							body.mailingType = additionalFields.mailingType;
 					}
-					if (this.getNodeParameter('terminationReason', i)) {
-							body.terminationReason= this.getNodeParameter('terminationReason', i);
+					if (additionalFields.emailTemplate) {
+							body.emailTemplate = additionalFields.emailTemplate;
 					}
-					if (this.getNodeParameter('subscriptionDate', i)) {
-							body.subscriptionDate= this.getNodeParameter('subscriptionDate', i);
+					if (additionalFields.ccedEmails) {
+							body.ccedEmails = additionalFields.ccedEmails;
 					}
-					if (this.getNodeParameter('terminationDate', i)) {
-							body.terminationDate= this.getNodeParameter('terminationDate', i);
+					if (additionalFields.customerInvoicingThreshold) {
+							body.customerInvoicingThreshold = additionalFields.customerInvoicingThreshold;
 					}
-					if (this.getNodeParameter('customerBrand', i)) {
-							body.customerBrand= this.getNodeParameter('customerBrand', i);
+					if (additionalFields.customerAccountInvoicingThreshold) {
+							body.customerAccountInvoicingThreshold = additionalFields.customerAccountInvoicingThreshold;
 					}
-					if (this.getNodeParameter('registrationNo', i)) {
-							body.registrationNo= this.getNodeParameter('registrationNo', i);
+					if (additionalFields.checkThreshold) {
+							body.checkThreshold = additionalFields.checkThreshold;
 					}
-					if (this.getNodeParameter('vatNo', i)) {
-							body.vatNo= this.getNodeParameter('vatNo', i);
+					if (additionalFields.customerAccountCheckThreshold) {
+							body.customerAccountCheckThreshold = additionalFields.customerAccountCheckThreshold;
 					}
-					if (this.getNodeParameter('seller', i)) {
-							body.seller= this.getNodeParameter('seller', i);
+					if (additionalFields.customerCheckThreshold) {
+							body.customerCheckThreshold = additionalFields.customerCheckThreshold;
 					}
-					if (this.getNodeParameter('mandateIdentification', i)) {
-							body.mandateIdentification= this.getNodeParameter('mandateIdentification', i);
+					if (additionalFields.taxCategoryCode) {
+							body.taxCategoryCode = additionalFields.taxCategoryCode;
 					}
-					if (this.getNodeParameter('mandateDate', i)) {
-							body.mandateDate= this.getNodeParameter('mandateDate', i);
+					if (additionalFields.thresholdPerEntity) {
+							body.thresholdPerEntity = additionalFields.thresholdPerEntity;
 					}
-					if (this.getNodeParameter('caStatus', i)) {
-							body.caStatus= this.getNodeParameter('caStatus', i);
+					if (additionalFields.customerAccountThresholdPerEntity) {
+							body.customerAccountThresholdPerEntity = additionalFields.customerAccountThresholdPerEntity;
 					}
-					if (this.getNodeParameter('creditCategory', i)) {
-							body.creditCategory= this.getNodeParameter('creditCategory', i);
+					if (additionalFields.customerThresholdPerEntity) {
+							body.customerThresholdPerEntity = additionalFields.customerThresholdPerEntity;
 					}
-					if (this.getNodeParameter('dateStatus', i)) {
-							body.dateStatus= this.getNodeParameter('dateStatus', i);
+					if (additionalFields.company) {
+							body.company = additionalFields.company;
 					}
-					if (this.getNodeParameter('dateDunningLevel', i)) {
-							body.dateDunningLevel= this.getNodeParameter('dateDunningLevel', i);
-					}
-					if (this.getNodeParameter('dunningLevel', i)) {
-							body.dunningLevel= this.getNodeParameter('dunningLevel', i);
-					}
-					if (this.getNodeParameter('paymentTerms', i)) {
-							body.paymentTerms= this.getNodeParameter('paymentTerms', i);
-					}
-					if (this.getNodeParameter('billingCycle', i)) {
-							body.billingCycle= this.getNodeParameter('billingCycle', i);
-					}
-					if (this.getNodeParameter('nextInvoiceDate', i)) {
-							body.nextInvoiceDate= this.getNodeParameter('nextInvoiceDate', i);
-					}
-					if (this.getNodeParameter('electronicBilling', i)) {
-							body.electronicBilling= this.getNodeParameter('electronicBilling', i);
-					}
-					if (this.getNodeParameter('baStatus', i)) {
-							body.baStatus= this.getNodeParameter('baStatus', i);
-					}
-					if (this.getNodeParameter('invoicingThreshold', i)) {
-							body.invoicingThreshold= this.getNodeParameter('invoicingThreshold', i);
-					}
-					if (this.getNodeParameter('uaStatus', i)) {
-							body.uaStatus= this.getNodeParameter('uaStatus', i);
-					}
-					if (this.getNodeParameter('mailingType', i)) {
-							body.mailingType= this.getNodeParameter('mailingType', i);
-					}
-					if (this.getNodeParameter('emailTemplate', i)) {
-							body.emailTemplate= this.getNodeParameter('emailTemplate', i);
-					}
-					if (this.getNodeParameter('ccedEmails', i)) {
-							body.ccedEmails= this.getNodeParameter('ccedEmails', i);
-					}
-					if (this.getNodeParameter('customerInvoicingThreshold', i)) {
-							body.customerInvoicingThreshold= this.getNodeParameter('customerInvoicingThreshold', i);
-					}
-					if (this.getNodeParameter('customerAccountInvoicingThreshold', i)) {
-							body.customerAccountInvoicingThreshold= this.getNodeParameter('customerAccountInvoicingThreshold', i);
-					}
-					if (this.getNodeParameter('checkThreshold', i)) {
-							body.checkThreshold= this.getNodeParameter('checkThreshold', i);
-					}
-					if (this.getNodeParameter('customerAccountCheckThreshold', i)) {
-							body.customerAccountCheckThreshold= this.getNodeParameter('customerAccountCheckThreshold', i);
-					}
-					if (this.getNodeParameter('customerCheckThreshold', i)) {
-							body.customerCheckThreshold= this.getNodeParameter('customerCheckThreshold', i);
-					}
-					if (this.getNodeParameter('taxCategoryCode', i)) {
-							body.taxCategoryCode= this.getNodeParameter('taxCategoryCode', i);
-					}
-					if (this.getNodeParameter('thresholdPerEntity', i)) {
-							body.thresholdPerEntity= this.getNodeParameter('thresholdPerEntity', i);
-					}
-					if (this.getNodeParameter('customerAccountThresholdPerEntity', i)) {
-							body.customerAccountThresholdPerEntity= this.getNodeParameter('customerAccountThresholdPerEntity', i);
-					}
-					if (this.getNodeParameter('customerThresholdPerEntity', i)) {
-							body.customerThresholdPerEntity= this.getNodeParameter('customerThresholdPerEntity', i);
-					}
-					if (this.getNodeParameter('company', i)) {
-							body.company= this.getNodeParameter('company', i);
-					}
+					
 					responseData = await opencellApi.call(this, 'POST', url, body);
 					returnData.push(responseData);
 				}
