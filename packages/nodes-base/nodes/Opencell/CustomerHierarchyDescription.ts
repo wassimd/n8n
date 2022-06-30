@@ -17,6 +17,7 @@ export const customerHierarchyOperations: INodeProperties[] = [
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -142,6 +143,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 		name: 'name',
 		type: 'collection',
 		placeholder: 'Add Field',
+		required: true,
 		default: {},
 		displayOptions: {
 			show: {
@@ -181,6 +183,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 	{
 		displayName: 'Address',
 		name: 'address',
+		required: true,
 		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
@@ -205,7 +208,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				displayName: 'Zip Code',
 				name: 'zipCode',
 				type: 'number',
-				default: '',
+				default: 0,
 			},
 			{
 				displayName: 'City',
@@ -225,6 +228,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 		displayName: 'Contact Information',
 		name: 'contactInformation',
 		type: 'collection',
+		required: true,
 		placeholder: 'Add Field',
 		default: {},
 		displayOptions: {
@@ -239,7 +243,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'E-mail',
+				displayName: 'Email',
 				name: 'email',
 				type: 'string',
 				default: '',
@@ -267,9 +271,33 @@ export const customerHierarchyFields: INodeProperties[] = [
 				name:'address',
 				type:'collection',
 				default: {},
-				// @ts-ignore
-				options: this.findWhere({ displayName: 'Address'}),
-			}
+				options: [
+					{
+						displayName: 'Address',
+						name: 'address1',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'City',
+						name: 'city',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Country',
+						name: 'country',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Zip Code',
+						name: 'zipCode',
+						type: 'number',
+						default: 0,
+					},
+				],
+			},
 		],
 	},
 
@@ -277,6 +305,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 		displayName: 'E-mail',
 		name: 'email',
 		type: 'string',
+		required: true,
 		default: '',
 		displayOptions: {
 			show: {
@@ -292,6 +321,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 	{
 		displayName: 'Language',
 		name: 'language',
+		required: true,
 		type: 'string',
 		default: '',
 		displayOptions: {
@@ -309,6 +339,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 		displayName: 'Country',
 		name: 'country',
 		type: 'string',
+		required: true,
 		default: '',
 		displayOptions: {
 			show: {
@@ -324,6 +355,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 	{
 		displayName: 'paymentMethod',
 		name: 'paymentMethod',
+		required: true,
 		type: 'options',
 					options: [
 						{
@@ -355,7 +387,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value: 'CASH',
 						},
 					],
-		default: '',
+		default: {},
 		displayOptions: {
 			show: {
 				resource: [
@@ -370,6 +402,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 	{
 		displayName: 'Customer Category',
 		name: 'customerCategory',
+		required: true,
 		type: 'string',
 		default: '',
 		displayOptions: {
@@ -386,6 +419,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 	{
 		displayName: 'Currency',
 		name: 'currency',
+		required: true,
 		type: 'string',
 		default: '',
 		displayOptions: {
@@ -484,6 +518,205 @@ export const customerHierarchyFields: INodeProperties[] = [
 			},
 		},
 		options: [
+			// Specific DTOs (auto-generated)
+			{
+				displayName: 'Bank Coordinates',
+				name: 'bankCoordinates',
+				type: 'collection',
+				default: {},
+				displayOptions: {
+					show: {
+						resource: [
+							'customerHierarchy',
+						],
+						operation: [
+							'upsert',
+						],
+					},
+				},
+				options: [
+					{
+						displayName: 'Account Number',
+						name: 'accountNumber',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Bank Code',
+						name: 'bankCode',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Branch Code',
+						name: 'branchCode',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Key',
+						name: 'key',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'IBAN',
+						name: 'iban',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'BIC',
+						name: 'bic',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Account Owner',
+						name: 'accountOwner',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Bank Name',
+						name: 'bankName',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Bank ID',
+						name: 'bankId',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Issuer Number',
+						name: 'issuerNumber',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Issuer Name',
+						name: 'issuerName',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'ICS',
+						name: 'ics',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Empty',
+						name: 'empty',
+						type: 'boolean',
+						default: false,
+					},
+				],
+			},
+			{
+				displayName: 'Minimum Amount',
+				name: 'minimumAmountEl',
+				type: 'collection',
+				default: {},
+				displayOptions: {
+					show: {
+						resource: [
+							'customerHierarchy',
+						],
+						operation: [
+							'upsert',
+						],
+					},
+				},
+				options: [
+					{
+						displayName: 'Customer Minimum Amount',
+						name: 'customerMinimumAmountEl',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Customer Minimum Label',
+						name: 'customerMinimumLabelEl',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Customer Minimum Target Account',
+						name: 'customerMinimumTargetAccount',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Customer Account Minimum Amount',
+						name: 'customerAccountMinimumAmountEl',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Customer Account Minimum Label',
+						name: 'customerAccountMinimumLabelEl',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Customer Account Minimum Target Account',
+						name: 'customerAccountMinimumTargetAccount',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Billing Account Minimum Amount',
+						name: 'billingAccountMinimumAmountEl',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Billing Account Minimum Label',
+						name: 'billingAccountMinimumLabelEl',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'User Account Minimum Amount',
+						name: 'userAccountMinimumAmountEl',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'User Account Minimum Label',
+						name: 'userAccountMinimumLabelEl',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Customer Minimum Charge Template',
+						name: 'customerMinimumChargeTemplate',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Customer Account Minimum Charge Template',
+						name: 'customerAccountMinimumChargeTemplate',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'Billing Account Minimum Charge Template',
+						name: 'billingAccountMinimumChargeTemplate',
+						type: 'string',
+						default: '',
+					},
+					{
+						displayName: 'User Account Minimum Charge Template',
+						name: 'userAccountMinimumChargeTemplate',
+						type: 'string',
+						default: '',
+					},
+				],
+			},
 			// Auto generated
 			{
 				displayName: 'Description',
@@ -577,7 +810,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value: 'CLOSE',
 						},
 					],
-					default: '',
+					default: {},
 			},
 			{
 					displayName: 'Credit Category',
@@ -631,7 +864,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value: 'R6',
 						},
 					],
-					default: '',
+					default: 'R0',
 			},
 			{
 					displayName: 'Payment Terms',
@@ -655,7 +888,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 					displayName: 'Electronic Billing',
 					name: 'electronicBilling',
 					type: 'boolean',
-					default: '',
+					default: false,
 			},
 			{
 					displayName: 'BA Status',
@@ -679,13 +912,13 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value:'CLOSED',
 						},
 					],
-					default: '',
+					default: 'ACTIVE',
 			},
 			{
 					displayName: 'Invoicing Threshold',
 					name: 'invoicingThreshold',
 					type: 'number',
-					default: '',
+					default: 0,
 			},
 			{
 					displayName: 'UA Status',
@@ -709,7 +942,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value:'CLOSED',
 						},
 					],
-					default: '',
+					default: 'ACTIVE',
 			},
 			{
 					displayName: 'Mailing Type',
@@ -733,13 +966,13 @@ export const customerHierarchyFields: INodeProperties[] = [
 					displayName: 'Customer Invoicing Threshold',
 					name: 'customerInvoicingThreshold',
 					type: 'number',
-					default: '',
+					default: 0,
 			},
 			{
 					displayName: 'Customer Account Invoicing Threshold',
 					name: 'customerAccountInvoicingThreshold',
 					type: 'number',
-					default: '',
+					default: 0,
 			},
 			{
 					displayName: 'Check Threshold',
@@ -763,7 +996,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value:'POSITIVE_IL',
 						},
 					],
-					default: '',
+					default: 'BEFORE_DISCOUNT',
 			},
 			{
 					displayName: 'Customer Account Check Threshold',
@@ -787,7 +1020,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value:'POSITIVE_IL',
 						},
 					],
-					default: '',
+					default: 'BEFORE_DISCOUNT',
 			},
 			{
 					displayName: 'Customer Check Threshold',
@@ -811,7 +1044,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 							value:'POSITIVE_IL',
 						},
 					],
-					default: '',
+					default: 'BEFORE_DISCOUNT',
 			},
 			{
 					displayName: 'Tax Category Code',
@@ -823,25 +1056,25 @@ export const customerHierarchyFields: INodeProperties[] = [
 					displayName: 'Threshold Per Entity',
 					name: 'thresholdPerEntity',
 					type: 'boolean',
-					default: '',
+					default: false,
 			},
 			{
 					displayName: 'Customer Account Threshold Per Entity',
 					name: 'customerAccountThresholdPerEntity',
 					type: 'boolean',
-					default: '',
+					default: false,
 			},
 			{
 					displayName: 'Customer Threshold Per Entity',
 					name: 'customerThresholdPerEntity',
 					type: 'boolean',
-					default: '',
+					default: false,
 			},
 			{
 					displayName: 'Company',
 					name: 'company',
 					type: 'boolean',
-					default: '',
+					default: false,
 			},
 		// End of auto generated fields
 		],

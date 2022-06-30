@@ -355,6 +355,12 @@ export class Opencell implements INodeType {
 						body.currency = this.getNodeParameter('currency', i);
 					}
 					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+					if (additionalFields.bankCoordinates) {
+						body.bankCoordinates = additionalFields.bankCoordinates;
+					}
+					if (additionalFields.minimumAmountEl) {
+						body.minimumAmountEl = additionalFields.minimumAmountEl;
+					}
 					if (additionalFields.description) {
 						body.description = additionalFields.description;
 					}
