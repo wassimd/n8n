@@ -359,117 +359,117 @@ export class Opencell implements INodeType {
 						body.description = additionalFields.description;
 					}
 					if (additionalFields.externalRef1) {
-							body.externalRef1 = additionalFields.externalRef1;
+						body.externalRef1 = additionalFields.externalRef1;
 					}
 					if (additionalFields.externalRef2) {
-							body.externalRef2 = additionalFields.externalRef2;
+						body.externalRef2 = additionalFields.externalRef2;
 					}
 					if (additionalFields.jobTitle) {
-							body.jobTitle = additionalFields.jobTitle;
+						body.jobTitle = additionalFields.jobTitle;
 					}
 					if (additionalFields.terminationReason) {
-							body.terminationReason = additionalFields.terminationReason;
+						body.terminationReason = additionalFields.terminationReason;
 					}
 					if (additionalFields.subscriptionDate) {
-							body.subscriptionDate = additionalFields.subscriptionDate;
+						body.subscriptionDate = additionalFields.subscriptionDate;
 					}
 					if (additionalFields.terminationDate) {
-							body.terminationDate = additionalFields.terminationDate;
+						body.terminationDate = additionalFields.terminationDate;
 					}
 					if (additionalFields.customerBrand) {
-							body.customerBrand = additionalFields.customerBrand;
+						body.customerBrand = additionalFields.customerBrand;
 					}
 					if (additionalFields.registrationNo) {
-							body.registrationNo = additionalFields.registrationNo;
+						body.registrationNo = additionalFields.registrationNo;
 					}
 					if (additionalFields.vatNo) {
-							body.vatNo = additionalFields.vatNo;
+						body.vatNo = additionalFields.vatNo;
 					}
 					if (additionalFields.seller) {
-							body.seller = additionalFields.seller;
+						body.seller = additionalFields.seller;
 					}
 					if (additionalFields.mandateIdentification) {
-							body.mandateIdentification = additionalFields.mandateIdentification;
+						body.mandateIdentification = additionalFields.mandateIdentification;
 					}
 					if (additionalFields.mandateDate) {
-							body.mandateDate = additionalFields.mandateDate;
+						body.mandateDate = additionalFields.mandateDate;
 					}
 					if (additionalFields.caStatus) {
-							body.caStatus = additionalFields.caStatus;
+						body.caStatus = additionalFields.caStatus;
 					}
 					if (additionalFields.creditCategory) {
-							body.creditCategory = additionalFields.creditCategory;
+						body.creditCategory = additionalFields.creditCategory;
 					}
 					if (additionalFields.dateStatus) {
-							body.dateStatus = additionalFields.dateStatus;
+						body.dateStatus = additionalFields.dateStatus;
 					}
 					if (additionalFields.dateDunningLevel) {
-							body.dateDunningLevel = additionalFields.dateDunningLevel;
+						body.dateDunningLevel = additionalFields.dateDunningLevel;
 					}
 					if (additionalFields.dunningLevel) {
-							body.dunningLevel = additionalFields.dunningLevel;
+						body.dunningLevel = additionalFields.dunningLevel;
 					}
 					if (additionalFields.paymentTerms) {
-							body.paymentTerms = additionalFields.paymentTerms;
+						body.paymentTerms = additionalFields.paymentTerms;
 					}
 					if (additionalFields.billingCycle) {
-							body.billingCycle = additionalFields.billingCycle;
+						body.billingCycle = additionalFields.billingCycle;
 					}
 					if (additionalFields.nextInvoiceDate) {
-							body.nextInvoiceDate = additionalFields.nextInvoiceDate;
+						body.nextInvoiceDate = additionalFields.nextInvoiceDate;
 					}
 					if (additionalFields.electronicBilling) {
-							body.electronicBilling = additionalFields.electronicBilling;
+						body.electronicBilling = additionalFields.electronicBilling;
 					}
 					if (additionalFields.baStatus) {
-							body.baStatus = additionalFields.baStatus;
+						body.baStatus = additionalFields.baStatus;
 					}
 					if (additionalFields.invoicingThreshold) {
-							body.invoicingThreshold = additionalFields.invoicingThreshold;
+						body.invoicingThreshold = additionalFields.invoicingThreshold;
 					}
 					if (additionalFields.uaStatus) {
-							body.uaStatus = additionalFields.uaStatus;
+						body.uaStatus = additionalFields.uaStatus;
 					}
 					if (additionalFields.mailingType) {
-							body.mailingType = additionalFields.mailingType;
+						body.mailingType = additionalFields.mailingType;
 					}
 					if (additionalFields.emailTemplate) {
-							body.emailTemplate = additionalFields.emailTemplate;
+						body.emailTemplate = additionalFields.emailTemplate;
 					}
 					if (additionalFields.ccedEmails) {
-							body.ccedEmails = additionalFields.ccedEmails;
+						body.ccedEmails = additionalFields.ccedEmails;
 					}
 					if (additionalFields.customerInvoicingThreshold) {
-							body.customerInvoicingThreshold = additionalFields.customerInvoicingThreshold;
+						body.customerInvoicingThreshold = additionalFields.customerInvoicingThreshold;
 					}
 					if (additionalFields.customerAccountInvoicingThreshold) {
-							body.customerAccountInvoicingThreshold = additionalFields.customerAccountInvoicingThreshold;
+						body.customerAccountInvoicingThreshold = additionalFields.customerAccountInvoicingThreshold;
 					}
 					if (additionalFields.checkThreshold) {
-							body.checkThreshold = additionalFields.checkThreshold;
+						body.checkThreshold = additionalFields.checkThreshold;
 					}
 					if (additionalFields.customerAccountCheckThreshold) {
-							body.customerAccountCheckThreshold = additionalFields.customerAccountCheckThreshold;
+						body.customerAccountCheckThreshold = additionalFields.customerAccountCheckThreshold;
 					}
 					if (additionalFields.customerCheckThreshold) {
-							body.customerCheckThreshold = additionalFields.customerCheckThreshold;
+						body.customerCheckThreshold = additionalFields.customerCheckThreshold;
 					}
 					if (additionalFields.taxCategoryCode) {
-							body.taxCategoryCode = additionalFields.taxCategoryCode;
+						body.taxCategoryCode = additionalFields.taxCategoryCode;
 					}
 					if (additionalFields.thresholdPerEntity) {
-							body.thresholdPerEntity = additionalFields.thresholdPerEntity;
+						body.thresholdPerEntity = additionalFields.thresholdPerEntity;
 					}
 					if (additionalFields.customerAccountThresholdPerEntity) {
-							body.customerAccountThresholdPerEntity = additionalFields.customerAccountThresholdPerEntity;
+						body.customerAccountThresholdPerEntity = additionalFields.customerAccountThresholdPerEntity;
 					}
 					if (additionalFields.customerThresholdPerEntity) {
-							body.customerThresholdPerEntity = additionalFields.customerThresholdPerEntity;
+						body.customerThresholdPerEntity = additionalFields.customerThresholdPerEntity;
 					}
 					if (additionalFields.company) {
-							body.company = additionalFields.company;
+						body.company = additionalFields.company;
 					}
-					
+
 					responseData = await opencellApi.call(this, 'POST', url, body);
 					returnData.push(responseData);
 				}
