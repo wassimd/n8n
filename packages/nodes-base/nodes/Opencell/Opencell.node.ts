@@ -4,17 +4,19 @@ import {
 } from 'n8n-core';
 
 import {
-	IDataObject,
-	INodeExecutionData,
-	INodeType,
-	INodeTypeDescription,
-	IHttpRequestOptions,
+	ICredentialDataDecryptedObject,
 	ICredentialsDecrypted,
 	ICredentialTestFunctions,
-	INodePropertyOptions,
+	IDataObject,
+	IHttpRequestOptions,
 	INodeCredentialTestResult,
-	ICredentialDataDecryptedObject,
+	INodeExecutionData,
+	INodeProperties,
+	INodePropertyOptions,
+	INodeType,
+	INodeTypeDescription,
 	JsonObject,
+	NodePropertyTypes,
 } from 'n8n-workflow';
 
 import {
@@ -24,17 +26,20 @@ import {
 import {
 	customerHierarchyFields,
 	customerHierarchyOperations,
+} from './CustomerHierarchyDescription';
 
-} from './CustomerHierarchyDescription'
+import {
+	subscriptionFields,
+	subscriptionOperations,
+} from './SubscriptionDescription';
 
 import {
 	genericApiFields,
 	genericApiOperations,
-} from './GenericApiComponent'
-import { incidentNoteOperations } from '../PagerDuty/IncidentNoteDescription';
-import { threadId } from 'worker_threads';
+} from './GenericApiComponent';
+import { getCustomerOptionalFields } from '../Magento/GenericFunctions';
 
-async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<any> {
+async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<INodeCredentialTestResult> {
 
 	const credentials = decryptedCredentials;
 	const requestOptions: IHttpRequestOptions = {
@@ -49,9 +54,9 @@ async function validateCredentials(this: ICredentialTestFunctions ,decryptedCred
 			username: credentials.username as string,
 			password: credentials.password as string,
 		};
-		requestOptions.url = `${credentials.host}`; //`${credentials.host}:${credentials.port}`;
+		requestOptions.url = `${credentials.host}:${credentials.port}`;
 	} else {
-		throw 'Les credentials ne sont pas définis'
+		throw new Error('Credentials undefined');
 	}
 
 	requestOptions.url += '/opencell/api/rest/catalog/version';
@@ -66,6 +71,7 @@ export class Opencell implements INodeType {
 		icon: 'file:opencell.svg',
 		group: ['transform'],
 		version: 1,
+		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Consume Opencell API',
 		defaults: {
 			name: 'Opencell',
@@ -114,12 +120,13 @@ export class Opencell implements INodeType {
 					},
 				],
 				default: 'basicAuth',
-				description: 'The method of authentication.',
+				description: 'The method of authentication',
 			},
 			{
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Contact',
@@ -133,6 +140,10 @@ export class Opencell implements INodeType {
 						name: 'Generic API',
 						value: 'genericApi',
 					},
+					{
+						name: 'Subscription',
+						value: 'subscription',
+					},
 				],
 				default: 'customerHierarchy',
 				required: true,
@@ -141,11 +152,12 @@ export class Opencell implements INodeType {
 			{
 				displayName: 'Operation',
 				name: 'operation',
+				noDataExpression: true,
 				type: 'options',
 				displayOptions: {
 					show: {
 						resource: [
-							'contact',
+							'contact',>
 						],
 					},
 				},
@@ -157,7 +169,6 @@ export class Opencell implements INodeType {
 					},
 				],
 				default: 'create',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Email',
@@ -214,6 +225,9 @@ export class Opencell implements INodeType {
 			// GENERIC API
 			...genericApiOperations,
 			...genericApiFields,
+			// SUBSCRIPTION
+			...subscriptionOperations,
+			...subscriptionFields,
 		],
 	};
 
@@ -251,6 +265,61 @@ export class Opencell implements INodeType {
 		},
 
 		loadOptions: {
+			async getCustomFields(this: ILoadOptionsFunctions): Promise<INodeProperties[]> {
+				const returnData: INodeProperties[] = [];
+				const endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
+				const fields = await opencellApi.call(this, 'GET', endpoint, {});
+
+				for (const field of fields) {
+					let fieldType:NodePropertyTypes;
+					let def; //default
+					const opt:INodePropertyOptions[] = [];
+
+					switch(field.fieldType){
+						case 'DOUBLE' || 'INT' || 'LONG' :
+							fieldType =  'number';
+							def = 0;
+						case 'BOOLEAN':
+							fieldType = 'boolean';
+							def = false;
+						case 'DATE':
+							fieldType = 'dateTime';
+							def=0;
+						case "CHECKBOX_LIST":
+							fieldType = 'multiOptions';
+							def={};
+						case "LIST":
+							fieldType = 'options'
+							def={};
+						default:
+							fieldType =  'string';
+							def='';
+					}
+
+					let data: INodeProperties = {
+						displayName: field.description,
+						name: field.code,
+						type: fieldType,
+						required: field.valueRequired,
+						default: def,
+					};
+
+					if(field.listValues) {
+						for(const [key,val] of Object.entries(field.listValues))
+							opt.push({
+								name: key,
+								// @ts-ignore
+								value: val,
+							});
+							data.options = opt;
+						}
+
+					returnData.push(data);
+				}
+
+				return returnData;
+			},
+
 			async getTitles(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const returnData: INodePropertyOptions[] = [];
 				const endpoint = '/opencell/api/rest/v2/generic/all/title';
@@ -276,7 +345,6 @@ export class Opencell implements INodeType {
 						value: entity,
 					});
 				}
-
 				return returnData.sort((a, b) => a < b ? 0 : 1);
 			},
 			async getNestedEntities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
@@ -284,13 +352,13 @@ export class Opencell implements INodeType {
 				const entity = this.getNodeParameter('entity') as string;
 				const endpoint = `/opencell/api/rest/v2/generic/entities/${entity}`;
 				const response = await opencellApi.call(this, 'GET', endpoint, {});
-				for (let key of Object.keys(response)) {
-					let attribute = response[key];
-					if(attribute.isEntity == "true"){
+				for (const key of Object.keys(response)) {
+					const attribute = response[key];
+					if (attribute.isEntity === 'true') {
 						returnData.push({
-							 		name: key,//attribute.shortTypeName,
-							 		value: key,
-							});
+							name: key,//attribute.shortTypeName,
+							value: key,
+						});
 					}
 				}
 				// for (const entity of response.entities) {
@@ -301,6 +369,34 @@ export class Opencell implements INodeType {
 				// 	});
 				// }
 				return returnData.sort((a, b) => a < b ? 0 : 1);
+			},
+			async getUserAccounts(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const returnData: INodePropertyOptions[] = [];
+				const endpoint = '/opencell/api/rest/v2/generic/all/userAccount';
+				const userAccounts = await opencellApi.call(this, 'POST', endpoint, {'genericFields': ['code']});
+				for (const userAccount of userAccounts) {
+					//const contactName = `${contact.properties.firstname.value} ${contact.properties.lastname.value}`;
+					const userAccountId = userAccount.id;
+					returnData.push({
+						name: userAccount.code,
+						value: userAccount.code,
+					});
+				}
+				return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
+			},
+			async getOfferTemplates(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const returnData: INodePropertyOptions[] = [];
+				const endpoint = '/opencell/api/rest/v2/generic/all/offerTemplate';
+				const offerTemplates = await opencellApi.call(this, 'POST', endpoint, {'genericFields': ['code']});
+				for (const offerTemplate of offerTemplates) {
+					//const contactName = `${contact.properties.firstname.value} ${contact.properties.lastname.value}`;
+					const userAccountId = offerTemplate.id;
+					returnData.push({
+						name: offerTemplate.code,
+						value: offerTemplate.code,
+					});
+				}
+				return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
 			},
 		},
 	};
@@ -313,192 +409,117 @@ export class Opencell implements INodeType {
 		const resource = this.getNodeParameter('resource', 0) as string;
 		const operation = this.getNodeParameter('operation', 0) as string;
 
+		// type filters = {
+		// 	[key: string]: string
+		// }
+
 		for (let i = 0; i < items.length; i++) {
-			// Add credentials if any are set
-			// here we use basic auth
+			try {
+				// Add credentials if any are set
+				// here we use basic auth
 
-			if (resource === 'contact') {
-				if (operation === 'create') {
+				if (resource === 'contact') {
+					if (operation === 'create') {
 
+					}
 				}
-			}
-			else if (resource === 'customerHierarchy') {
-				if (operation === 'upsert') {
+				else if (resource === 'customerHierarchy') {
+					if (operation === 'upsert') {
 
-					const url = `/opencell/api/rest/account/accountHierarchy/createOrUpdateCRMAccountHierarchy`;
+						const url = `/opencell/api/rest/account/accountHierarchy/createOrUpdateCRMAccountHierarchy`;
 
-					const crmAccountType = this.getNodeParameter('crmAccountType', i) as string;
-					const crmParentCode = this.getNodeParameter('crmParentCode', i) as string;
-					let body: IDataObject = {};
-					body.crmAccountType = crmAccountType as string;
-					body.crmParentCode = crmParentCode as string;
-					body.code = this.getNodeParameter('code', i) as string;
-					body.name = this.getNodeParameter('name', i);
-					body.address = this.getNodeParameter('address', i);
-					body.contactInformation = this.getNodeParameter('contactInformation', i);
-					if (this.getNodeParameter('email', i)) {
-						body.email = this.getNodeParameter('email', i);
-					}
-					if (this.getNodeParameter('language', i)) {
-						body.language = this.getNodeParameter('language', i);
-					}
-					if (this.getNodeParameter('country', i)) {
-						body.country = this.getNodeParameter('country', i);
-					}
-					if (this.getNodeParameter('paymentMethod', i)) {
-						body.paymentMethod = this.getNodeParameter('paymentMethod', i);
-					}
-					if (this.getNodeParameter('customerCategory', i)) {
-						body.customerCategory = this.getNodeParameter('customerCategory', i);
-					}
-					if (this.getNodeParameter('currency', i)) {
-						body.currency = this.getNodeParameter('currency', i);
-					}
-					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-					if (additionalFields.bankCoordinates) {
-						body.bankCoordinates = additionalFields.bankCoordinates;
-					}
-					if (additionalFields.minimumAmountEl) {
-						body.minimumAmountEl = additionalFields.minimumAmountEl;
-					}
-					if (additionalFields.description) {
-						body.description = additionalFields.description;
-					}
-					if (additionalFields.externalRef1) {
-						body.externalRef1 = additionalFields.externalRef1;
-					}
-					if (additionalFields.externalRef2) {
-						body.externalRef2 = additionalFields.externalRef2;
-					}
-					if (additionalFields.jobTitle) {
-						body.jobTitle = additionalFields.jobTitle;
-					}
-					if (additionalFields.terminationReason) {
-						body.terminationReason = additionalFields.terminationReason;
-					}
-					if (additionalFields.subscriptionDate) {
-						body.subscriptionDate = additionalFields.subscriptionDate;
-					}
-					if (additionalFields.terminationDate) {
-						body.terminationDate = additionalFields.terminationDate;
-					}
-					if (additionalFields.customerBrand) {
-						body.customerBrand = additionalFields.customerBrand;
-					}
-					if (additionalFields.registrationNo) {
-						body.registrationNo = additionalFields.registrationNo;
-					}
-					if (additionalFields.vatNo) {
-						body.vatNo = additionalFields.vatNo;
-					}
-					if (additionalFields.seller) {
-						body.seller = additionalFields.seller;
-					}
-					if (additionalFields.mandateIdentification) {
-						body.mandateIdentification = additionalFields.mandateIdentification;
-					}
-					if (additionalFields.mandateDate) {
-						body.mandateDate = additionalFields.mandateDate;
-					}
-					if (additionalFields.caStatus) {
-						body.caStatus = additionalFields.caStatus;
-					}
-					if (additionalFields.creditCategory) {
-						body.creditCategory = additionalFields.creditCategory;
-					}
-					if (additionalFields.dateStatus) {
-						body.dateStatus = additionalFields.dateStatus;
-					}
-					if (additionalFields.dateDunningLevel) {
-						body.dateDunningLevel = additionalFields.dateDunningLevel;
-					}
-					if (additionalFields.dunningLevel) {
-						body.dunningLevel = additionalFields.dunningLevel;
-					}
-					if (additionalFields.paymentTerms) {
-						body.paymentTerms = additionalFields.paymentTerms;
-					}
-					if (additionalFields.billingCycle) {
-						body.billingCycle = additionalFields.billingCycle;
-					}
-					if (additionalFields.nextInvoiceDate) {
-						body.nextInvoiceDate = additionalFields.nextInvoiceDate;
-					}
-					if (additionalFields.electronicBilling) {
-						body.electronicBilling = additionalFields.electronicBilling;
-					}
-					if (additionalFields.baStatus) {
-						body.baStatus = additionalFields.baStatus;
-					}
-					if (additionalFields.invoicingThreshold) {
-						body.invoicingThreshold = additionalFields.invoicingThreshold;
-					}
-					if (additionalFields.uaStatus) {
-						body.uaStatus = additionalFields.uaStatus;
-					}
-					if (additionalFields.mailingType) {
-						body.mailingType = additionalFields.mailingType;
-					}
-					if (additionalFields.emailTemplate) {
-						body.emailTemplate = additionalFields.emailTemplate;
-					}
-					if (additionalFields.ccedEmails) {
-						body.ccedEmails = additionalFields.ccedEmails;
-					}
-					if (additionalFields.customerInvoicingThreshold) {
-						body.customerInvoicingThreshold = additionalFields.customerInvoicingThreshold;
-					}
-					if (additionalFields.customerAccountInvoicingThreshold) {
-						body.customerAccountInvoicingThreshold = additionalFields.customerAccountInvoicingThreshold;
-					}
-					if (additionalFields.checkThreshold) {
-						body.checkThreshold = additionalFields.checkThreshold;
-					}
-					if (additionalFields.customerAccountCheckThreshold) {
-						body.customerAccountCheckThreshold = additionalFields.customerAccountCheckThreshold;
-					}
-					if (additionalFields.customerCheckThreshold) {
-						body.customerCheckThreshold = additionalFields.customerCheckThreshold;
-					}
-					if (additionalFields.taxCategoryCode) {
-						body.taxCategoryCode = additionalFields.taxCategoryCode;
-					}
-					if (additionalFields.thresholdPerEntity) {
-						body.thresholdPerEntity = additionalFields.thresholdPerEntity;
-					}
-					if (additionalFields.customerAccountThresholdPerEntity) {
-						body.customerAccountThresholdPerEntity = additionalFields.customerAccountThresholdPerEntity;
-					}
-					if (additionalFields.customerThresholdPerEntity) {
-						body.customerThresholdPerEntity = additionalFields.customerThresholdPerEntity;
-					}
-					if (additionalFields.company) {
-						body.company = additionalFields.company;
-					}
-					if (additionalFields.customFields) {
-						body.customFields = additionalFields.customFields;
-					}
+						const crmAccountType = this.getNodeParameter('crmAccountType', i) as string;
+						const crmParentCode = this.getNodeParameter('crmParentCode', i) as string;
+						const body: IDataObject = {};
+						body.crmAccountType = crmAccountType as string;
+						body.crmParentCode = crmParentCode as string;
+						body.code = this.getNodeParameter('code', i) as string;
+						body.name = this.getNodeParameter('name', i);
+						body.address = this.getNodeParameter('address', i);
+						body.contactInformation = this.getNodeParameter('contactInformation', i);
+						body.contactInformation = this.getNodeParameter('contactInformation', i);
+						if (this.getNodeParameter('email', i)) {
+							body.email = this.getNodeParameter('email', i);
+						}
+						if (this.getNodeParameter('language', i)) {
+							body.language = this.getNodeParameter('language', i);
+						}
+						if (this.getNodeParameter('country', i)) {
+							body.country = this.getNodeParameter('country', i);
+						}
+						if (this.getNodeParameter('paymentMethod', i)) {
+							body.paymentMethod = this.getNodeParameter('paymentMethod', i);
+						}
+						if (this.getNodeParameter('customerCategory', i)) {
+							body.customerCategory = this.getNodeParameter('customerCategory', i);
+						}
+						if (this.getNodeParameter('currency', i)) {
+							body.currency = this.getNodeParameter('currency', i);
+						}
+						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+						if (additionalFields.billingCycle) {
+							body.billingCycle = additionalFields.billingCycle;
+						}
+						if (additionalFields.vatNo) {
+							body.vatNo = additionalFields.vatNo;
+						}
+						if (additionalFields.electronicBilling) {
+							body.electronicBilling = additionalFields.electronicBilling;
+						}
 
-					responseData = await opencellApi.call(this, 'POST', url, body);
-					returnData.push(responseData);
+						responseData = await opencellApi.call(this, 'POST', url, body);
+						returnData.push(responseData);
+					}
 				}
-			}
+				// GENERIC API
+				else if (resource === 'genericApi') {
+					if (operation === 'get') {
+						const entity = this.getNodeParameter('entity', i) as string;
+						const entiyId = this.getNodeParameter('id', i) as number;
+						const url = `/opencell/api/rest/v2/generic/${entity}/${entiyId}`;
 
-			else if(resource === 'genericApi'){
-				if (operation === 'get') {
-					const entity = this.getNodeParameter('entity', i) as string;
-					const entiyId = this.getNodeParameter('id', i) as number;
-					const url = `/opencell/api/rest/v2/generic/${entity}/${entiyId}`;
-
-					// Update body if nested entities are set
-					const nestedEntities = this.getNodeParameter('nestedEntities', i) as string[];
-					const body : IDataObject = {};
-					if(nestedEntities.length > 0){
-						body.nestedEntities = nestedEntities;
+						// Update body if nested entities are set
+						const nestedEntities = this.getNodeParameter('nestedEntities', i) as string[];
+						const body: IDataObject = {};
+						if (nestedEntities.length > 0) {
+							body.nestedEntities = nestedEntities;
+						}
+						responseData = await opencellApi.call(this, 'POST', url, body);
+						returnData.push(responseData);
 					}
-					responseData = await opencellApi.call(this, 'POST', url, body);
-					returnData.push(responseData);
+					else if (operation === 'search') {
+						const entity = this.getNodeParameter('entity', i) as string;
+						const url = `/opencell/api/rest/v2/generic/all/${entity}`;
+						const filters = this.getNodeParameter('filters', i) as IDataObject;
+						const body: IDataObject = {};
+						if (filters) {
+							const filterValues = (filters as IDataObject).filterValues as IDataObject[];
+							if (filterValues) {
+								const bodyFilters = {} as IDataObject;
+								console.log(filterValues);
+								for (const filterValue of filterValues) {
+									if (filterValue.key) {
+										console.log(filterValue);
+										const key: string = filterValue.key as string;
+										bodyFilters[key] = filterValue.value;
+									}
+								}
+								body.filters = bodyFilters;
+							}
+
+							console.log(body);
+
+						}
+						responseData = await opencellApi.call(this, 'POST', url, body);
+						returnData.push(responseData);
+					}
 				}
+			} catch (error) {
+				if (this.continueOnFail()) {
+					returnData.push({ error: error.message });
+					continue;
+				}
+				throw error;
 			}
 		}
 
