@@ -72,7 +72,7 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'create',
-					'delete',
+					'update',
 				],
 			},
 		},
@@ -94,7 +94,7 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'create',
-					'delete',
+					'update',
 				],
 			},
 		},
@@ -115,7 +115,7 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'create',
-					'delete',
+					'update',
 				],
 			},
 		},
@@ -134,12 +134,13 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'create',
-					'delete',
+					'update',
 				],
 			},
 		},
 		description: 'Choose the subscription Date',
 	},
+<<<<<<< HEAD
 	/*
 	{
 		displayName: 'Custom Fields',
@@ -177,4 +178,90 @@ export const subscriptionFields: INodeProperties[] = [
 		],
 	},
 	*/
+=======
+
+	//Termination
+	{
+		displayName: 'Subscription Code',
+		name: 'subscriptionCode',
+		type: 'string',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'terminate',
+				]
+			}
+		},
+		required: true,
+	},
+	{
+		displayName: 'Subscription Validity Date',
+		name: 'subscriptionValidityDate',
+		type: 'dateTime',
+		default: new Date().setHours(0,0,0,0),
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'terminate',
+				]
+			}
+		},
+	},
+	{
+		displayName: 'Termination Reason',
+		name: 'terminationReason',
+		type: 'options',
+		default: 'TERM_REASON_1',
+		options: [
+			{
+				name: 'Agreement Reimbursement Charge',
+				value: 'TERM_REASON_1',
+			},
+			{
+				name: 'Agreement',
+				value: 'TERM_REASON_2',
+			},
+			{
+				name: 'Charge',
+				value: 'TERM_REASON_3',
+			},
+		],
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'terminate',
+				]
+			}
+		},
+		required: true,
+	},
+	{
+		displayName: 'Termination Date',
+		name: 'terminationDate',
+		type: 'dateTime',
+		default: new Date().setHours(0,0,0,0),
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'terminate',
+				]
+			}
+		},
+		required: true,
+	},
+
+>>>>>>> d67c3db94 (Link n8n to api)
 ];
