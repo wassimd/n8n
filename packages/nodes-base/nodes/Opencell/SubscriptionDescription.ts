@@ -23,9 +23,9 @@ export const subscriptionOperations: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: 'Create & Instanciate',
+				name: 'Create & Instantiate',
 				value: 'create',
-				description: 'Create subscription & Instanciate products',
+				description: 'Create subscription & Instantiate products',
 			},
 			{
 				name: 'Terminate',
@@ -140,7 +140,24 @@ export const subscriptionFields: INodeProperties[] = [
 		},
 		description: `Choose the subscription Date.`,
 	},
-
+	{
+		displayName: 'Billing Cycle',
+		name: 'billingCycle',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'create',
+					'update',
+				],
+			},
+		},
+		default: '',
+	},
 	//Termination
 	{
 		displayName: 'Subscription Code',
