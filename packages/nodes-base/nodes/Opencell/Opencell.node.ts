@@ -467,14 +467,16 @@ export class Opencell implements INodeType {
 						url = `/opencell/api/rest/billing/subscription`;
 						
 						const code = this.getNodeParameter('code', i) as string;
-						const userAccount = this.getNodeParameter('code', i) as string;
+						const userAccount = this.getNodeParameter('userAccount', i) as string;
 						const offerTemplate = this.getNodeParameter('offerTemplate', i) as string;
 						const subscriptionDate = this.getNodeParameter('subscriptionDate', i);
+						const billingCycle = this.getNodeParameter('billingCycle',i);
 
 						body.code = code as string;
 						body.userAccount = userAccount as string;
 						body.offerTemplate = offerTemplate as string;
 						body.subscriptionDate = subscriptionDate;
+						body.billingCycle = billingCycle;
 					}
 
 					else { //Operation : terminate
@@ -527,9 +529,12 @@ export class Opencell implements INodeType {
 								}
 								body.filters = bodyFilters;
 							}
+<<<<<<< HEAD
 
 							//console.log(body);
 
+=======
+>>>>>>> c8e46228c (Complete Create and Terminate operations)
 						}
 						responseData = await opencellApi.call(this, 'POST', url, body);
 						returnData.push(responseData);
