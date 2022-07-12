@@ -8,6 +8,7 @@ import {
 	ICredentialsDecrypted,
 	ICredentialTestFunctions,
 	IDataObject,
+	IHttpRequestMethods,
 	IHttpRequestOptions,
 	INodeCredentialTestResult,
 	INodeExecutionData,
@@ -381,7 +382,6 @@ export class Opencell implements INodeType {
 						body.name = this.getNodeParameter('name', i);
 						body.address = this.getNodeParameter('address', i);
 						body.contactInformation = this.getNodeParameter('contactInformation', i);
-						body.contactInformation = this.getNodeParameter('contactInformation', i);
 						if (this.getNodeParameter('email', i)) {
 							body.email = this.getNodeParameter('email', i);
 						}
@@ -414,6 +414,49 @@ export class Opencell implements INodeType {
 						responseData = await opencellApi.call(this, 'POST', url, body);
 						returnData.push(responseData);
 					}
+				}
+				else if (resource === 'subscription') {
+					//Mandatory fields : code, versionNumber, userAccount, offerTemplate, subscriptionDate, billingCycle, seller
+					let url:string;
+					let verb:IHttpRequestMethods;
+					const body: IDataObject = {};
+
+					if (operation === 'create' || operation === 'update') {
+
+						if (operation === 'create') {
+							verb = 'POST';
+						}
+						else {
+							verb = 'PUT';
+						}
+
+						url = `/opencell/api/rest/billing/subscription`;
+						
+						const code = this.getNodeParameter('code', i) as string;
+						const userAccount = this.getNodeParameter('code', i) as string;
+						const offerTemplate = this.getNodeParameter('offerTemplate', i) as string;
+						const subscriptionDate = this.getNodeParameter('subscriptionDate', i);
+
+						body.code = code as string;
+						body.userAccount = userAccount as string;
+						body.offerTemplate = offerTemplate as string;
+						body.subscriptionDate = subscriptionDate;
+					}
+
+					else { //Operation : terminate
+						verb = 'POST';
+						url = `/opencell/api/rest/billing/subscription/terminate`;
+
+						body.subscriptionCode = this.getNodeParameter('subscriptionCode', i) as string;
+						body.terminationReason = this.getNodeParameter('terminationReason', i) as string;
+						body.terminationDate = this.getNodeParameter('terminationDate', i) as string;
+						if (this.getNodeParameter('subscriptionValidityDate', i)) {
+							body.subscriptionValidityDate = this.getNodeParameter('subscriptionValidityDate', i);
+						}
+					}
+
+					responseData = await opencellApi.call(this, verb, url, body)
+					returnData.push(responseData);
 				}
 				// GENERIC API
 				else if (resource === 'genericApi') {
