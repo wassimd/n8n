@@ -13,8 +13,8 @@ export class OpencellOAuth2Api implements ICredentialType {
 	documentationUrl = 'opencell';
 	properties: INodeProperties[] = [
 		{
-			displayName: 'Opencell Authentication URL',
-			name: 'opencellAuthUrl',
+			displayName: 'Host',
+			name: 'host',
 			type:'string',
 			default:'https://wda.d2.opencell.work',
 		},
