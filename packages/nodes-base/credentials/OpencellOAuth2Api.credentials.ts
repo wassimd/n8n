@@ -13,23 +13,36 @@ export class OpencellOAuth2Api implements ICredentialType {
 	documentationUrl = 'opencell';
 	properties: INodeProperties[] = [
 		{
+			displayName: 'Host',
+			name: 'host',
+			type:'string',
+			default:'https://wda.d2.opencell.work',
+		},
+		{
 			displayName: 'Authorization URL',
 			name: 'authUrl',
 			type: 'hidden',
-			default: 'https://wda.d2.opencell.work/auth/realms/opencell/protocol/openid-connect/auth',
+			default: `{{$self["opencellAuthUrl"]}}/auth/realms/opencell/protocol/openid-connect/auth`,
 			required: true,
 		},
 		{
 			displayName: 'Access Token URL',
 			name: 'accessTokenUrl',
 			type: 'hidden',
-			default: 'https://wda.d2.opencell.work/auth/realms/opencell/protocol/openid-connect/token',
+			default: '{{$self["opencellAuthUrl"]}}/auth/realms/opencell/protocol/openid-connect/token',
 			required: true,
+		},
+		{
+			displayName: 'Port',
+			name:'port',
+			type:'number',
+			default:'80',
+			required: false,
 		},
 		{
 			displayName: 'Scope',
 			name: 'scope',
-			type: 'hidden',
+			type: 'string',
 			default: 'openid',
 		},
 		{
