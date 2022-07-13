@@ -322,6 +322,7 @@ export class Opencell implements INodeType {
 						value: entity,
 					});
 				}
+
 				return returnData.sort((a, b) => a < b ? 0 : 1);
 			},
 			async getNestedEntities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
