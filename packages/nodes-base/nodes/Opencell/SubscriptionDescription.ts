@@ -13,6 +13,7 @@ export const subscriptionOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
+		noDataExpression: true,
 		type: 'options',
 		displayOptions: {
 			show: {
@@ -54,11 +55,12 @@ export const subscriptionOperations: INodeProperties[] = [
 			// },
 		],
 		default: 'create',
-		description: 'The operation to perform.',
+		description: 'The operation to perform on the subscription',
 	},
 ];
 
 export const subscriptionFields: INodeProperties[] = [
+	//Create and instantiate
 	{
 		displayName: 'Code',
 		name: 'code',
@@ -97,7 +99,7 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 			},
 		},
-		description: `Choose the the user account to subscribe.`,
+		description: 'Choose the the user account to subscribe',
 	},
 	{
 		displayName: 'Offer Template',
@@ -119,9 +121,97 @@ export const subscriptionFields: INodeProperties[] = [
 			},
 		},
 		required: true,
-		description: `Choose the subscription offer.`,
+		description: 'Choose the subscription offer',
 	},
-	// versionNumber
+	{
+		displayName: 'Renewal Rule',
+		name:'renewalRule',
+		required: true,
+		type:'collection',
+		options:[
+			{
+				displayName: 'Initially Active For Unit',
+				name: 'initialyActiveForUnit',
+				type:'options',
+				options: [
+					{
+						name: 'Month',
+						value: 'MONTH',
+					},
+					{
+						name: 'Day',
+						value: 'DAY',
+					},
+				],
+				default: 'DAY',
+			},
+			{
+				displayName: 'Auto Renew',
+				name:'autoRenew',
+				type: 'boolean',
+				default:false,
+			},
+			{
+				displayName: 'Extend Agreement Period to Subscribed Till Date',
+				name: 'extendAgreementPeriodToSubscribedTillDate',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName:'End Of Term Action',
+				name:'endOfTermAction',
+				type:'options',
+				options: [
+					{
+						name: 'Suspend',
+						value: 'SUSPEND',
+					},
+					{
+						name: 'Terminate',
+						value: 'TERMINATE',
+					},
+				],
+				default: 'SUSPEND',
+			},
+			{
+				displayName:'Renewal Term Type',
+				name:'renewalTermType',
+				type:'options',
+				options: [
+					{
+						name: 'Recurring',
+						value: 'RECURRING',
+					},
+					{
+						name: 'Calendar',
+						value: 'CALENDAR',
+					},
+					{
+						name: 'Fixed',
+						value: 'FIXED',
+					},
+				],
+				default: 'FIXED',
+			},
+			{
+				displayName: 'Renew For Unit',
+				name: 'renewForUnit',
+				type:'options',
+				options: [
+					{
+						name: 'Day',
+						value: 'DAY',
+					},
+					{
+						name: 'Month',
+						value: 'MONTH',
+					},
+				],
+				default: 'DAY',
+			},
+		],
+		default:{},
+	},
 	{
 		displayName: 'Subscription Date',
 		name: 'subscriptionDate',
@@ -138,25 +228,35 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 			},
 		},
-		description: `Choose the subscription Date.`,
+		description: 'Choose the subscription Date',
+		required: true,
 	},
 	{
-		displayName: 'Billing Cycle',
-		name: 'billingCycle',
-		type: 'string',
-		required: true,
-		displayOptions: {
-			show: {
-				resource: [
-					'subscription',
-				],
-				operation: [
-					'create',
-					'update',
-				],
+		displayName: 'Product to Instantiate',
+		name: 'productToInstantiateDto',
+		type: 'multiOptions',
+		default: [],
+		options: [
+			{
+				displayName: 'Product Code',
+				name: 'productCode',
+				type: 'string',
+				default:'',
 			},
-		},
-		default: '',
+			{
+				displayName: 'Quantity',
+				name: 'quantity',
+				type: 'number',
+				default:1,
+			},
+			{
+				displayName: 'Delivery Date',
+				name: 'deliveryDate',
+				type: 'dateTime',
+				default:new Date().setHours(0,0,0,0),
+			},
+			/// TODO : attribute Instances (gros DTO)
+		],
 	},
 	//Termination
 	{
@@ -171,8 +271,8 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'terminate',
-				]
-			}
+				],
+			},
 		},
 		required: true,
 	},
@@ -188,8 +288,8 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'terminate',
-				]
-			}
+				],
+			},
 		},
 	},
 	{
@@ -218,8 +318,8 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'terminate',
-				]
-			}
+				],
+			},
 		},
 		required: true,
 	},
@@ -235,8 +335,8 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'terminate',
-				]
-			}
+				],
+			},
 		},
 		required: true,
 	},
