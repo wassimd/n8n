@@ -82,7 +82,7 @@ export const genericApiFields: INodeProperties[] = [
 		displayName: 'Nested Entities',
 		name: 'nestedEntities',
 		type: 'multiOptions',
-		required: true,
+		required: false,
 		displayOptions: {
 			show: {
 				resource: [
@@ -90,6 +90,7 @@ export const genericApiFields: INodeProperties[] = [
 				],
 				operation: [
 					'get',
+					'search',
 				],
 			},
 		},
@@ -98,5 +99,48 @@ export const genericApiFields: INodeProperties[] = [
 			loadOptionsDependsOn: ['entity'],
 		},
 		default: [],
+	},
+	{
+		displayName: 'Filters',
+		name: 'filters',
+		placeholder: 'Add Filter',
+		type: 'fixedCollection',
+		default: '',
+		typeOptions: {
+			multipleValues: true,
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'genericApi',
+				],
+				operation: [
+					'search',
+				],
+			},
+		},
+		description: '',
+		options: [
+			{
+				name: 'filterValues',
+				displayName: 'Filter',
+				values: [
+					{
+						displayName: 'Key',
+						name: 'key',
+						type: 'string',
+						default: '',
+						description: 'Key of the filter to add.',
+					},
+					{
+						displayName: 'Value',
+						name: 'value',
+						type: 'string',
+						default: '',
+						description: 'Value to set for the filter key.',
+					},
+				],
+			},
+		],
 	},
 ];

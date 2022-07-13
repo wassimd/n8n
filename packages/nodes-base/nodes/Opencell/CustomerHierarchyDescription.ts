@@ -12,6 +12,7 @@ export const customerHierarchyOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
+		noDataExpression: true,
 		type: 'options',
 		displayOptions: {
 			show: {
@@ -24,7 +25,7 @@ export const customerHierarchyOperations: INodeProperties[] = [
 			{
 				name: 'Create/Update',
 				value: 'upsert',
-				description: 'Create/Update a contact',
+				description: 'Create or Update a contact',
 			},
 			{
 				name: 'Delete',
@@ -53,7 +54,6 @@ export const customerHierarchyOperations: INodeProperties[] = [
 			},
 		],
 		default: 'upsert',
-		description: 'The operation to perform.',
 	},
 ];
 
@@ -81,12 +81,12 @@ export const customerHierarchyFields: INodeProperties[] = [
 			{
 				name: 'Cust 2 UA',
 				value: 'C_UA',
-				description: 'Creates Customer, Customer Account, Billing Account, User Account'
+				description: 'Creates Customer, Customer Account, Billing Account, User Account',
 			},
 			{
 				name: 'S and  C',
 				value: 'S_C',
-				description: 'Creates Seller and Customer'
+				description: 'Creates Seller and Customer',
 			},
 			{
 				name: 'Customer',
@@ -95,7 +95,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 			// to complete
 		],
 		default: 'C_UA',
-		description: `Specify which form hierarchy would you create/update.`,
+		description: 'Specify which form hierarchy would you create/update',
 	},
 	{
 		displayName: 'Parent Code',
@@ -127,7 +127,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				operation: [
 					'upsert',
 					'delete',
-					'get'
+					'get',
 				],
 			},
 		},
@@ -158,7 +158,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				typeOptions: {
 					loadOptionsMethod: 'getTitles',
 				},
-				description: `Choose the title/civility of the customer.`,
+				description: 'Choose the title/civility of the customer',
 			},
 			{
 				displayName: 'First Name',
@@ -201,7 +201,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				displayName: 'Zip Code',
 				name: 'zipCode',
 				type: 'number',
-				default: '',
+				default: 0,
 			},
 			{
 				displayName: 'City',
@@ -235,13 +235,13 @@ export const customerHierarchyFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'E-mail',
+				displayName: 'EMAIL',
 				name: 'email',
 				type: 'string',
 				default: '',
 			},
 			{
-				displayName: 'Mobile',
+				displayName: 'MOBILE',
 				name: 'mobile',
 				type: 'string',
 				default: '',
@@ -250,7 +250,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 	},
 
 	{
-		displayName: 'E-mail',
+		displayName: 'EMAIL',
 		name: 'email',
 		type: 'string',
 		default: '',
@@ -364,14 +364,14 @@ export const customerHierarchyFields: INodeProperties[] = [
 						displayName: 'Name',
 						name: 'name',
 						type: 'string',
-						default: 'Name of the metadata key to add.',
+						default: 'Name of the metadata key to add',
 					},
 					{
 						displayName: 'Value',
 						name: 'value',
 						type: 'string',
 						default: '',
-						description: 'Value to set for the metadata key.',
+						description: 'Value to set for the metadata key',
 					},
 				],
 			},
@@ -446,7 +446,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				displayName: 'Electronic Billing',
 				name: 'electronicBilling',
 				type: 'boolean',
-				default: '',
+				default: false,
 			},
 		],
 	},
