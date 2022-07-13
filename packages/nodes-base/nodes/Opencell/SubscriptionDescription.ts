@@ -24,9 +24,9 @@ export const subscriptionOperations: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: 'Create & Instantiate',
+				name: 'Create & Instanciate',
 				value: 'create',
-				description: 'Create subscription & Instantiate products',
+				description: 'Create subscription & Instanciate products',
 			},
 			{
 				name: 'Terminate',
@@ -140,67 +140,7 @@ export const subscriptionFields: INodeProperties[] = [
 		},
 		description: 'Choose the subscription Date',
 	},
-<<<<<<< HEAD
-<<<<<<< HEAD
-	/*
-	{
-		displayName: 'Custom Fields',
-		name: 'customFieldsUI',
-		placeholder: 'Add Custom Field',
-		type: 'fixedCollection',
-		typeOptions: {
-			multipleValues: true,
-		},
-		default: {},
-		options: [
-			{
-				name: 'customFieldsValues',
-				displayName: 'Custom Fields',
-				values: [
-					{
-						displayName: 'Field',
-						name: 'field',
-						type: 'options',
-						typeOptions: {
-							loadOptionsMethod: 'getCustomFields',
-						},
-						default: '',
-						description: 'Name of the field',
-					},
-					{
-						displayName: 'Value',
-						name: 'value',
-						type: 'string',
-						default: '',
-						description: 'Value of the field',
-					},
-				],
-			},
-		],
-	},
-	*/
-=======
 
-=======
-	{
-		displayName: 'Billing Cycle',
-		name: 'billingCycle',
-		type: 'string',
-		required: true,
-		displayOptions: {
-			show: {
-				resource: [
-					'subscription',
-				],
-				operation: [
-					'create',
-					'update',
-				],
-			},
-		},
-		default: '',
-	},
->>>>>>> c8e46228c (Complete Create and Terminate operations)
 	//Termination
 	{
 		displayName: 'Subscription Code',
@@ -284,5 +224,4 @@ export const subscriptionFields: INodeProperties[] = [
 		required: true,
 	},
 
->>>>>>> d67c3db94 (Link n8n to api)
 ];

@@ -450,33 +450,41 @@ export class Opencell implements INodeType {
 					}
 				}
 				else if (resource === 'subscription') {
-					//Mandatory fields : code, versionNumber, userAccount, offerTemplate, subscriptionDate, billingCycle, seller
 					let url:string;
 					let verb:IHttpRequestMethods;
 					const body: IDataObject = {};
 
-					if (operation === 'create' || operation === 'update') {
+					if (operation === 'create') {
 
-						if (operation === 'create') {
-							verb = 'POST';
-						}
-						else {
-							verb = 'PUT';
-						}
+						verb = 'POST';
 
-						url = `/opencell/api/rest/billing/subscription`;
+						url = `/opencell/api/billing/subscription/subscribeAndInstantiateProducts`;
 						
-						const code = this.getNodeParameter('code', i) as string;
-						const userAccount = this.getNodeParameter('userAccount', i) as string;
-						const offerTemplate = this.getNodeParameter('offerTemplate', i) as string;
-						const subscriptionDate = this.getNodeParameter('subscriptionDate', i);
-						const billingCycle = this.getNodeParameter('billingCycle',i);
+						/*
+						code
+						userAccount
+						offerTemplate
+						renewalRule:
+							initialyActiveForUnit (enum MONTH, DAY)
+							autoRenew (bool)
+							extendAgreementPeriodToSubscribedTillDate (bool)
+							endOfTermAction Enum:[ SUSPEND, TERMINATE ]
+							renewalTermType (enum RECURRING, CALENDAR)
+							renewForUnit (enum MONTH, DAY)
+						subscriptionDate
+						productToInstantiateDto:
+							productCode	(str)
+							quantity (number)
+							deliveryDate (dateTime)
+							attributeInstances (... gros Dto)
+						*/
 
-						body.code = code as string;
-						body.userAccount = userAccount as string;
-						body.offerTemplate = offerTemplate as string;
-						body.subscriptionDate = subscriptionDate;
-						body.billingCycle = billingCycle;
+						body.code = this.getNodeParameter('code', i) as string;
+						body.userAccount = this.getNodeParameter('userAccount', i) as string;
+						body.offerTemplate = this.getNodeParameter('offerTemplate', i) as string;
+						body.renewalRule = this.getNodeParameter('renewalRule',i);
+						body.subscriptionDate = this.getNodeParameter('subscriptionDate', i);
+						body.productToInstantiateDto = this.getNodeParameter('productToInstantiateDto',i);
 					}
 
 					else { //Operation : terminate
@@ -491,7 +499,7 @@ export class Opencell implements INodeType {
 						}
 					}
 
-					responseData = await opencellApi.call(this, verb, url, body)
+					responseData = await opencellApi.call(this, verb, url, body);
 					returnData.push(responseData);
 				}
 				// GENERIC API
