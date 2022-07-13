@@ -14,6 +14,7 @@ export const subscriptionOperations: INodeProperties[] = [
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -54,7 +55,7 @@ export const subscriptionOperations: INodeProperties[] = [
 			// },
 		],
 		default: 'create',
-		description: 'The operation to perform.',
+		description: 'The operation to perform on the Subscription',
 	},
 ];
 
@@ -97,7 +98,7 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 			},
 		},
-		description: `Choose the the user account to subscribe.`,
+		description: 'Choose the the user account to subscribe',
 	},
 	{
 		displayName: 'Offer Template',
@@ -119,9 +120,8 @@ export const subscriptionFields: INodeProperties[] = [
 			},
 		},
 		required: true,
-		description: `Choose the subscription offer.`,
+		description: 'Choose the subscription offer',
 	},
-	// versionNumber
 	{
 		displayName: 'Subscription Date',
 		name: 'subscriptionDate',
@@ -138,6 +138,43 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 			},
 		},
-		description: `Choose the subscription Date.`,
+		description: 'Choose the subscription Date',
 	},
+	/*
+	{
+		displayName: 'Custom Fields',
+		name: 'customFieldsUI',
+		placeholder: 'Add Custom Field',
+		type: 'fixedCollection',
+		typeOptions: {
+			multipleValues: true,
+		},
+		default: {},
+		options: [
+			{
+				name: 'customFieldsValues',
+				displayName: 'Custom Fields',
+				values: [
+					{
+						displayName: 'Field',
+						name: 'field',
+						type: 'options',
+						typeOptions: {
+							loadOptionsMethod: 'getCustomFields',
+						},
+						default: '',
+						description: 'Name of the field',
+					},
+					{
+						displayName: 'Value',
+						name: 'value',
+						type: 'string',
+						default: '',
+						description: 'Value of the field',
+					},
+				],
+			},
+		],
+	},
+	*/
 ];

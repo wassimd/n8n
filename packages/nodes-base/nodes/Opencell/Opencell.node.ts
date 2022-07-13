@@ -14,7 +14,6 @@ import {
 	INodePropertyOptions,
 	INodeType,
 	INodeTypeDescription,
-	JsonObject,
 } from 'n8n-workflow';
 
 import {
@@ -24,19 +23,18 @@ import {
 import {
 	customerHierarchyFields,
 	customerHierarchyOperations,
-
 } from './CustomerHierarchyDescription';
 
 import {
 	subscriptionFields,
 	subscriptionOperations,
-
 } from './SubscriptionDescription';
 
 import {
 	genericApiFields,
 	genericApiOperations,
 } from './GenericApiComponent';
+import { getCustomerOptionalFields } from '../Magento/GenericFunctions';
 
 async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<INodeCredentialTestResult> {
 
@@ -264,6 +262,41 @@ export class Opencell implements INodeType {
 		},
 
 		loadOptions: {
+			async getCustomFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+
+				let endpoint:string;
+				const returnData: INodePropertyOptions[] = [];
+
+				switch(this.getNode().parameters.resource) {
+					case 'subscription' :
+						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
+					case 'customerHierarchy' :
+						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
+					default:
+						endpoint="";
+				}
+
+				const cfs = await opencellApi.call(this, 'GET', endpoint, {});
+
+				for (const cf of cfs.entityCustomization.field) {
+					let name = '';
+					if (cf.listValues) {
+						let listeValeurs='';
+						for (const key in cf.listValues) listeValeurs += key + ', ';
+						listeValeurs = listeValeurs.slice(0,-2); //remove last ', '
+						name = cf.description + ' (' + cf.fieldType + ' : ' + listeValeurs + ')';
+					} else {
+						name = cf.description + ' (' + cf.fieldType + ')';
+					}
+
+					returnData.push({
+						name: `${name}`,
+						value: cf.code,
+					});
+				}
+				return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
+			},
+
 			async getTitles(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const returnData: INodePropertyOptions[] = [];
 				const endpoint = '/opencell/api/rest/v2/generic/all/title';
@@ -441,10 +474,10 @@ export class Opencell implements INodeType {
 							const filterValues = (filters as IDataObject).filterValues as IDataObject[];
 							if (filterValues) {
 								const bodyFilters = {} as IDataObject;
-								console.log(filterValues);
+								//console.log(filterValues);
 								for (const filterValue of filterValues) {
 									if (filterValue.key) {
-										console.log(filterValue);
+										//console.log(filterValue);
 										const key: string = filterValue.key as string;
 										bodyFilters[key] = filterValue.value;
 									}
@@ -452,7 +485,7 @@ export class Opencell implements INodeType {
 								body.filters = bodyFilters;
 							}
 
-							console.log(body);
+							//console.log(body);
 
 						}
 						responseData = await opencellApi.call(this, 'POST', url, body);

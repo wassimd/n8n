@@ -48,13 +48,13 @@ export class OpencellOAuth2Api implements ICredentialType {
 		{
 			displayName: 'Auth URI Query Parameters',
 			name: 'authQueryParameters',
-			type: 'hidden',
+			type: 'string',
 			default: '',
 		},
 		{
 			displayName: 'Authentication',
 			name: 'authentication',
-			type: 'hidden',
+			type: 'string',
 			default: 'body',
 		},
 	];
