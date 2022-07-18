@@ -450,38 +450,10 @@ export class Opencell implements INodeType {
 					}
 				}
 				else if (resource === 'subscription') {
-<<<<<<< HEAD
-					//Mandatory fields : code, versionNumber, userAccount, offerTemplate, subscriptionDate, billingCycle, seller
-=======
->>>>>>> 1570ade7b058035c5834f3469b7cc99118a02d1d
 					let url:string;
 					let verb:IHttpRequestMethods;
 					const body: IDataObject = {};
 
-<<<<<<< HEAD
-					if (operation === 'create' || operation === 'update') {
-
-						if (operation === 'create') {
-							verb = 'POST';
-						}
-						else {
-							verb = 'PUT';
-						}
-
-						url = `/opencell/api/rest/billing/subscription`;
-						
-						const code = this.getNodeParameter('code', i) as string;
-						const userAccount = this.getNodeParameter('userAccount', i) as string;
-						const offerTemplate = this.getNodeParameter('offerTemplate', i) as string;
-						const subscriptionDate = this.getNodeParameter('subscriptionDate', i);
-						const billingCycle = this.getNodeParameter('billingCycle',i);
-
-						body.code = code as string;
-						body.userAccount = userAccount as string;
-						body.offerTemplate = offerTemplate as string;
-						body.subscriptionDate = subscriptionDate;
-						body.billingCycle = billingCycle;
-=======
 					if (operation === 'create') {
 
 						verb = 'POST';
@@ -513,7 +485,6 @@ export class Opencell implements INodeType {
 						body.renewalRule = this.getNodeParameter('renewalRule',i);
 						body.subscriptionDate = this.getNodeParameter('subscriptionDate', i);
 						body.productToInstantiateDto = this.getNodeParameter('productToInstantiateDto',i);
->>>>>>> 1570ade7b058035c5834f3469b7cc99118a02d1d
 					}
 
 					else { //Operation : terminate
@@ -528,11 +499,7 @@ export class Opencell implements INodeType {
 						}
 					}
 
-<<<<<<< HEAD
-					responseData = await opencellApi.call(this, verb, url, body)
-=======
 					responseData = await opencellApi.call(this, verb, url, body);
->>>>>>> 1570ade7b058035c5834f3469b7cc99118a02d1d
 					returnData.push(responseData);
 				}
 				// GENERIC API
