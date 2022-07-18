@@ -457,34 +457,22 @@ export class Opencell implements INodeType {
 					if (operation === 'create') {
 
 						verb = 'POST';
-
-						url = `/opencell/api/billing/subscription/subscribeAndInstantiateProducts`;
+						url = `/opencell/api/rest/billing/subscription/subscribeAndInstantiateProducts`;
 						
-						/*
-						code
-						userAccount
-						offerTemplate
-						renewalRule:
-							initialyActiveForUnit (enum MONTH, DAY)
-							autoRenew (bool)
-							extendAgreementPeriodToSubscribedTillDate (bool)
-							endOfTermAction Enum:[ SUSPEND, TERMINATE ]
-							renewalTermType (enum RECURRING, CALENDAR)
-							renewForUnit (enum MONTH, DAY)
-						subscriptionDate
-						productToInstantiateDto:
-							productCode	(str)
-							quantity (number)
-							deliveryDate (dateTime)
-							attributeInstances (... gros Dto)
-						*/
-
 						body.code = this.getNodeParameter('code', i) as string;
 						body.userAccount = this.getNodeParameter('userAccount', i) as string;
 						body.offerTemplate = this.getNodeParameter('offerTemplate', i) as string;
 						body.renewalRule = this.getNodeParameter('renewalRule',i);
 						body.subscriptionDate = this.getNodeParameter('subscriptionDate', i);
-						body.productToInstantiateDto = this.getNodeParameter('productToInstantiateDto',i);
+						const productToInstantiateDto = this.getNodeParameter('productToInstantiateDto',i) as IDataObject;
+						if (productToInstantiateDto) {
+							body.productToInstantiateDto = productToInstantiateDto["product"];
+						}
+					}
+
+					else if (operation === 'update') {
+						verb = 'PUT';
+						url = `/opencell/api/rest/billing/subscription`;
 					}
 
 					else { //Operation : terminate

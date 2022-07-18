@@ -15,7 +15,6 @@ export const subscriptionOperations: INodeProperties[] = [
 		name: 'operation',
 		noDataExpression: true,
 		type: 'options',
-		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -28,16 +27,19 @@ export const subscriptionOperations: INodeProperties[] = [
 				name: 'Create & Instantiate',
 				value: 'create',
 				description: 'Create subscription & Instantiate products',
+				action: 'Create & Instantiate a subscription',
 			},
 			{
 				name: 'Terminate',
 				value: 'terminate',
 				description: 'Terminate a subscription',
+				action: 'Terminate a subscription',
 			},
 			{
 				name: 'Update',
 				value: 'update',
 				description: 'Update a subscription',
+				action: 'Update a subscription',
 			},
 			// {
 			// 	name: 'Get All',
@@ -56,7 +58,6 @@ export const subscriptionOperations: INodeProperties[] = [
 			// },
 		],
 		default: 'create',
-		description: 'The operation to perform on the subscription',
 	},
 ];
 
@@ -81,7 +82,7 @@ export const subscriptionFields: INodeProperties[] = [
 		default: '',
 	},
 	{
-		displayName: 'User Account',
+		displayName: 'User Account Name or ID',
 		name: 'userAccount',
 		type: 'options',
 		default: '',
@@ -100,10 +101,10 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 			},
 		},
-		description: 'Choose the the user account to subscribe',
+		description: 'Choose the the user account to subscribe. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
 	},
 	{
-		displayName: 'Offer Template',
+		displayName: 'Offer Template Name or ID',
 		name: 'offerTemplate',
 		type: 'options',
 		default: '',
@@ -122,12 +123,23 @@ export const subscriptionFields: INodeProperties[] = [
 			},
 		},
 		required: true,
-		description: 'Choose the subscription offer',
+		description: 'Choose the subscription offer. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
 	},
 	{
 		displayName: 'Renewal Rule',
 		name:'renewalRule',
 		required: true,
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'create',
+					'update',
+				],
+			},
+		},
 		type:'collection',
 		options:[
 			{
@@ -235,27 +247,50 @@ export const subscriptionFields: INodeProperties[] = [
 	{
 		displayName: 'Product to Instantiate',
 		name: 'productToInstantiateDto',
-		type: 'multiOptions',
-		default: [],
+		type: 'fixedCollection',
+		required:true,
+		typeOptions: {
+			multipleValues: true,
+		},
+		default: {},
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'create',
+					'update',
+				],
+			},
+		},
+		placeholder: 'Add Product',
 		options: [
 			{
-				displayName: 'Product Code',
-				name: 'productCode',
-				type: 'string',
-				default:'',
-			},
-			{
-				displayName: 'Quantity',
-				name: 'quantity',
-				type: 'number',
-				default:1,
-			},
-			{
-				displayName: 'Delivery Date',
-				name: 'deliveryDate',
-				type: 'dateTime',
-				default:new Date().setHours(0,0,0,0),
-			},
+				name: 'product',
+				displayName: 'Product',
+				values: [
+					{
+						displayName: 'Product Code',
+						name: 'productCode',
+						required: true,
+						type: 'string',
+						default:"",
+					},
+					{
+						displayName: 'Quantity',
+						name: 'quantity',
+						type: 'number',
+						default:1,
+					},
+					{
+						displayName: 'Delivery Date',
+						name: 'deliveryDate',
+						type: 'dateTime',
+						default:new Date().setHours(0,0,0,0),
+					},
+				]
+			}
 			/// TODO : attribute Instances (gros DTO)
 		],
 	},
