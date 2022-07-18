@@ -458,7 +458,7 @@ export class Opencell implements INodeType {
 
 						verb = 'POST';
 
-						url = `/opencell/api/billing/subscription/subscribeAndInstantiateProducts`;
+						url = `/opencell/api/rest/billing/subscription/subscribeAndInstantiateProducts`;
 						
 						/*
 						code
@@ -484,7 +484,10 @@ export class Opencell implements INodeType {
 						body.offerTemplate = this.getNodeParameter('offerTemplate', i) as string;
 						body.renewalRule = this.getNodeParameter('renewalRule',i);
 						body.subscriptionDate = this.getNodeParameter('subscriptionDate', i);
-						body.productToInstantiateDto = this.getNodeParameter('productToInstantiateDto',i);
+						const productToInstantiateDto = this.getNodeParameter('productToInstantiateDto',i) as IDataObject;
+						if (productToInstantiateDto) {
+							body.productToInstantiateDto = productToInstantiateDto["product"];
+						}
 					}
 
 					else { //Operation : terminate
