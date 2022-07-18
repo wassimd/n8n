@@ -41,21 +41,6 @@ export const subscriptionOperations: INodeProperties[] = [
 				description: 'Update a subscription',
 				action: 'Update a subscription',
 			},
-			// {
-			// 	name: 'Get All',
-			// 	value: 'getAll',
-			// 	description: 'Get all contacts',
-			// },
-			// {
-			// 	name: 'Get Recently Created/Updated',
-			// 	value: 'getRecentlyCreatedUpdated',
-			// 	description: 'Get recently created/updated contacts',
-			// },
-			// {
-			// 	name: 'Search',
-			// 	value: 'search',
-			// 	description: 'Search contacts',
-			// },
 		],
 		default: 'create',
 	},
@@ -101,7 +86,7 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 			},
 		},
-		description: 'Choose the the user account to subscribe. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
+		description: 'Choose the the user account to subscribe. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
 		displayName: 'Offer Template Name or ID',
@@ -123,7 +108,7 @@ export const subscriptionFields: INodeProperties[] = [
 			},
 		},
 		required: true,
-		description: 'Choose the subscription offer. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
+		description: 'Choose the subscription offer. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
 		displayName: 'Renewal Rule',
@@ -248,7 +233,6 @@ export const subscriptionFields: INodeProperties[] = [
 		displayName: 'Product to Instantiate',
 		name: 'productToInstantiateDto',
 		type: 'fixedCollection',
-		required:true,
 		typeOptions: {
 			multipleValues: true,
 		},
@@ -274,7 +258,7 @@ export const subscriptionFields: INodeProperties[] = [
 						name: 'productCode',
 						required: true,
 						type: 'string',
-						default:"",
+						default:'',
 					},
 					{
 						displayName: 'Quantity',
@@ -288,8 +272,8 @@ export const subscriptionFields: INodeProperties[] = [
 						type: 'dateTime',
 						default:new Date().setHours(0,0,0,0),
 					},
-				]
-			}
+				],
+			},
 			/// TODO : attribute Instances (gros DTO)
 		],
 	},
@@ -375,5 +359,39 @@ export const subscriptionFields: INodeProperties[] = [
 		},
 		required: true,
 	},
-
+	{
+		displayName: 'Custom Fields',
+		name: 'customFieldsUI',
+		placeholder: 'Add Custom Field',
+		type: 'fixedCollection',
+		typeOptions: {
+			multipleValues: true,
+		},
+		default: {},
+		options: [
+			{
+				name: 'customFieldsValues',
+				displayName: 'Custom Field',
+				values: [
+					{
+						displayName: 'Field Name or ID',
+						name: 'field',
+						type: 'options',
+						typeOptions: {
+							loadOptionsMethod: 'getCustomFields',
+						},
+						default: '',
+						description: 'Name of the field. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
+					},
+					{
+						displayName: 'Value',
+						name: 'value',
+						type: 'string',
+						default: '',
+						description: 'Value of the field',
+					},
+				],
+			},
+		],
+	},
 ];

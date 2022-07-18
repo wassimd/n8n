@@ -15,6 +15,7 @@ import {
 	INodePropertyOptions,
 	INodeType,
 	INodeTypeDescription,
+	NodeApiError,
 } from 'n8n-workflow';
 
 import {
@@ -118,7 +119,6 @@ export class Opencell implements INodeType {
 					},
 				],
 				default: 'basicAuth',
-				description: 'The method of authentication',
 			},
 			{
 				displayName: 'Resource',
@@ -145,7 +145,6 @@ export class Opencell implements INodeType {
 				],
 				default: 'customerHierarchy',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
@@ -164,6 +163,7 @@ export class Opencell implements INodeType {
 						name: 'Create',
 						value: 'create',
 						description: 'Create a contact',
+						action: 'Create a contact',
 					},
 				],
 				default: 'create',
@@ -172,6 +172,7 @@ export class Opencell implements INodeType {
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				required: true,
 				displayOptions: {
 					show: {
@@ -274,28 +275,33 @@ export class Opencell implements INodeType {
 					case 'customerHierarchy' :
 						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
 					default:
-						endpoint="";
+						endpoint='';
 				}
 
 				const cfs = await opencellApi.call(this, 'GET', endpoint, {});
 
-				for (const cf of cfs.entityCustomization.field) {
-					let name = '';
-					if (cf.listValues) {
-						let listeValeurs='';
-						for (const key in cf.listValues) listeValeurs += key + ', ';
-						listeValeurs = listeValeurs.slice(0,-2); //remove last ', '
-						name = cf.description + ' (' + cf.fieldType + ' : ' + listeValeurs + ')';
-					} else {
-						name = cf.description + ' (' + cf.fieldType + ')';
-					}
+				if (cfs.entityCustomization.field) {
+					for (const cf of cfs.entityCustomization.field) {
+						let name = '';
+						if (cf.listValues) { // Create a string containing all possible values to guide the user
+							let values=''; 
+							for (const key in cf.listValues) values += key + ', ';
+							values = values.slice(0,-2); //remove last ', '
+							name = cf.description + ' (' + cf.fieldType + ' : ' + values + ')';
+						} else {
+							name = cf.description + ' (' + cf.fieldType + ')';
+						}
 
-					returnData.push({
-						name: `${name}`,
-						value: cf.code,
-					});
+						returnData.push({
+							name: `${name}`,
+							value: cf.code,
+						});
+					}
+					return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
 				}
-				return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
+				else {
+					throw new NodeApiError(this.getNode(),{error:'Unable to get custom fields.\nServer response:'+cfs});
+				}
 			},
 
 			async getTitles(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
@@ -465,7 +471,7 @@ export class Opencell implements INodeType {
 						body.subscriptionDate = this.getNodeParameter('subscriptionDate', i);
 						const productToInstantiateDto = this.getNodeParameter('productToInstantiateDto',i) as IDataObject;
 						if (productToInstantiateDto) {
-							body.productToInstantiateDto = productToInstantiateDto["product"];
+							body.productToInstantiateDto = productToInstantiateDto['product'];
 						}
 					}
 
