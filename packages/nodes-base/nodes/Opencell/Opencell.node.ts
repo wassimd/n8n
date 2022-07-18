@@ -455,7 +455,6 @@ export class Opencell implements INodeType {
 					const body: IDataObject = {};
 
 					if (operation === 'create') {
-
 						verb = 'POST';
 						url = `/opencell/api/rest/billing/subscription/subscribeAndInstantiateProducts`;
 						
@@ -473,9 +472,15 @@ export class Opencell implements INodeType {
 					else if (operation === 'update') {
 						verb = 'PUT';
 						url = `/opencell/api/rest/billing/subscription`;
+
+						body.code = this.getNodeParameter('code', i) as string;
+						body.userAccount = this.getNodeParameter('userAccount', i) as string;
+						body.offerTemplate = this.getNodeParameter('offerTemplate', i) as string;
+						body.renewalRule = this.getNodeParameter('renewalRule',i);
+						body.subscriptionDate = this.getNodeParameter('subscriptionDate', i);
 					}
 
-					else { //Operation : terminate
+					else { // Operation : terminate
 						verb = 'POST';
 						url = `/opencell/api/rest/billing/subscription/terminate`;
 

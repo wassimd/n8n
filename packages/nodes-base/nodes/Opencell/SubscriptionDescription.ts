@@ -260,7 +260,6 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'create',
-					'update',
 				],
 			},
 		},
