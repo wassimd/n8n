@@ -42,7 +42,7 @@ export class OpencellOAuth2Api implements ICredentialType {
 		{
 			displayName: 'Scope',
 			name: 'scope',
-			type: 'string',
+			type: 'hidden',
 			default: 'openid',
 		},
 		{
