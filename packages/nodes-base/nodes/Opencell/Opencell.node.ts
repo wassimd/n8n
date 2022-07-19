@@ -16,6 +16,7 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	NodeApiError,
+	NodeParameterValue,
 } from 'n8n-workflow';
 
 import {
@@ -268,14 +269,17 @@ export class Opencell implements INodeType {
 
 				let endpoint:string;
 				const returnData: INodePropertyOptions[] = [];
-
-				switch(this.getNode().parameters.resource) {
-					case 'subscription' :
+				
+				switch(this.getNode().parameters.resource as string) {
+					case 'subscription':
 						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
-					case 'customerHierarchy' :
-						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
+						break;
+					case 'customerHierarchy':
+						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.CustomerHierarchy';
+						break;
 					default:
-						endpoint='';
+						throw new NodeApiError(this.getNode(), {error:"This resource doesn't support custom fields"});
+						break;
 				}
 
 				const cfs = await opencellApi.call(this, 'GET', endpoint, {});
@@ -297,6 +301,7 @@ export class Opencell implements INodeType {
 							value: cf.code,
 						});
 					}
+
 					return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
 				}
 				else {
