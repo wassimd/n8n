@@ -367,6 +367,17 @@ export const subscriptionFields: INodeProperties[] = [
 		typeOptions: {
 			multipleValues: true,
 		},
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'create',
+					'update',
+				],
+			},
+		},
 		default: {},
 		options: [
 			{
@@ -375,7 +386,7 @@ export const subscriptionFields: INodeProperties[] = [
 				values: [
 					{
 						displayName: 'Field Name or ID',
-						name: 'field',
+						name: 'code',
 						type: 'options',
 						typeOptions: {
 							loadOptionsMethod: 'getCustomFields',
@@ -384,11 +395,87 @@ export const subscriptionFields: INodeProperties[] = [
 						description: 'Name of the field. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 					},
 					{
-						displayName: 'Value',
-						name: 'value',
+						//This is used to determine the type of the value field
+						displayName:'Type',
+						name:'type',
+						type:'hidden',
+						default: `={{$parameter["&code"].split("|")[1]}}`
+						//default: `={{$parameter["customFieldsUI"]["customFieldsValues"][0]["field"].split("|")[1]}}`,
+					},
+					{
+						displayName: 'String',
+						name: 'stringValue',
 						type: 'string',
 						default: '',
-						description: 'Value of the field',
+						description: 'Text value of the field',
+						displayOptions: {
+							show:{
+								type:['STRING'],
+							}
+						}
+					},
+					{
+						displayName: 'Text Area',
+						name: 'stringValue',
+						type: 'string',
+						default: '',
+						description: 'Text value of the field',
+						typeOptions: {
+							alwaysOpenEditWindow:true,
+						},
+						displayOptions: {
+							show:{
+								type:['TEXT_AREA'],
+							}
+						}
+					},
+					{
+						displayName: 'Date',
+						name: 'dateValue',
+						type: 'dateTime',
+						default: new Date().setHours(0,0,0,0),
+						description: 'Date value of the field',
+						displayOptions: {
+							show:{
+								type:['DATE'],
+							}
+						}
+					},
+					{
+						displayName: 'Boolean',
+						name: 'booleanValue',
+						type: 'boolean',
+						default:false,
+						description: 'Whether the custom field is true or not',
+						displayOptions: {
+							show:{
+								type:['BOOLEAN'],
+							}
+						}
+					},
+					{
+						displayName: 'Number (Long)',
+						name: 'longValue',
+						type: 'number',
+						default:0,
+						description: 'Number value of the field',
+						displayOptions: {
+							show:{
+								type:['LONG'],
+							}
+						}
+					},
+					{
+						displayName: 'Number (Double)',
+						name: 'doubleValue',
+						type: 'number',
+						default:0,
+						description: 'Number value of the field',
+						displayOptions: {
+							show:{
+								type:['DOUBLE'],
+							}
+						}
 					},
 				],
 			},

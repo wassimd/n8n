@@ -266,10 +266,9 @@ export class Opencell implements INodeType {
 
 		loadOptions: {
 			async getCustomFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-
 				let endpoint:string;
 				const returnData: INodePropertyOptions[] = [];
-				
+
 				switch(this.getNode().parameters.resource as string) {
 					case 'subscription':
 						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
@@ -286,19 +285,19 @@ export class Opencell implements INodeType {
 
 				if (cfs.entityCustomization.field) {
 					for (const cf of cfs.entityCustomization.field) {
-						let name = '';
-						if (cf.listValues) { // Create a string containing all possible values to guide the user
-							let values=''; 
-							for (const key in cf.listValues) values += key + ', ';
-							values = values.slice(0,-2); //remove last ', '
-							name = cf.description + ' (' + cf.fieldType + ' : ' + values + ')';
-						} else {
-							name = cf.description + ' (' + cf.fieldType + ')';
+						//Generate the list of possible values if relevant (list, checkbox-list, map...)
+						let listValues = "";
+						if (cf.listValues) {
+							listValues = "|"
+							for (const key in cf.listValues) {
+								listValues += key + ',';
+							}
+							listValues = listValues.slice(0,-1); //remove last ','
 						}
 
 						returnData.push({
-							name: `${name}`,
-							value: cf.code,
+							name: `${cf.description}`,
+							value: `${cf.code}|${cf.fieldType}${listValues}`,
 						});
 					}
 
@@ -503,6 +502,12 @@ export class Opencell implements INodeType {
 						}
 					}
 
+					if (this.getNodeParameter('customFieldsUI',i)){
+						const customFields = this.getNodeParameter('customFieldsUI',i) as IDataObject;
+						const customFieldsValues = customFields.customFieldsValues as IDataObject;
+						console.log("[EXEC CFs : avant]\n",customFields);
+						//TODO : remove everything after | in "code" value
+					}
 					responseData = await opencellApi.call(this, verb, url, body);
 					returnData.push(responseData);
 				}
