@@ -27,38 +27,43 @@ export const customerHierarchyOperations: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: 'Create/Update',
+				name: 'Create or Update',
 				value: 'upsert',
-				description: 'Create/Update a contact',
+				description: 'Create a new record, or update the current one if it already exists (upsert)',
+				action: 'Create/Update a customer hierarchy',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
 				description: 'Delete a contact',
+				action: 'Delete a customer hierarchy',
 			},
 			{
 				name: 'Get',
 				value: 'get',
 				description: 'Get a contact',
+				action: 'Get a customer hierarchy',
 			},
 			{
 				name: 'Get All',
 				value: 'getAll',
 				description: 'Get all contacts',
+				action: 'Get all customer hierarchies',
 			},
 			{
 				name: 'Get Recently Created/Updated',
 				value: 'getRecentlyCreatedUpdated',
 				description: 'Get recently created/updated contacts',
+				action: 'Get Recently Created/Updated a customer hierarchy',
 			},
 			{
 				name: 'Search',
 				value: 'search',
 				description: 'Search contacts',
+				action: 'Search a customer hierarchy',
 			},
 		],
 		default: 'upsert',
-		description: 'The operation to perform.',
 	},
 ];
 
@@ -89,7 +94,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				description: 'Creates Customer, Customer Account, Billing Account, User Account',
 			},
 			{
-				name: 'S and  C',
+				name: 'S and C',
 				value: 'S_C',
 				description: 'Creates Seller and Customer',
 			},
@@ -100,7 +105,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 			// to complete
 		],
 		default: 'C_UA',
-		description: `Specify which form hierarchy would you create/update.`,
+		description: 'Specify which form hierarchy would you create/update',
 	},
 	{
 		displayName: 'Parent Code',
@@ -157,14 +162,14 @@ export const customerHierarchyFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Title',
+				displayName: 'Title Name or ID',
 				name: 'title',
 				type: 'options',
 				default: '',
 				typeOptions: {
 					loadOptionsMethod: 'getTitles',
 				},
-				description: `Choose the title/civility of the customer.`,
+				description: 'Choose the title/civility of the customer. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 			},
 			{
 				displayName: 'First Name',
@@ -278,6 +283,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				default: '',
 			},
 			{
@@ -304,6 +310,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 		displayName: 'Email',
 		name: 'email',
 		type: 'string',
+		placeholder: 'name@email.com',
 		required: true,
 		default: '',
 		displayOptions: {
@@ -1057,6 +1064,724 @@ export const customerHierarchyFields: INodeProperties[] = [
 			},
 			// End of auto generated fields
 			//Custom field DTO
+<<<<<<< HEAD
+=======
+
+			{
+				displayName: 'Custom Fields',
+				name: 'customFields',
+				type: 'collection',
+				options: [
+					{
+						displayName: 'Custom Field',
+						name: 'customField',
+						type: 'collection',
+						default: {},
+						options: [
+							{
+								displayName: 'Code',
+								name: 'code',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Description',
+								name: 'description',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Field Type',
+								name: 'fieldType',
+								type: 'options',
+								options: [
+									{
+										name: 'Boolean',
+										value: 'BOOLEAN',
+									},
+									{
+										name: 'Checkbox List',
+										value: 'CHECKBOX_LIST',
+									},
+									{
+										name: 'Child Entity',
+										value: 'CHILD_ENTITY',
+									},
+									{
+										name: 'Custom Table Wrapper',
+										value: 'CUSTOM_TABLE_WRAPPER',
+									},
+									{
+										name: 'Date',
+										value: 'DATE',
+									},
+									{
+										name: 'Double',
+										value: 'DOUBLE',
+									},
+									{
+										name: 'Entity',
+										value: 'ENTITY',
+									},
+									{
+										name: 'List',
+										value: 'LIST',
+									},
+									{
+										name: 'Long',
+										value: 'LONG',
+									},
+									{
+										name: 'Multi Value',
+										value: 'MULTI_VALUE',
+									},
+									{
+										name: 'String',
+										value: 'STRING',
+									},
+									{
+										name: 'Text Area',
+										value: 'TEXT_AREA',
+									},
+								],
+								default: 'STRING',
+							},
+							{
+								displayName: 'Language Descriptions',
+								name: 'languageDescriptions',
+								type: 'collection',
+								options: [
+									{
+										displayName: 'Language Code',
+										name: 'languageCode',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Description',
+										name: 'description',
+										type:'string',
+										default:'',
+									},
+								],
+								default: {},
+							},
+							{
+								displayName: 'Value Date',
+								name: 'valueDate',
+								type: 'dateTime',
+								default: '',
+							},
+							{
+								displayName: 'Value Period Start Date',
+								name: 'valuePeriodStartDate',
+								type: 'dateTime',
+								default: '',
+							},
+							{
+								displayName: 'Value Period End Date',
+								name: 'valuePeriodEndDate',
+								type: 'dateTime',
+								default: '',
+							},
+							{
+								displayName: 'Value Period Priority',
+								name: 'valuePeriodPriority',
+								type: 'boolean',
+								default: false,
+							},
+							{
+								displayName: 'String Value',
+								name: 'stringValue',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Date Value',
+								name: 'dateValue',
+								type: 'dateTime',
+								default: '',
+							},
+							{
+								displayName: 'Long Value',
+								name: 'longValue',
+								type: 'boolean',
+								default: false,
+							},
+							{
+								displayName: 'Double Value',
+								name: 'doubleValue',
+								type: 'boolean',
+								default: false,
+							},
+							{
+								displayName: 'Boolean Value',
+								name: 'booleanValue',
+								type: 'boolean',
+								default: false,
+							},
+							{
+								displayName: 'List Value',
+								name: 'listValue',
+								type: 'collection',
+								options: [
+									{
+										displayName: 'Value',
+										name: 'value',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Empty',
+										name: 'empty',
+										type:'boolean',
+										default:false,
+									},
+								],
+								default: {},
+							},
+							{
+								displayName: 'Map Value',
+								name: 'mapValue',
+								type: 'collection',
+								options: [
+									{
+										displayName: 'Value',
+										name: 'value',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Empty',
+										name: 'empty',
+										type:'boolean',
+										default:false,
+									},
+								],
+								default: {},
+							},
+							{
+								displayName: 'Entity Reference Value',
+								name: 'entityReferenceValue',
+								type: 'collection',
+								options: [
+									{
+										displayName: 'Class Name',
+										name: 'classname',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Code',
+										name: 'code',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Empty',
+										name: 'empty',
+										type:'boolean',
+										default:false,
+									},
+								],
+								default: {},
+							},
+							{
+								displayName: 'Index Type',
+								name: 'indexType',
+								type: 'options',
+								options: [
+									{
+											name: 'Store Only',
+											value: 'STORE_ONLY',
+									},
+									{
+											name: 'Index',
+											value: 'INDEX',
+									},
+									{
+											name: 'Index Not Analyze',
+											value: 'INDEX_NOT_ANALYZE',
+									},
+								],
+								default: 'STORE_ONLY',
+							},
+							{
+								displayName: 'File Value',
+								name: 'fileValue',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Formatted Value',
+								name: 'formattedValue',
+								type: 'collection',
+								options: [
+									{
+										displayName: 'ID',
+										name: 'id',
+										type:'number',
+										default:0,
+									},
+									{
+										displayName: 'Code',
+										name: 'code',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Description',
+										name: 'description',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Updated Code',
+										name: 'updatedCode',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Single Value',
+										name: 'singleValue',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'List Value',
+										name: 'listValue',
+										type: 'collection',
+										options: [
+											{
+												displayName: 'Value',
+												name: 'value',
+												type:'string',
+												default:'',
+											},
+											{
+												displayName: 'Empty',
+												name: 'empty',
+												type:'boolean',
+												default:false,
+											},
+										],
+										default: {},
+									},
+									{
+										displayName: 'Map Value',
+										name: 'mapValue',
+										type: 'collection',
+										options: [
+											{
+												displayName: 'Value',
+												name: 'value',
+												type:'string',
+												default:'',
+											},
+											{
+												displayName: 'Empty',
+												name: 'empty',
+												type:'boolean',
+												default:false,
+											},
+										],
+										default: {},
+									},
+								],
+								default: {},
+							},
+							{
+								displayName: 'Gui Position',
+								name: 'guiPosition',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Custom Table Code',
+								name: 'customTableCode',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Data Filter',
+								name: 'dataFilter',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Fields',
+								name: 'fields',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Empty',
+								name: 'empty',
+								type: 'boolean',
+								default: false,
+							},
+						],
+					},
+					{
+						displayName: 'Inherited Custom Field',
+						name: 'inheritedCustomField',
+						type: 'collection',
+						default: {},
+						options: [
+							{
+								displayName: 'Code',
+								name: 'code',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Description',
+								name: 'description',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Field Type',
+								name: 'fieldType',
+								type: 'options',
+								options: [
+									{
+										name: 'Boolean',
+										value: 'BOOLEAN',
+									},
+									{
+										name: 'Checkbox List',
+										value: 'CHECKBOX_LIST',
+									},
+									{
+										name: 'Child Entity',
+										value: 'CHILD_ENTITY',
+									},
+									{
+										name: 'Custom Table Wrapper',
+										value: 'CUSTOM_TABLE_WRAPPER',
+									},
+									{
+										name: 'Date',
+										value: 'DATE',
+									},
+									{
+										name: 'Double',
+										value: 'DOUBLE',
+									},
+									{
+										name: 'Entity',
+										value: 'ENTITY',
+									},
+									{
+										name: 'List',
+										value: 'LIST',
+									},
+									{
+										name: 'Long',
+										value: 'LONG',
+									},
+									{
+										name: 'Multi Value',
+										value: 'MULTI_VALUE',
+									},
+									{
+										name: 'String',
+										value: 'STRING',
+									},
+									{
+										name: 'Text Area',
+										value: 'TEXT_AREA',
+									},
+								],
+								default: 'STRING',
+							},
+							{
+								displayName: 'Language Descriptions',
+								name: 'languageDescriptions',
+								type: 'collection',
+								options: [
+									{
+										displayName: 'Language Code',
+										name: 'languageCode',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Description',
+										name: 'description',
+										type:'string',
+										default:'',
+									},
+								],
+								default: {},
+							},
+							{
+								displayName: 'Value Date',
+								name: 'valueDate',
+								type: 'dateTime',
+								default: '',
+							},
+							{
+								displayName: 'Value Period Start Date',
+								name: 'valuePeriodStartDate',
+								type: 'dateTime',
+								default: '',
+							},
+							{
+								displayName: 'Value Period End Date',
+								name: 'valuePeriodEndDate',
+								type: 'dateTime',
+								default: '',
+							},
+							{
+								displayName: 'Value Period Priority',
+								name: 'valuePeriodPriority',
+								type: 'boolean',
+								default: false,
+							},
+							{
+								displayName: 'String Value',
+								name: 'stringValue',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Date Value',
+								name: 'dateValue',
+								type: 'dateTime',
+								default: '',
+							},
+							{
+								displayName: 'Long Value',
+								name: 'longValue',
+								type: 'boolean',
+								default: false,
+							},
+							{
+								displayName: 'Double Value',
+								name: 'doubleValue',
+								type: 'boolean',
+								default: false,
+							},
+							{
+								displayName: 'Boolean Value',
+								name: 'booleanValue',
+								type: 'boolean',
+								default: false,
+							},
+							{
+								displayName: 'List Value',
+								name: 'listValue',
+								type: 'collection',
+								options: [
+									{
+										displayName: 'Value',
+										name: 'value',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Empty',
+										name: 'empty',
+										type:'boolean',
+										default:false,
+									},
+								],
+								default: {},
+							},
+							{
+								displayName: 'Map Value',
+								name: 'mapValue',
+								type: 'collection',
+								options: [
+									{
+										displayName: 'Value',
+										name: 'value',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Empty',
+										name: 'empty',
+										type:'boolean',
+										default:false,
+									},
+								],
+								default: {},
+							},
+							{
+								displayName: 'Entity Reference Value',
+								name: 'entityReferenceValue',
+								type: 'collection',
+								options: [
+									{
+										displayName: 'Class Name',
+										name: 'classname',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Code',
+										name: 'code',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Empty',
+										name: 'empty',
+										type:'boolean',
+										default:false,
+									},
+								],
+								default: {},
+							},
+							{
+								displayName: 'Index Type',
+								name: 'indexType',
+								type: 'options',
+								options: [
+									{
+											name: 'Store Only',
+											value: 'STORE_ONLY',
+									},
+									{
+											name: 'Index',
+											value: 'INDEX',
+									},
+									{
+											name: 'Index Not Analyze',
+											value: 'INDEX_NOT_ANALYZE',
+									},
+								],
+								default: 'STORE_ONLY',
+							},
+							{
+								displayName: 'File Value',
+								name: 'fileValue',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Formatted Value',
+								name: 'formattedValue',
+								type: 'collection',
+								options: [
+									{
+										displayName: 'ID',
+										name: 'id',
+										type:'number',
+										default:0,
+									},
+									{
+										displayName: 'Code',
+										name: 'code',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Description',
+										name: 'description',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Updated Code',
+										name: 'updatedCode',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'Single Value',
+										name: 'singleValue',
+										type:'string',
+										default:'',
+									},
+									{
+										displayName: 'List Value',
+										name: 'listValue',
+										type: 'collection',
+										options: [
+											{
+												displayName: 'Value',
+												name: 'value',
+												type:'string',
+												default:'',
+											},
+											{
+												displayName: 'Empty',
+												name: 'empty',
+												type:'boolean',
+												default:false,
+											},
+										],
+										default: {},
+									},
+									{
+										displayName: 'Map Value',
+										name: 'mapValue',
+										type: 'collection',
+										options: [
+											{
+												displayName: 'Value',
+												name: 'value',
+												type:'string',
+												default:'',
+											},
+											{
+												displayName: 'Empty',
+												name: 'empty',
+												type:'boolean',
+												default:false,
+											},
+										],
+										default: {},
+									},
+								],
+								default: {},
+							},
+							{
+								displayName: 'Gui Position',
+								name: 'guiPosition',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Custom Table Code',
+								name: 'customTableCode',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Data Filter',
+								name: 'dataFilter',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Fields',
+								name: 'fields',
+								type: 'string',
+								default: '',
+							},
+							{
+								displayName: 'Empty',
+								name: 'empty',
+								type: 'boolean',
+								default: false,
+							},
+						],
+					},
+					{
+						displayName: 'Empty',
+						name: 'empty',
+						type: 'boolean',
+						default: false,
+					},
+				],
+				default: {},
+			},
+>>>>>>> 12feed9d3 (Comply with n8n@0.186.1 new specification)
 		],
 	},
 ];

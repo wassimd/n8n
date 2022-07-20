@@ -10,7 +10,7 @@ type name = {
 
 export const genericApiOperations: INodeProperties[] = [
 	{
-		displayName: 'Entity',
+		displayName: 'Entity Name or ID',
 		name: 'entity',
 		type: 'options',
 		displayOptions: {
@@ -24,12 +24,13 @@ export const genericApiOperations: INodeProperties[] = [
 		typeOptions: {
 			loadOptionsMethod: 'getEntities',
 		},
-		description: `Choose the Entity.`,
+		description: 'Choose the Entity. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
 	},
 	{
 		displayName: 'Operation',
 		name: 'operation',
 		type: 'options',
+		noDataExpression: true,
 		displayOptions: {
 			show: {
 				resource: [
@@ -42,20 +43,22 @@ export const genericApiOperations: INodeProperties[] = [
 				name: 'Get',
 				value: 'get',
 				description: 'Get a contact',
+				action: 'Get a contact',
 			},
 			{
 				name: 'Get All',
 				value: 'getAll',
 				description: 'Get all contacts',
+				action: 'Get all contacts',
 			},
 			{
 				name: 'Search',
 				value: 'search',
 				description: 'Search contacts',
+				action: 'Search contacts',
 			},
 		],
 		default: 'get',
-		description: 'The operation to perform.',
 	},
 ];
 
@@ -79,10 +82,10 @@ export const genericApiFields: INodeProperties[] = [
 		default: '',
 	},
 	{
-		displayName: 'Nested Entities',
+		displayName: 'Nested Entity Names or IDs',
 		name: 'nestedEntities',
 		type: 'multiOptions',
-		required: false,
+		description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 		displayOptions: {
 			show: {
 				resource: [
@@ -105,7 +108,7 @@ export const genericApiFields: INodeProperties[] = [
 		name: 'filters',
 		placeholder: 'Add Filter',
 		type: 'fixedCollection',
-		default: '',
+		default: {},
 		typeOptions: {
 			multipleValues: true,
 		},
@@ -119,7 +122,6 @@ export const genericApiFields: INodeProperties[] = [
 				],
 			},
 		},
-		description: '',
 		options: [
 			{
 				name: 'filterValues',
@@ -130,14 +132,14 @@ export const genericApiFields: INodeProperties[] = [
 						name: 'key',
 						type: 'string',
 						default: '',
-						description: 'Key of the filter to add.',
+						description: 'Key of the filter to add',
 					},
 					{
 						displayName: 'Value',
 						name: 'value',
 						type: 'string',
 						default: '',
-						description: 'Value to set for the filter key.',
+						description: 'Value to set for the filter key',
 					},
 				],
 			},
