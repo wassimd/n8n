@@ -366,6 +366,7 @@ export const subscriptionFields: INodeProperties[] = [
 		type: 'fixedCollection',
 		typeOptions: {
 			multipleValues: true,
+			loadOptionsDependsOn: ['opencellOAuth2Api','opencellApi'],
 		},
 		displayOptions: {
 			show: {
@@ -401,6 +402,36 @@ export const subscriptionFields: INodeProperties[] = [
 						type:'hidden',
 						default: `={{$parameter["&code"].split("|")[1]}}`
 						//default: `={{$parameter["customFieldsUI"]["customFieldsValues"][0]["field"].split("|")[1]}}`,
+					},
+					{
+						displayName: 'List Value Name or ID',
+						name:'listValue',
+						type:'options',
+						description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
+						default: '',
+						typeOptions: {
+							loadOptionsMethod: 'getCustomFieldListValues',
+						},
+						displayOptions: {
+							show:{
+								type:['LIST'],
+							}
+						}
+					},
+					{
+						displayName: 'Checkbox List Value Names or IDs',
+						name:'listValue',
+						type:'multiOptions',
+						description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
+						typeOptions: {
+							loadOptionsMethod: 'getCustomFieldListValues',
+						},
+						displayOptions: {
+							show:{
+								type:['CHECKBOX_LIST'],
+							}
+						},
+						default: [],
 					},
 					{
 						displayName: 'String',
