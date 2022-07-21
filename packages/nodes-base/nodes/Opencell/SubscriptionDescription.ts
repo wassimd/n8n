@@ -184,12 +184,8 @@ export const subscriptionFields: INodeProperties[] = [
 						name: 'Calendar',
 						value: 'CALENDAR',
 					},
-					{
-						name: 'Fixed',
-						value: 'FIXED',
-					},
 				],
-				default: 'FIXED',
+				default: 'RECURRING',
 			},
 			{
 				displayName: 'Renew For Unit',
@@ -397,15 +393,15 @@ export const subscriptionFields: INodeProperties[] = [
 					},
 					{
 						//This is used to determine the type of the value field
-						displayName:'Type',
-						name:'type',
+						displayName:'Field Type',
+						name:'fieldType',
 						type:'hidden',
-						default: `={{$parameter["&code"].split("|")[1]}}`
+						default: `={{$parameter["&code"].split("|")[1]}}`,
 						//default: `={{$parameter["customFieldsUI"]["customFieldsValues"][0]["field"].split("|")[1]}}`,
 					},
 					{
 						displayName: 'List Value Name or ID',
-						name:'listValue',
+						name:'value',
 						type:'options',
 						description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 						default: '',
@@ -414,13 +410,13 @@ export const subscriptionFields: INodeProperties[] = [
 						},
 						displayOptions: {
 							show:{
-								type:['LIST'],
-							}
-						}
+								fieldType:['LIST'],
+							},
+						},
 					},
 					{
 						displayName: 'Checkbox List Value Names or IDs',
-						name:'listValue',
+						name:'value',
 						type:'multiOptions',
 						description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 						typeOptions: {
@@ -428,8 +424,8 @@ export const subscriptionFields: INodeProperties[] = [
 						},
 						displayOptions: {
 							show:{
-								type:['CHECKBOX_LIST'],
-							}
+								fieldType:['CHECKBOX_LIST'],
+							},
 						},
 						default: [],
 					},
@@ -441,9 +437,9 @@ export const subscriptionFields: INodeProperties[] = [
 						description: 'Text value of the field',
 						displayOptions: {
 							show:{
-								type:['STRING'],
-							}
-						}
+								fieldType:['STRING'],
+							},
+						},
 					},
 					{
 						displayName: 'Text Area',
@@ -456,9 +452,9 @@ export const subscriptionFields: INodeProperties[] = [
 						},
 						displayOptions: {
 							show:{
-								type:['TEXT_AREA'],
-							}
-						}
+								fieldType:['TEXT_AREA'],
+							},
+						},
 					},
 					{
 						displayName: 'Date',
@@ -468,9 +464,9 @@ export const subscriptionFields: INodeProperties[] = [
 						description: 'Date value of the field',
 						displayOptions: {
 							show:{
-								type:['DATE'],
-							}
-						}
+								fieldType:['DATE'],
+							},
+						},
 					},
 					{
 						displayName: 'Boolean',
@@ -480,9 +476,9 @@ export const subscriptionFields: INodeProperties[] = [
 						description: 'Whether the custom field is true or not',
 						displayOptions: {
 							show:{
-								type:['BOOLEAN'],
-							}
-						}
+								fieldType:['BOOLEAN'],
+							},
+						},
 					},
 					{
 						displayName: 'Number (Long)',
@@ -492,9 +488,9 @@ export const subscriptionFields: INodeProperties[] = [
 						description: 'Number value of the field',
 						displayOptions: {
 							show:{
-								type:['LONG'],
-							}
-						}
+								fieldType:['LONG'],
+							},
+						},
 					},
 					{
 						displayName: 'Number (Double)',
@@ -504,9 +500,9 @@ export const subscriptionFields: INodeProperties[] = [
 						description: 'Number value of the field',
 						displayOptions: {
 							show:{
-								type:['DOUBLE'],
-							}
-						}
+								fieldType:['DOUBLE'],
+							},
+						},
 					},
 				],
 			},

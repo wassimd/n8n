@@ -273,12 +273,8 @@ export class Opencell implements INodeType {
 					case 'subscription':
 						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
 						break;
-					case 'customerHierarchy':
-						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.CustomerHierarchy';
-						break;
 					default:
-						throw new NodeApiError(this.getNode(), {error:"This resource doesn't support custom fields"});
-						break;
+						throw new NodeApiError(this.getNode(), {error:'This resource doesn\'t support custom fields'});
 				}
 
 				const customFields = await opencellApi.call(this, 'GET', endpoint, {});
@@ -286,11 +282,13 @@ export class Opencell implements INodeType {
 				if (customFields.entityCustomization.field) {
 					for (const cf of customFields.entityCustomization.field) {
 						//Generate the list of possible values if relevant (list, checkbox-list, map...)
-						let listValues = "";
+						let listValues = '';
 						if (cf.listValues) {
-							listValues = "|"
+							listValues = '|';
 							for (const key in cf.listValues) {
-								listValues += key + ',';
+								if(key) {
+									listValues += key + ',';
+								}
 							}
 							listValues = listValues.slice(0,-1); //remove last ','
 						}
@@ -309,20 +307,17 @@ export class Opencell implements INodeType {
 			async getCustomFieldListValues(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				//Get the customFields that have already been fetched, and return the listValues corresponding to the newest item
 				//TODO : check consistency. js objects are not ordered : getting the last object in the array might not always return the newest item.
-
 				const returnData: INodePropertyOptions[] = [];
-
-				const customFieldsUI = this.getNodeParameter("customFieldsUI") as IDataObject;
-
+				const customFieldsUI = this.getNodeParameter('customFieldsUI') as IDataObject;
 				if (customFieldsUI.customFieldsValues) {
 					//Get custom fields as an array
 					const customFieldsArray = Object.entries(customFieldsUI.customFieldsValues);
 					//Convert the keys from strings to numbers, in order to be able to get the last element
 					const customFieldsArrayWithNumericKeys = customFieldsArray.map(([key,value])=>[+key,value]);
 					//Get the last element.
-					const lastCustomFieldEntry = customFieldsArrayWithNumericKeys.slice(-1)[0][1]
+					const lastCustomFieldEntry = customFieldsArrayWithNumericKeys.slice(-1)[0][1];
 					//The `code` holds data in the following pattern : CODE|TYPE(|LISTVALUES), with the listValues being comma-separated
-					const listValues = lastCustomFieldEntry.code.split("|")[2].split(",") as string;
+					const listValues = lastCustomFieldEntry.code.split('|')[2].split(',') as string;
 
 					for (const value of listValues) {
 						returnData.push({
@@ -533,10 +528,44 @@ export class Opencell implements INodeType {
 
 					if (this.getNodeParameter('customFieldsUI',i)){
 						const customFields = this.getNodeParameter('customFieldsUI',i) as IDataObject;
-						const customFieldsValues = customFields.customFieldsValues as IDataObject;
-						console.log("[EXEC customFields : avant]\n",customFields);
-						//TODO : remove everything after | in "code" value
+						const customFieldsValues = customFields.customFieldsValues as IDataObject[];
+
+
+						//Remove everything after | in 'code'
+						if(customFieldsValues) {
+							for(const cf of customFieldsValues) {
+								//console.log("[code:]",cf.code);
+								if(cf.code) {
+									cf.code = String(cf.code).split('|')[0];
+								}
+								//convert list values to the format expected by the api aka "value":[{"value":"VAL1"},{"value":"VAL2"}]
+								const valueField = cf.value as string[];
+								if(valueField && valueField.toString() != '') {
+									//Multiple values case
+									if(cf.fieldType == "CHECKBOX_LIST") {
+										let valueList:IDataObject[] = []
+										for(const value of valueField) {
+											valueList.push({
+												"value":value,
+											})
+										}
+										cf.value = valueList;
+									}
+									//Single values case
+									else {
+										cf.value = [{
+											"value":cf.value,
+										}]
+									}
+								}
+							}
+						}
+
+						body.customFields = {
+							'customField':customFieldsValues,
+						};
 					}
+
 					responseData = await opencellApi.call(this, verb, url, body);
 					returnData.push(responseData);
 				}
