@@ -13,8 +13,8 @@ export const subscriptionOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
-		type: 'options',
 		noDataExpression: true,
+		type: 'options',
 		displayOptions: {
 			show: {
 				resource: [
@@ -24,19 +24,22 @@ export const subscriptionOperations: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: 'Create & Instanciate',
+				name: 'Create & Instantiate',
 				value: 'create',
-				description: 'Create subscription & Instanciate products',
+				description: 'Create subscription & Instantiate products',
+				action: 'Create & Instantiate a subscription',
 			},
 			{
 				name: 'Terminate',
 				value: 'terminate',
 				description: 'Terminate a subscription',
+				action: 'Terminate a subscription',
 			},
 			{
 				name: 'Update',
 				value: 'update',
 				description: 'Update a subscription',
+				action: 'Update a subscription',
 			},
 			// {
 			// 	name: 'Get All',
@@ -55,11 +58,11 @@ export const subscriptionOperations: INodeProperties[] = [
 			// },
 		],
 		default: 'create',
-		description: 'The operation to perform on the Subscription',
 	},
 ];
 
 export const subscriptionFields: INodeProperties[] = [
+	//Create and instantiate
 	{
 		displayName: 'Code',
 		name: 'code',
@@ -72,14 +75,14 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'create',
-					'delete',
+					'update',
 				],
 			},
 		},
 		default: '',
 	},
 	{
-		displayName: 'User Account',
+		displayName: 'User Account Name or ID',
 		name: 'userAccount',
 		type: 'options',
 		default: '',
@@ -94,14 +97,14 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'create',
-					'delete',
+					'update',
 				],
 			},
 		},
-		description: 'Choose the the user account to subscribe',
+		description: 'Choose the the user account to subscribe. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
 	},
 	{
-		displayName: 'Offer Template',
+		displayName: 'Offer Template Name or ID',
 		name: 'offerTemplate',
 		type: 'options',
 		default: '',
@@ -115,12 +118,112 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'create',
-					'delete',
+					'update',
 				],
 			},
 		},
 		required: true,
-		description: 'Choose the subscription offer',
+		description: 'Choose the subscription offer. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
+	},
+	{
+		displayName: 'Renewal Rule',
+		name:'renewalRule',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'create',
+					'update',
+				],
+			},
+		},
+		type:'collection',
+		options:[
+			{
+				displayName: 'Initially Active For Unit',
+				name: 'initialyActiveForUnit',
+				type:'options',
+				options: [
+					{
+						name: 'Month',
+						value: 'MONTH',
+					},
+					{
+						name: 'Day',
+						value: 'DAY',
+					},
+				],
+				default: 'DAY',
+			},
+			{
+				displayName: 'Auto Renew',
+				name:'autoRenew',
+				type: 'boolean',
+				default:false,
+			},
+			{
+				displayName: 'Extend Agreement Period to Subscribed Till Date',
+				name: 'extendAgreementPeriodToSubscribedTillDate',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName:'End Of Term Action',
+				name:'endOfTermAction',
+				type:'options',
+				options: [
+					{
+						name: 'Suspend',
+						value: 'SUSPEND',
+					},
+					{
+						name: 'Terminate',
+						value: 'TERMINATE',
+					},
+				],
+				default: 'SUSPEND',
+			},
+			{
+				displayName:'Renewal Term Type',
+				name:'renewalTermType',
+				type:'options',
+				options: [
+					{
+						name: 'Recurring',
+						value: 'RECURRING',
+					},
+					{
+						name: 'Calendar',
+						value: 'CALENDAR',
+					},
+					{
+						name: 'Fixed',
+						value: 'FIXED',
+					},
+				],
+				default: 'FIXED',
+			},
+			{
+				displayName: 'Renew For Unit',
+				name: 'renewForUnit',
+				type:'options',
+				options: [
+					{
+						name: 'Day',
+						value: 'DAY',
+					},
+					{
+						name: 'Month',
+						value: 'MONTH',
+					},
+				],
+				default: 'DAY',
+			},
+		],
+		default:{},
 	},
 	{
 		displayName: 'Subscription Date',
@@ -134,47 +237,143 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 				operation: [
 					'create',
-					'delete',
+					'update',
 				],
 			},
 		},
 		description: 'Choose the subscription Date',
+		required: true,
 	},
-	/*
 	{
-		displayName: 'Custom Fields',
-		name: 'customFieldsUI',
-		placeholder: 'Add Custom Field',
+		displayName: 'Product to Instantiate',
+		name: 'productToInstantiateDto',
 		type: 'fixedCollection',
+		required:true,
 		typeOptions: {
 			multipleValues: true,
 		},
 		default: {},
-		options: [
-			{
-				name: 'customFieldsValues',
-				displayName: 'Custom Fields',
-				values: [
-					{
-						displayName: 'Field',
-						name: 'field',
-						type: 'options',
-						typeOptions: {
-							loadOptionsMethod: 'getCustomFields',
-						},
-						default: '',
-						description: 'Name of the field',
-					},
-					{
-						displayName: 'Value',
-						name: 'value',
-						type: 'string',
-						default: '',
-						description: 'Value of the field',
-					},
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'create',
 				],
 			},
+		},
+		placeholder: 'Add Product',
+		options: [
+			{
+				name: 'product',
+				displayName: 'Product',
+				values: [
+					{
+						displayName: 'Product Code',
+						name: 'productCode',
+						required: true,
+						type: 'string',
+						default:"",
+					},
+					{
+						displayName: 'Quantity',
+						name: 'quantity',
+						type: 'number',
+						default:1,
+					},
+					{
+						displayName: 'Delivery Date',
+						name: 'deliveryDate',
+						type: 'dateTime',
+						default:new Date().setHours(0,0,0,0),
+					},
+				]
+			}
+			/// TODO : attribute Instances (gros DTO)
 		],
 	},
-	*/
+	//Termination
+	{
+		displayName: 'Subscription Code',
+		name: 'subscriptionCode',
+		type: 'string',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'terminate',
+				],
+			},
+		},
+		required: true,
+	},
+	{
+		displayName: 'Subscription Validity Date',
+		name: 'subscriptionValidityDate',
+		type: 'dateTime',
+		default: new Date().setHours(0,0,0,0),
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'terminate',
+				],
+			},
+		},
+	},
+	{
+		displayName: 'Termination Reason',
+		name: 'terminationReason',
+		type: 'options',
+		default: 'TERM_REASON_1',
+		options: [
+			{
+				name: 'Agreement Reimbursement Charge',
+				value: 'TERM_REASON_1',
+			},
+			{
+				name: 'Agreement',
+				value: 'TERM_REASON_2',
+			},
+			{
+				name: 'Charge',
+				value: 'TERM_REASON_3',
+			},
+		],
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'terminate',
+				],
+			},
+		},
+		required: true,
+	},
+	{
+		displayName: 'Termination Date',
+		name: 'terminationDate',
+		type: 'dateTime',
+		default: new Date().setHours(0,0,0,0),
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'terminate',
+				],
+			},
+		},
+		required: true,
+	},
+
 ];

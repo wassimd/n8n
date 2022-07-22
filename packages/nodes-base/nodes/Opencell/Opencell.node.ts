@@ -8,6 +8,7 @@ import {
 	ICredentialsDecrypted,
 	ICredentialTestFunctions,
 	IDataObject,
+	IHttpRequestMethods,
 	IHttpRequestOptions,
 	INodeCredentialTestResult,
 	INodeExecutionData,
@@ -415,7 +416,6 @@ export class Opencell implements INodeType {
 						body.name = this.getNodeParameter('name', i);
 						body.address = this.getNodeParameter('address', i);
 						body.contactInformation = this.getNodeParameter('contactInformation', i);
-						body.contactInformation = this.getNodeParameter('contactInformation', i);
 						if (this.getNodeParameter('email', i)) {
 							body.email = this.getNodeParameter('email', i);
 						}
@@ -448,6 +448,52 @@ export class Opencell implements INodeType {
 						responseData = await opencellApi.call(this, 'POST', url, body);
 						returnData.push(responseData);
 					}
+				}
+				else if (resource === 'subscription') {
+					let url:string;
+					let verb:IHttpRequestMethods;
+					const body: IDataObject = {};
+
+					if (operation === 'create') {
+						verb = 'POST';
+						url = `/opencell/api/rest/billing/subscription/subscribeAndInstantiateProducts`;
+						
+						body.code = this.getNodeParameter('code', i) as string;
+						body.userAccount = this.getNodeParameter('userAccount', i) as string;
+						body.offerTemplate = this.getNodeParameter('offerTemplate', i) as string;
+						body.renewalRule = this.getNodeParameter('renewalRule',i);
+						body.subscriptionDate = this.getNodeParameter('subscriptionDate', i);
+						const productToInstantiateDto = this.getNodeParameter('productToInstantiateDto',i) as IDataObject;
+						if (productToInstantiateDto) {
+							body.productToInstantiateDto = productToInstantiateDto["product"];
+						}
+					}
+
+					else if (operation === 'update') {
+						verb = 'PUT';
+						url = `/opencell/api/rest/billing/subscription`;
+
+						body.code = this.getNodeParameter('code', i) as string;
+						body.userAccount = this.getNodeParameter('userAccount', i) as string;
+						body.offerTemplate = this.getNodeParameter('offerTemplate', i) as string;
+						body.renewalRule = this.getNodeParameter('renewalRule',i);
+						body.subscriptionDate = this.getNodeParameter('subscriptionDate', i);
+					}
+
+					else { // Operation : terminate
+						verb = 'POST';
+						url = `/opencell/api/rest/billing/subscription/terminate`;
+
+						body.subscriptionCode = this.getNodeParameter('subscriptionCode', i) as string;
+						body.terminationReason = this.getNodeParameter('terminationReason', i) as string;
+						body.terminationDate = this.getNodeParameter('terminationDate', i) as string;
+						if (this.getNodeParameter('subscriptionValidityDate', i)) {
+							body.subscriptionValidityDate = this.getNodeParameter('subscriptionValidityDate', i);
+						}
+					}
+
+					responseData = await opencellApi.call(this, verb, url, body);
+					returnData.push(responseData);
 				}
 				// GENERIC API
 				else if (resource === 'genericApi') {
@@ -484,9 +530,6 @@ export class Opencell implements INodeType {
 								}
 								body.filters = bodyFilters;
 							}
-
-							//console.log(body);
-
 						}
 						responseData = await opencellApi.call(this, 'POST', url, body);
 						returnData.push(responseData);
@@ -500,7 +543,6 @@ export class Opencell implements INodeType {
 				throw error;
 			}
 		}
-
 		// Map data to n8n data structure
 		return [this.helpers.returnJsonArray(returnData)];
 	}
