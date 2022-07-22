@@ -1,0 +1,164 @@
+
+> n8n@0.186.1 dev
+> lerna exec npm run dev --parallel
+
+n8n-workflow: > n8n-workflow@0.108.0 dev
+n8n-workflow: > npm run watch
+n8n-core: > n8n-core@0.126.0 dev
+n8n-core: > npm run watch
+n8n: > n8n@0.186.1 dev
+n8n: > concurrently -k -n "TypeScript,Node" -c "yellow.bold,cyan.bold" "npm run watch" "nodemon"
+n8n-design-system: > n8n-design-system@0.26.0 dev
+n8n-design-system: > npm run watch:theme
+n8n-node-dev: > n8n-node-dev@0.65.0 dev
+n8n-node-dev: > npm run watch
+n8n-nodes-base: > n8n-nodes-base@0.184.1 dev
+n8n-nodes-base: > npm run watch
+n8n-editor-ui: > n8n-editor-ui@0.152.0 dev
+n8n-editor-ui: > npm run serve
+n8n-workflow: > n8n-workflow@0.108.0 watch
+n8n-workflow: > tsc --watch
+n8n-core: > n8n-core@0.126.0 watch
+n8n-core: > tsc --watch
+n8n-node-dev: > n8n-node-dev@0.65.0 watch
+n8n-node-dev: > tsc --watch
+n8n-design-system: > n8n-design-system@0.26.0 watch:theme
+n8n-design-system: > gulp watch:theme
+n8n-editor-ui: > n8n-editor-ui@0.152.0 serve
+n8n-editor-ui: > cross-env VUE_APP_URL_BASE_API=http://localhost:5678/ vue-cli-service serve
+n8n-nodes-base: > n8n-nodes-base@0.184.1 watch
+n8n-nodes-base: > tsc --watch
+n8n: [Node] [33m[nodemon] 2.0.19[39m
+n8n: [Node] [33m[nodemon] to restart at any time, enter `rs`[39m
+n8n: [Node] [33m[nodemon] watching path(s): commands/**/* index.ts src/**/*[39m
+n8n: [Node] [33m[nodemon] watching extensions: ts[39m
+n8n: [Node] [32m[nodemon] starting `npm start`[39m
+n8n-workflow: c10:34:02 - Starting compilation in watch mode...
+n8n-node-dev: c10:34:02 - Starting compilation in watch mode...
+n8n-core: c10:34:02 - Starting compilation in watch mode...
+n8n-nodes-base: c10:34:02 - Starting compilation in watch mode...
+n8n: [TypeScript] 
+n8n: [TypeScript] > n8n@0.186.1 watch
+n8n: [TypeScript] > tsc --watch
+n8n: [TypeScript] 
+n8n: [Node] 
+n8n: [Node] > n8n@0.186.1 start
+n8n: [Node] > run-script-os
+n8n: [Node] 
+n8n: [TypeScript] c10:34:02 - Starting compilation in watch mode...
+n8n: [TypeScript] 
+n8n-editor-ui:  INFO  Starting development server...
+n8n-design-system: [10:34:03] Using gulpfile ~/Documents/GitHub/n8n/packages/design-system/gulpfile.js
+n8n-design-system: [10:34:03] Starting 'watch:theme'...
+n8n-design-system: [10:34:03] Starting 'build:theme'...
+n8n-design-system: [10:34:03] Starting 'compileTheme'...
+n8n: [Node] 
+n8n: [Node] > n8n@0.186.1 start:default
+n8n: [Node] > cd bin && ./n8n
+n8n: [Node] 
+n8n-editor-ui: Starting type checking and linting service...
+n8n-editor-ui: Using 1 worker with 2048MB memory limit
+n8n-node-dev: 10:34:05 - Found 0 errors. Watching for file changes.
+n8n-design-system: [10:34:05] Finished 'compileTheme' after 2.06 s
+n8n-design-system: [10:34:05] Starting 'copyThemeFonts'...
+n8n-design-system: [10:34:05] Finished 'copyThemeFonts' after 71 ms
+n8n-design-system: [10:34:05] Finished 'build:theme' after 2.14 s
+n8n-design-system: [10:34:05] Starting '<anonymous>'...
+n8n: [Node] Initializing n8n process
+n8n-core: 10:34:06 - Found 0 errors. Watching for file changes.
+n8n-workflow: 10:34:07 - Found 0 errors. Watching for file changes.
+n8n-node-dev: c10:34:07 - File change detected. Starting incremental compilation...
+n8n-core: c10:34:07 - File change detected. Starting incremental compilation...
+n8n-node-dev: 10:34:07 - Found 0 errors. Watching for file changes.
+n8n-core: 10:34:07 - Found 0 errors. Watching for file changes.
+n8n-node-dev: c10:34:07 - File change detected. Starting incremental compilation...
+n8n-core: c10:34:07 - File change detected. Starting incremental compilation...
+n8n-node-dev: 10:34:07 - Found 0 errors. Watching for file changes.
+n8n-core: 10:34:07 - Found 0 errors. Watching for file changes.
+n8n: [Node] query is slow: SELECT id FROM migrations where name = "MakeStoppedAtNullable1607431743769"
+n8n: [Node] execution time: 2596
+n8n: [Node] n8n's port 5678 is already in use. Do you have another instance of n8n running already?
+n8n: [Node] [31m[nodemon] app crashed - waiting for file changes before starting...[39m
+n8n: [TypeScript] 
+n8n: [TypeScript] 10:34:11 - Found 0 errors. Watching for file changes.
+n8n: [TypeScript] c10:34:11 - File change detected. Starting incremental compilation...
+n8n: [TypeScript] 
+n8n: [TypeScript] 
+n8n: [TypeScript] 10:34:11 - Found 0 errors. Watching for file changes.
+n8n-editor-ui:  DONE  Compiled successfully in 10587ms10:34:15
+n8n-editor-ui: No type errors found
+n8n-editor-ui: No lint errors found
+n8n-editor-ui: Version: typescript 4.6.4, tslint 5.20.1
+n8n-editor-ui: Time: 6901ms
+n8n-editor-ui: Webpack Bundle Analyzer is started at http://127.0.0.1:8888
+n8n-editor-ui: Use Ctrl+C to close it
+n8n-editor-ui:   App running at:
+n8n-editor-ui:   - Local:   http://localhost:8080/ 
+n8n-editor-ui:   - Network: http://192.168.1.107:8080/
+n8n-editor-ui:   Note that the development build is not optimized.
+n8n-editor-ui:   To create a production build, run npm run build.
+n8n-editor-ui:  WAIT  Compiling...10:34:15
+n8n-editor-ui:  DONE  Compiled successfully in 312ms10:34:16
+n8n-editor-ui: Type checking and linting in progress...
+n8n-editor-ui:   App running at:
+n8n-editor-ui:   - Local:   http://localhost:8080/ 
+n8n-editor-ui:   - Network: http://192.168.1.107:8080/
+n8n-editor-ui: No type errors found
+n8n-editor-ui: No lint errors found
+n8n-editor-ui: Version: typescript 4.6.4, tslint 5.20.1
+n8n-editor-ui: Time: 2398ms
+n8n: [TypeScript] c10:34:18 - File change detected. Starting incremental compilation...
+n8n: [TypeScript] 
+n8n: [TypeScript] 
+n8n: [TypeScript] 10:34:18 - Found 0 errors. Watching for file changes.
+n8n-nodes-base: 10:34:22 - Found 0 errors. Watching for file changes.
+n8n-nodes-base: c10:34:23 - File change detected. Starting incremental compilation...
+n8n-nodes-base: 10:34:23 - Found 0 errors. Watching for file changes.
+n8n-nodes-base: c10:44:06 - File change detected. Starting incremental compilation...
+n8n-nodes-base: 10:44:07 - Found 0 errors. Watching for file changes.
+n8n-nodes-base: c10:44:12 - File change detected. Starting incremental compilation...
+n8n-nodes-base: 10:44:12 - Found 0 errors. Watching for file changes.
+n8n-editor-ui:  WAIT  Compiling...10:45:14
+n8n: [TypeScript] c10:45:14 - File change detected. Starting incremental compilation...
+n8n: [TypeScript] 
+n8n-node-dev: c10:45:14 - File change detected. Starting incremental compilation...
+n8n-node-dev: 10:45:14 - Found 0 errors. Watching for file changes.
+n8n: [TypeScript] 
+n8n: [TypeScript] 10:45:14 - Found 0 errors. Watching for file changes.
+n8n-nodes-base: c10:45:14 - File change detected. Starting incremental compilation...
+n8n-node-dev: c10:45:15 - File change detected. Starting incremental compilation...
+n8n-node-dev: 10:45:15 - Found 0 errors. Watching for file changes.
+n8n: [TypeScript] c10:45:15 - File change detected. Starting incremental compilation...
+n8n: [TypeScript] 
+n8n: [TypeScript] 
+n8n: [TypeScript] 10:45:15 - Found 0 errors. Watching for file changes.
+n8n-nodes-base: 10:45:15 - Found 0 errors. Watching for file changes.
+n8n-core: c10:45:16 - File change detected. Starting incremental compilation...
+n8n-node-dev: c10:45:16 - File change detected. Starting incremental compilation...
+n8n-node-dev: 10:45:16 - Found 0 errors. Watching for file changes.
+n8n-core: 10:45:16 - Found 0 errors. Watching for file changes.
+n8n-core: c10:45:16 - File change detected. Starting incremental compilation...
+n8n-node-dev: c10:45:16 - File change detected. Starting incremental compilation...
+n8n: [TypeScript] c10:45:16 - File change detected. Starting incremental compilation...
+n8n: [TypeScript] 
+n8n-node-dev: 10:45:16 - Found 0 errors. Watching for file changes.
+n8n-core: 10:45:16 - Found 0 errors. Watching for file changes.
+n8n-nodes-base: c10:45:16 - File change detected. Starting incremental compilation...
+n8n: [TypeScript] 
+n8n: [TypeScript] 10:45:16 - Found 0 errors. Watching for file changes.
+n8n-nodes-base: 10:45:16 - Found 0 errors. Watching for file changes.
+n8n-editor-ui:  DONE  Compiled successfully in 2423ms10:45:16
+n8n-editor-ui: Type checking and linting in progress...
+n8n-editor-ui:   App running at:
+n8n-editor-ui:   - Local:   http://localhost:8080/ 
+n8n-editor-ui:   - Network: http://192.168.1.107:8080/
+n8n-editor-ui:  WAIT  Compiling...10:45:16
+n8n-editor-ui:  DONE  Compiled successfully in 544ms10:45:17
+n8n-editor-ui: Type checking and linting in progress...
+n8n-editor-ui:   App running at:
+n8n-editor-ui:   - Local:   http://localhost:8080/ 
+n8n-editor-ui:   - Network: http://192.168.1.107:8080/
+n8n-editor-ui: No type errors found
+n8n-editor-ui: No lint errors found
+n8n-editor-ui: Version: typescript 4.6.4, tslint 5.20.1
+n8n-editor-ui: Time: 2943ms
