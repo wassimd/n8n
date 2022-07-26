@@ -169,7 +169,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 				typeOptions: {
 					loadOptionsMethod: 'getTitles',
 				},
-				description: 'Choose the title/civility of the customer. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
+				description: 'Choose the title/civility of the customer. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
 			},
 			{
 				displayName: 'First Name',
@@ -1064,8 +1064,6 @@ export const customerHierarchyFields: INodeProperties[] = [
 			},
 			// End of auto generated fields
 			//Custom field DTO
-<<<<<<< HEAD
-=======
 
 			{
 				displayName: 'Custom Fields',
@@ -1781,7 +1779,6 @@ export const customerHierarchyFields: INodeProperties[] = [
 				],
 				default: {},
 			},
->>>>>>> 12feed9d3 (Comply with n8n@0.186.1 new specification)
 		],
 	},
 ];

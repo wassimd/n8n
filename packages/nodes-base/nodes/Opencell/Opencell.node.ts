@@ -17,10 +17,6 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	NodeApiError,
-<<<<<<< HEAD
-	NodeParameterValue,
-=======
->>>>>>> 12feed9d3 (Comply with n8n@0.186.1 new specification)
 } from 'n8n-workflow';
 
 import {
@@ -53,16 +49,11 @@ async function validateCredentials(this: ICredentialTestFunctions ,decryptedCred
 		json: true,
 	};
 
-	if (credentials !== undefined) {
-		requestOptions.auth = {
-			username: credentials.username as string,
-			password: credentials.password as string,
-		};
-		requestOptions.url = `${credentials.host}:${credentials.port}`;
-	} else {
-		throw new NodeApiError({} as INode, {error:'Credentials undefined'});
-	}
-
+	requestOptions.auth = {
+		username: credentials.username as string,
+		password: credentials.password as string,
+	};
+	requestOptions.url = `${credentials.host}:${credentials.port}`;
 	requestOptions.url += '/opencell/api/rest/catalog/version';
 	requestOptions.method = 'GET';
 

@@ -24,7 +24,7 @@ export const genericApiOperations: INodeProperties[] = [
 		typeOptions: {
 			loadOptionsMethod: 'getEntities',
 		},
-		description: 'Choose the Entity. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
+		description: 'Choose the Entity. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
 	},
 	{
 		displayName: 'Operation',
@@ -85,7 +85,7 @@ export const genericApiFields: INodeProperties[] = [
 		displayName: 'Nested Entity Names or IDs',
 		name: 'nestedEntities',
 		type: 'multiOptions',
-		description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
+		description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
 		displayOptions: {
 			show: {
 				resource: [

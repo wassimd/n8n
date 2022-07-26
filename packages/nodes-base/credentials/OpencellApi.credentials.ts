@@ -28,6 +28,7 @@ export class OpencellApi implements ICredentialType {
 			name: 'username',
 			type: 'string',
 			default: '',
+			required: true,
 		},
 		{
 			displayName: 'Password',
@@ -37,6 +38,7 @@ export class OpencellApi implements ICredentialType {
 				password: true,
 			},
 			default: '',
+			required: true,
 		},
 	];
 }
