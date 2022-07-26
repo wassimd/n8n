@@ -335,7 +335,9 @@ export class Opencell implements INodeType {
 			async getTitles(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const returnData: INodePropertyOptions[] = [];
 				const endpoint = '/opencell/api/rest/v2/generic/all/title';
-				const titles = await opencellApi.call(this, 'POST', endpoint, {});
+				const body : IDataObject = {};
+				body.limit = 100;
+				const titles = await opencellApi.call(this, 'POST', endpoint, body);
 				for (const title of titles) {
 					//const contactName = `${contact.properties.firstname.value} ${contact.properties.lastname.value}`;
 					const titleId = title.id;
@@ -491,7 +493,7 @@ export class Opencell implements INodeType {
 					if (operation === 'create') {
 						verb = 'POST';
 						url = `/opencell/api/rest/billing/subscription/subscribeAndInstantiateProducts`;
-						
+
 						body.code = this.getNodeParameter('code', i) as string;
 						body.userAccount = this.getNodeParameter('userAccount', i) as string;
 						body.offerTemplate = this.getNodeParameter('offerTemplate', i) as string;
@@ -578,6 +580,7 @@ export class Opencell implements INodeType {
 						// Update body if nested entities are set
 						const nestedEntities = this.getNodeParameter('nestedEntities', i) as string[];
 						const body: IDataObject = {};
+						body.limit = 100;
 						if (nestedEntities.length > 0) {
 							body.nestedEntities = nestedEntities;
 						}
