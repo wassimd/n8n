@@ -125,7 +125,7 @@ export const subscriptionFields: INodeProperties[] = [
 			},
 		},
 		required: true,
-		description: 'Choose the subscription offer. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
+		description: 'Choose the subscription offer. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
 	},
 	{
 		displayName: 'Renewal Rule',
@@ -411,7 +411,7 @@ export const subscriptionFields: INodeProperties[] = [
 							loadOptionsMethod: 'getCustomFields',
 						},
 						default: '',
-						description: 'Name of the field. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
+						description: 'Name of the field. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
 					},
 					{
 						//This is used to determine the type of the value field
@@ -425,7 +425,7 @@ export const subscriptionFields: INodeProperties[] = [
 						displayName: 'List Value Name or ID',
 						name:'value',
 						type:'options',
-						description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
+						description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
 						default: '',
 						typeOptions: {
 							loadOptionsMethod: 'getCustomFieldListValues',
@@ -440,7 +440,7 @@ export const subscriptionFields: INodeProperties[] = [
 						displayName: 'Checkbox List Value Names or IDs',
 						name:'value',
 						type:'multiOptions',
-						description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
+						description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
 						typeOptions: {
 							loadOptionsMethod: 'getCustomFieldListValues',
 						},

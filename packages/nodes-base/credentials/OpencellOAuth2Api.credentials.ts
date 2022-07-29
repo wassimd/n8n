@@ -22,14 +22,14 @@ export class OpencellOAuth2Api implements ICredentialType {
 			displayName: 'Authorization URL',
 			name: 'authUrl',
 			type: 'hidden',
-			default: `{{$self["opencellAuthUrl"]}}/auth/realms/opencell/protocol/openid-connect/auth`,
+			default: `={{$self["host"]}}/auth/realms/opencell/protocol/openid-connect/auth`,
 			required: true,
 		},
 		{
 			displayName: 'Access Token URL',
 			name: 'accessTokenUrl',
 			type: 'hidden',
-			default: '{{$self["opencellAuthUrl"]}}/auth/realms/opencell/protocol/openid-connect/token',
+			default: `={{$self["host"]}}/auth/realms/opencell/protocol/openid-connect/token`,
 			required: true,
 		},
 		{
