@@ -37,7 +37,10 @@ import {
 	genericApiFields,
 	genericApiOperations,
 } from './GenericApiComponent';
-import { getCustomerOptionalFields } from '../Magento/GenericFunctions';
+
+import {
+	customFields
+} from './CustomFieldsDescription';
 
 async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<INodeCredentialTestResult> {
 
@@ -228,6 +231,8 @@ export class Opencell implements INodeType {
 			// SUBSCRIPTION
 			...subscriptionOperations,
 			...subscriptionFields,
+			// CUSTOM FIELDS
+			...customFields,
 		],
 	};
 
@@ -272,6 +277,9 @@ export class Opencell implements INodeType {
 				switch(this.getNode().parameters.resource as string) {
 					case 'subscription':
 						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
+						break;
+					case 'customerHierarchy':
+						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.crm.Customer'
 						break;
 					default:
 						throw new NodeApiError(this.getNode(), {error:'This resource doesn\'t support custom fields'});
@@ -538,7 +546,6 @@ export class Opencell implements INodeType {
 									//Remove everything after | in 'code'
 									cf.code = String(cf.code).split('|')[0];
 								}
-
 								//convert list values to the format expected by the api aka "value":[{"value":"VAL1"},{"value":"VAL2"}]
 								const valueField = cf.value as string[];
 								if(valueField && valueField.toString() !== '') {
