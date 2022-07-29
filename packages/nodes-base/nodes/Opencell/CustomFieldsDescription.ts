@@ -52,10 +52,14 @@ export const customFields: INodeProperties[] = [ {
                     name:'value',
                     type:'options',
 <<<<<<< HEAD
+<<<<<<< HEAD
                     description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
 =======
                     description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 >>>>>>> 7b7a4d098 (Refactor and generalize customFields)
+=======
+                    description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
+>>>>>>> 8f3376246 (Fix lint)
                     default: '',
                     typeOptions: {
                         loadOptionsMethod: 'getCustomFieldListValues',
@@ -71,10 +75,14 @@ export const customFields: INodeProperties[] = [ {
                     name:'value',
                     type:'multiOptions',
 <<<<<<< HEAD
+<<<<<<< HEAD
                     description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
 =======
                     description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
 >>>>>>> 7b7a4d098 (Refactor and generalize customFields)
+=======
+                    description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
+>>>>>>> 8f3376246 (Fix lint)
                     typeOptions: {
                         loadOptionsMethod: 'getCustomFieldListValues',
                     },
