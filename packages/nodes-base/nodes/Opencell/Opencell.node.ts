@@ -614,6 +614,83 @@ export class Opencell implements INodeType {
 						if (additionalFields.company) {
 								body.company = additionalFields.company;
 						}
+
+						//Parse custom fields
+						const customFields = this.getNodeParameter('customFieldsUI',i) as IDataObject;
+						const customFieldsValues = customFields.customFieldsValues as IDataObject[];
+
+						//Not all fields should be sent to the api. Only the relevant ones.
+						let customFieldsToSend:IDataObject[] = [];
+
+						if(customFieldsValues) {
+							for(const cf of customFieldsValues) {
+
+								let currentCf:IDataObject = {
+									code:cf.code,
+									fieldType: cf.fieldType,
+								}
+
+								switch(String(cf.fieldType)) {
+
+									case 'LIST':
+									case 'CHECKBOX_LIST':
+										//convert list values to the format expected by the api aka "value":[{"value":"VAL1"},{"value":"VAL2"}]
+										const valueField = cf.value as string[];
+										if(valueField && valueField.toString() !== '') {
+											//Multiple values case
+											if(Array.isArray(valueField)) {
+												const valueList:IDataObject[] = [];
+												for(const value of valueField) {
+													valueList.push({
+														'value':value,
+													});
+												}
+												currentCf.value = valueList;
+											}
+											//Single values case
+											else {
+												let value = cf.value
+												currentCf.value = [{
+													'value':value,
+												}];
+											}
+										}
+										break;
+
+									case 'STRING':
+									case 'TEXT_AREA':
+										currentCf.stringValue = cf.stringValue;
+										break;
+									case 'DATE':
+										currentCf.dateValue = cf.dateValue;
+										break;
+									case 'BOOLEAN':
+										currentCf.booleanValue = cf.booleanValue;
+										break;
+									case 'LONG':
+										currentCf.longValue = cf.longValue;
+										break;
+									case 'DOUBLE':
+										currentCf.doubleValue = cf.doubleValue;
+										break;
+									default:
+										throw new NodeApiError(this.getNode(), {error: `Custom field type unsupported: ${cf.type}`});
+								}
+
+								if(cf.code) {
+									//Remove everything after | in 'code'
+									currentCf.code = String(cf.code).split('|')[0];
+								}
+
+								customFieldsToSend.push(currentCf);
+
+							}
+						}
+
+						body.customFields = {
+							'customField':customFieldsToSend,
+						};
+
 						responseData = await opencellApi.call(this, 'POST', url, body);
 						returnData.push(responseData);
 					}
