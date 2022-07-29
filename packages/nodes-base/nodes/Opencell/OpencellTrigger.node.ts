@@ -84,7 +84,6 @@ export class OpencellTrigger implements INodeType {
 					},
 				],
 				default: 'basicAuth',
-				description: 'The method of authentication',
 			},
 			{
 				displayName: 'Entity',
