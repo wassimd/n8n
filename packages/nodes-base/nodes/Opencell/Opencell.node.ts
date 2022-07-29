@@ -676,6 +676,7 @@ export class Opencell implements INodeType {
 									code:cf.code,
 									fieldType: cf.fieldType,
 								}
+<<<<<<< HEAD
 
 								switch(String(cf.fieldType)) {
 
@@ -701,6 +702,18 @@ export class Opencell implements INodeType {
 													'value':value,
 												}];
 											}
+=======
+								//convert list values to the format expected by the api aka "value":[{"value":"VAL1"},{"value":"VAL2"}]
+								const valueField = cf.value as string[];
+								if(valueField && valueField.toString() !== '') {
+									//Multiple values case
+									if(Array.isArray(valueField)) {
+										const valueList:IDataObject[] = [];
+										for(const value of valueField) {
+											valueList.push({
+												'value':value,
+											});
+>>>>>>> 7b7a4d098 (Refactor and generalize customFields)
 										}
 										break;
 

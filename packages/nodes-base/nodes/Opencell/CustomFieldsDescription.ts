@@ -51,7 +51,11 @@ export const customFields: INodeProperties[] = [ {
                     displayName: 'List Value Name or ID',
                     name:'value',
                     type:'options',
+<<<<<<< HEAD
                     description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
+=======
+                    description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
+>>>>>>> 7b7a4d098 (Refactor and generalize customFields)
                     default: '',
                     typeOptions: {
                         loadOptionsMethod: 'getCustomFieldListValues',
@@ -66,7 +70,11 @@ export const customFields: INodeProperties[] = [ {
                     displayName: 'Checkbox List Value Names or IDs',
                     name:'value',
                     type:'multiOptions',
+<<<<<<< HEAD
                     description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
+=======
+                    description: 'Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>',
+>>>>>>> 7b7a4d098 (Refactor and generalize customFields)
                     typeOptions: {
                         loadOptionsMethod: 'getCustomFieldListValues',
                     },
