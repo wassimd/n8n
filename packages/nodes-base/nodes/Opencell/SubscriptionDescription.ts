@@ -377,7 +377,7 @@ export const subscriptionFields: INodeProperties[] = [
 		},
 		required: true,
 	},
-	{
+	/* {
 		displayName: 'Custom Fields',
 		name: 'customFieldsUI',
 		placeholder: 'Add Custom Field',
@@ -529,5 +529,5 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 			},
 		],
-	},
+	}, */
 ];
