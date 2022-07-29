@@ -145,78 +145,6 @@ export class Opencell implements INodeType {
 				default: 'customerHierarchy',
 				required: true,
 			},
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				noDataExpression: true,
-				type: 'options',
-				displayOptions: {
-					show: {
-						resource: [
-							'contact',
-						],
-					},
-				},
-				options: [
-					{
-						name: 'Create',
-						value: 'create',
-						description: 'Create a contact',
-						action: 'Create a contact',
-					},
-				],
-				default: 'create',
-			},
-			{
-				displayName: 'Email',
-				name: 'email',
-				type: 'string',
-				placeholder: 'name@email.com',
-				required: true,
-				displayOptions: {
-					show: {
-						operation: [
-							'create',
-						],
-						resource: [
-							'contact',
-						],
-					},
-				},
-				default: '',
-				description: 'Primary email for the contact',
-			},
-			{
-				displayName: 'Additional Fields',
-				name: 'additionalFields',
-				type: 'collection',
-				placeholder: 'Add Field',
-				default: {},
-				displayOptions: {
-					show: {
-						resource: [
-							'contact',
-						],
-						operation: [
-							'create',
-						],
-					},
-				},
-				options: [
-					{
-						displayName: 'First Name',
-						name: 'firstName',
-						type: 'string',
-						default: '',
-					},
-					{
-						displayName: 'Last Name',
-						name: 'lastName',
-						type: 'string',
-						default: '',
-					},
-				],
-			},
 			// CUSTOMER HIERARCHY
 			...customerHierarchyOperations,
 			...customerHierarchyFields,
@@ -291,7 +219,7 @@ export class Opencell implements INodeType {
 						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
 						break;
 					case 'customerHierarchy':
-						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.crm.Customer'
+						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.crm.Customer';
 						break;
 					default:
 						throw new NodeApiError(this.getNode(), {error:'This resource doesn\'t support custom fields'});
@@ -620,15 +548,15 @@ export class Opencell implements INodeType {
 						const customFieldsValues = customFields.customFieldsValues as IDataObject[];
 
 						//Not all fields should be sent to the api. Only the relevant ones.
-						let customFieldsToSend:IDataObject[] = [];
+						const customFieldsToSend:IDataObject[] = [];
 
 						if(customFieldsValues) {
 							for(const cf of customFieldsValues) {
 
-								let currentCf:IDataObject = {
+								const currentCf:IDataObject = {
 									code:cf.code,
 									fieldType: cf.fieldType,
-								}
+								};
 
 								switch(String(cf.fieldType)) {
 
@@ -649,7 +577,7 @@ export class Opencell implements INodeType {
 											}
 											//Single values case
 											else {
-												let value = cf.value
+												const value = cf.value;
 												currentCf.value = [{
 													'value':value,
 												}];
@@ -744,15 +672,15 @@ export class Opencell implements INodeType {
 						const customFieldsValues = customFields.customFieldsValues as IDataObject[];
 
 						//Not all fields should be sent to the api. Only the relevant ones.
-						let customFieldsToSend:IDataObject[] = [];
+						const customFieldsToSend:IDataObject[] = [];
 
 						if(customFieldsValues) {
 							for(const cf of customFieldsValues) {
 
-								let currentCf:IDataObject = {
+								const currentCf:IDataObject = {
 									code:cf.code,
 									fieldType: cf.fieldType,
-								}
+								};
 
 								switch(String(cf.fieldType)) {
 
@@ -773,7 +701,7 @@ export class Opencell implements INodeType {
 											}
 											//Single values case
 											else {
-												let value = cf.value
+												const value = cf.value;
 												currentCf.value = [{
 													'value':value,
 												}];
@@ -823,8 +751,8 @@ export class Opencell implements INodeType {
 						const activateVerb = 'PUT';
 						const activateUrl = '/opencell/api/rest/billing/subscription/activate';
 						const activateBody = {
-							'subscriptionCode':this.getNodeParameter('code', i)
-						}
+							'subscriptionCode':this.getNodeParameter('code', i),
+						};
 						const activateResponseData = await opencellApi.call(this, activateVerb, activateUrl, activateBody);
 						returnData.push(activateResponseData);
 						

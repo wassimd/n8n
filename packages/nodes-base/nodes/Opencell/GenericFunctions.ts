@@ -21,7 +21,7 @@ export async function opencellApi(this: IHookFunctions | IWebhookFunctions | IEx
 
 	const returnData: IDataObject[] = [];
 
-	let requestOptions: OptionsWithUri = {
+	const requestOptions: OptionsWithUri = {
 		method,
 		headers: {},
 		uri : '',
@@ -35,7 +35,7 @@ export async function opencellApi(this: IHookFunctions | IWebhookFunctions | IEx
 
 	try {
 		const authenticationMethod = this.getNodeParameter('authentication', 0);
-		let responseData: any;
+		let responseData: any;//@ts-ignore:no-any
 
 		if(authenticationMethod === 'basicAuth') {
 			const httpBasicAuth = await this.getCredentials('opencellApi');

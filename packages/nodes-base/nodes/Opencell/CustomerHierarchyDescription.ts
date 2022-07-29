@@ -359,7 +359,7 @@ export const customerHierarchyFields: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'paymentMethod',
+		displayName: 'Payment Method',
 		name: 'paymentMethod',
 		required: true,
 		type: 'options',
