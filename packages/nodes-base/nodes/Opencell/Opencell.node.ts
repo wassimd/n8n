@@ -37,7 +37,6 @@ import {
 	genericApiFields,
 	genericApiOperations,
 } from './GenericApiComponent';
-import { getCustomerOptionalFields } from '../Magento/GenericFunctions';
 
 async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<INodeCredentialTestResult> {
 
@@ -265,7 +264,24 @@ export class Opencell implements INodeType {
 		},
 
 		loadOptions: {
+
+			async getProducts(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const returnData:INodePropertyOptions[] = [];
+				const endpoint = '/opencell/api/rest/v2/generic/all/product';
+				const body : IDataObject = {};
+				body.limit = 100;
+				const apiResponse = await opencellApi.call(this, 'POST', endpoint, body);
+					for(const product of apiResponse) {
+						returnData.push({
+							name: `${product.description}`,
+							value: `${product.code}`,
+						});
+					}
+				return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
+			},
+
 			async getCustomFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+
 				let endpoint:string;
 				const returnData: INodePropertyOptions[] = [];
 
@@ -348,6 +364,7 @@ export class Opencell implements INodeType {
 				}
 				return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
 			},
+			
 			async getEntities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const returnData: INodePropertyOptions[] = [];
 				const endpoint = '/opencell/api/rest/v2/generic/entities';
@@ -359,8 +376,7 @@ export class Opencell implements INodeType {
 						value: entity,
 					});
 				}
-
-				return returnData.sort((a, b) => a < b ? 0 : 1);
+				return returnData.sort((a, b) => a.name < b.name ? 0 : 1);
 			},
 			async getNestedEntities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const returnData: INodePropertyOptions[] = [];
@@ -528,47 +544,97 @@ export class Opencell implements INodeType {
 						}
 					}
 
-					//Parse custom fields
-					if (this.getNodeParameter('customFieldsUI',i)){
+					//Parse custom fields if operation is create or update
+					if (['create','update'].includes(operation) && this.getNodeParameter('customFieldsUI',i)){
 						const customFields = this.getNodeParameter('customFieldsUI',i) as IDataObject;
 						const customFieldsValues = customFields.customFieldsValues as IDataObject[];
+
+						//Not all fields should be sent to the api. Only the relevant ones.
+						let customFieldsToSend:IDataObject[] = [];
+
 						if(customFieldsValues) {
 							for(const cf of customFieldsValues) {
-								if(cf.code) {
-									//Remove everything after | in 'code'
-									cf.code = String(cf.code).split('|')[0];
+
+								let currentCf:IDataObject = {
+									code:cf.code,
+									fieldType: cf.fieldType,
 								}
 
-								//convert list values to the format expected by the api aka "value":[{"value":"VAL1"},{"value":"VAL2"}]
-								const valueField = cf.value as string[];
-								if(valueField && valueField.toString() !== '') {
-									//Multiple values case
-									if(Array.isArray(valueField)) {
-										const valueList:IDataObject[] = [];
-										for(const value of valueField) {
-											valueList.push({
-												'value':value,
-											});
+								switch(String(cf.fieldType)) {
+
+									case 'LIST':
+									case 'CHECKBOX_LIST':
+										//convert list values to the format expected by the api aka "value":[{"value":"VAL1"},{"value":"VAL2"}]
+										const valueField = cf.value as string[];
+										if(valueField && valueField.toString() !== '') {
+											//Multiple values case
+											if(Array.isArray(valueField)) {
+												const valueList:IDataObject[] = [];
+												for(const value of valueField) {
+													valueList.push({
+														'value':value,
+													});
+												}
+												currentCf.value = valueList;
+											}
+											//Single values case
+											else {
+												let value = cf.value
+												currentCf.value = [{
+													'value':value,
+												}];
+											}
 										}
-										cf.value = valueList;
-									}
-									//Single values case
-									else {
-										cf.value = [{
-											'value':cf.value,
-										}];
-									}
+										break;
+
+									case 'STRING':
+									case 'TEXT_AREA':
+										currentCf.stringValue = cf.stringValue;
+										break;
+									case 'DATE':
+										currentCf.dateValue = cf.dateValue;
+										break;
+									case 'BOOLEAN':
+										currentCf.booleanValue = cf.booleanValue;
+										break;
+									case 'LONG':
+										currentCf.longValue = cf.longValue;
+										break;
+									case 'DOUBLE':
+										currentCf.doubleValue = cf.doubleValue;
+										break;
+									default:
+										throw new NodeApiError(this.getNode(), {error: `Custom field type unsupported: ${cf.type}`});
 								}
+
+								if(cf.code) {
+									//Remove everything after | in 'code'
+									currentCf.code = String(cf.code).split('|')[0];
+								}
+
+								customFieldsToSend.push(currentCf);
+
 							}
 						}
 
 						body.customFields = {
-							'customField':customFieldsValues,
+							'customField':customFieldsToSend,
 						};
 					}
 
 					responseData = await opencellApi.call(this, verb, url, body);
 					returnData.push(responseData);
+
+					if(['create','update'].includes(operation) && this.getNodeParameter('activate',i)){
+						const activateVerb = 'PUT';
+						const activateUrl = '/opencell/api/rest/billing/subscription/activate';
+						const activateBody = {
+							'subscriptionCode':this.getNodeParameter('code', i)
+						}
+						const activateResponseData = await opencellApi.call(this, activateVerb, activateUrl, activateBody);
+						returnData.push(activateResponseData);
+						
+					}
 				}
 				// GENERIC API
 				else if (resource === 'genericApi') {

@@ -86,7 +86,24 @@ export const subscriptionFields: INodeProperties[] = [
 				],
 			},
 		},
-		description: 'Choose the the user account to subscribe. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/nodes/expressions.html#expressions">expression</a>.',
+		description: 'Choose the the user account to subscribe. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
+	},
+	{
+		displayName: 'Activate Subscription',
+		name:'activate',
+		type:'boolean',
+		default:false,
+		displayOptions: {
+			show: {
+				resource: [
+					'subscription',
+				],
+				operation: [
+					'create',
+					'update',
+				],
+			},
+		},
 	},
 	{
 		displayName: 'Offer Template Name or ID',
@@ -253,7 +270,11 @@ export const subscriptionFields: INodeProperties[] = [
 						displayName: 'Product Code',
 						name: 'productCode',
 						required: true,
-						type: 'string',
+						type: 'options',
+						description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
+						typeOptions: {
+							loadOptionsMethod: 'getProducts',
+						},
 						default:'',
 					},
 					{
@@ -268,6 +289,7 @@ export const subscriptionFields: INodeProperties[] = [
 						type: 'dateTime',
 						default:new Date().setHours(0,0,0,0),
 					},
+
 				],
 			},
 			/// TODO : attribute Instances (gros DTO)
