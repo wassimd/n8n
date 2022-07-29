@@ -500,7 +500,120 @@ export class Opencell implements INodeType {
 						if (additionalFields.electronicBilling) {
 							body.electronicBilling = additionalFields.electronicBilling;
 						}
-
+						if (additionalFields.description) {
+							body.description= additionalFields.description;
+						}
+						if (additionalFields.externalRef1) {
+								body.externalRef1= additionalFields.externalRef1;
+						}
+						if (additionalFields.externalRef2) {
+								body.externalRef2= additionalFields.externalRef2;
+						}
+						if (additionalFields.jobTitle) {
+								body.jobTitle= additionalFields.jobTitle;
+						}
+						if (additionalFields.terminationReason) {
+								body.terminationReason= additionalFields.terminationReason;
+						}
+						if (additionalFields.subscriptionDate) {
+								body.subscriptionDate= additionalFields.subscriptionDate;
+						}
+						if (additionalFields.terminationDate) {
+								body.terminationDate= additionalFields.terminationDate;
+						}
+						if (additionalFields.customerBrand) {
+								body.customerBrand= additionalFields.customerBrand;
+						}
+						if (additionalFields.registrationNo) {
+								body.registrationNo= additionalFields.registrationNo;
+						}
+						if (additionalFields.vatNo) {
+								body.vatNo= additionalFields.vatNo;
+						}
+						if (additionalFields.seller) {
+								body.seller= additionalFields.seller;
+						}
+						if (additionalFields.mandateIdentification) {
+								body.mandateIdentification= additionalFields.mandateIdentification;
+						}
+						if (additionalFields.mandateDate) {
+								body.mandateDate= additionalFields.mandateDate;
+						}
+						if (additionalFields.caStatus) {
+								body.caStatus= additionalFields.caStatus;
+						}
+						if (additionalFields.creditCategory) {
+								body.creditCategory= additionalFields.creditCategory;
+						}
+						if (additionalFields.dateStatus) {
+								body.dateStatus= additionalFields.dateStatus;
+						}
+						if (additionalFields.dateDunningLevel) {
+								body.dateDunningLevel= additionalFields.dateDunningLevel;
+						}
+						if (additionalFields.dunningLevel) {
+								body.dunningLevel= additionalFields.dunningLevel;
+						}
+						if (additionalFields.paymentTerms) {
+								body.paymentTerms= additionalFields.paymentTerms;
+						}
+						if (additionalFields.billingCycle) {
+								body.billingCycle= additionalFields.billingCycle;
+						}
+						if (additionalFields.nextInvoiceDate) {
+								body.nextInvoiceDate= additionalFields.nextInvoiceDate;
+						}
+						if (additionalFields.electronicBilling) {
+								body.electronicBilling= additionalFields.electronicBilling;
+						}
+						if (additionalFields.baStatus) {
+								body.baStatus= additionalFields.baStatus;
+						}
+						if (additionalFields.invoicingThreshold) {
+								body.invoicingThreshold= additionalFields.invoicingThreshold;
+						}
+						if (additionalFields.uaStatus) {
+								body.uaStatus= additionalFields.uaStatus;
+						}
+						if (additionalFields.mailingType) {
+								body.mailingType= additionalFields.mailingType;
+						}
+						if (additionalFields.emailTemplate) {
+								body.emailTemplate= additionalFields.emailTemplate;
+						}
+						if (additionalFields.ccedEmails) {
+								body.ccedEmails= additionalFields.ccedEmails;
+						}
+						if (additionalFields.customerInvoicingThreshold) {
+								body.customerInvoicingThreshold= additionalFields.customerInvoicingThreshold;
+						}
+						if (additionalFields.customerAccountInvoicingThreshold) {
+								body.customerAccountInvoicingThreshold= additionalFields.customerAccountInvoicingThreshold;
+						}
+						if (additionalFields.checkThreshold) {
+								body.checkThreshold= additionalFields.checkThreshold;
+						}
+						if (additionalFields.customerAccountCheckThreshold) {
+								body.customerAccountCheckThreshold= additionalFields.customerAccountCheckThreshold;
+						}
+						if (additionalFields.customerCheckThreshold) {
+								body.customerCheckThreshold= additionalFields.customerCheckThreshold;
+						}
+						if (additionalFields.taxCategoryCode) {
+								body.taxCategoryCode= additionalFields.taxCategoryCode;
+						}
+						if (additionalFields.thresholdPerEntity) {
+								body.thresholdPerEntity= additionalFields.thresholdPerEntity;
+						}
+						if (additionalFields.customerAccountThresholdPerEntity) {
+								body.customerAccountThresholdPerEntity= additionalFields.customerAccountThresholdPerEntity;
+						}
+						if (additionalFields.customerThresholdPerEntity) {
+								body.customerThresholdPerEntity= additionalFields.customerThresholdPerEntity;
+						}
+						if (additionalFields.company) {
+								body.company= additionalFields.company;
+						}
 						responseData = await opencellApi.call(this, 'POST', url, body);
 						returnData.push(responseData);
 					}
@@ -563,7 +676,6 @@ export class Opencell implements INodeType {
 									code:cf.code,
 									fieldType: cf.fieldType,
 								}
-<<<<<<< HEAD
 
 								switch(String(cf.fieldType)) {
 
@@ -589,18 +701,6 @@ export class Opencell implements INodeType {
 													'value':value,
 												}];
 											}
-=======
-								//convert list values to the format expected by the api aka "value":[{"value":"VAL1"},{"value":"VAL2"}]
-								const valueField = cf.value as string[];
-								if(valueField && valueField.toString() !== '') {
-									//Multiple values case
-									if(Array.isArray(valueField)) {
-										const valueList:IDataObject[] = [];
-										for(const value of valueField) {
-											valueList.push({
-												'value':value,
-											});
->>>>>>> 7b7a4d098 (Refactor and generalize customFields)
 										}
 										break;
 
