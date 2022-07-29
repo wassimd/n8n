@@ -38,6 +38,10 @@ import {
 	genericApiOperations,
 } from './GenericApiComponent';
 
+import {
+	customFields
+} from './CustomFieldsDescription';
+
 async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<INodeCredentialTestResult> {
 
 	const credentials = decryptedCredentials;
@@ -222,6 +226,8 @@ export class Opencell implements INodeType {
 			// SUBSCRIPTION
 			...subscriptionOperations,
 			...subscriptionFields,
+			// CUSTOM FIELDS
+			...customFields,
 		],
 	};
 
@@ -283,6 +289,9 @@ export class Opencell implements INodeType {
 				switch(this.getNode().parameters.resource as string) {
 					case 'subscription':
 						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
+						break;
+					case 'customerHierarchy':
+						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.crm.Customer'
 						break;
 					default:
 						throw new NodeApiError(this.getNode(), {error:'This resource doesn\'t support custom fields'});
