@@ -38,6 +38,10 @@ import {
 	genericApiOperations,
 } from './GenericApiComponent';
 
+import {
+	customFields
+} from './CustomFieldsDescription';
+
 async function validateCredentials(this: ICredentialTestFunctions ,decryptedCredentials: ICredentialDataDecryptedObject): Promise<INodeCredentialTestResult> {
 
 	const credentials = decryptedCredentials;
@@ -222,6 +226,8 @@ export class Opencell implements INodeType {
 			// SUBSCRIPTION
 			...subscriptionOperations,
 			...subscriptionFields,
+			// CUSTOM FIELDS
+			...customFields,
 		],
 	};
 
@@ -283,6 +289,9 @@ export class Opencell implements INodeType {
 				switch(this.getNode().parameters.resource as string) {
 					case 'subscription':
 						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.billing.Subscription';
+						break;
+					case 'customerHierarchy':
+						endpoint = '/opencell/api/rest/entityCustomization/customize/org.meveo.model.crm.Customer'
 						break;
 					default:
 						throw new NodeApiError(this.getNode(), {error:'This resource doesn\'t support custom fields'});
@@ -491,6 +500,196 @@ export class Opencell implements INodeType {
 						if (additionalFields.electronicBilling) {
 							body.electronicBilling = additionalFields.electronicBilling;
 						}
+						if (additionalFields.description) {
+							body.description = additionalFields.description;
+						}
+						if (additionalFields.externalRef1) {
+								body.externalRef1 = additionalFields.externalRef1;
+						}
+						if (additionalFields.externalRef2) {
+								body.externalRef2 = additionalFields.externalRef2;
+						}
+						if (additionalFields.jobTitle) {
+								body.jobTitle = additionalFields.jobTitle;
+						}
+						if (additionalFields.terminationReason) {
+								body.terminationReason = additionalFields.terminationReason;
+						}
+						if (additionalFields.subscriptionDate) {
+								body.subscriptionDate = additionalFields.subscriptionDate;
+						}
+						if (additionalFields.terminationDate) {
+								body.terminationDate = additionalFields.terminationDate;
+						}
+						if (additionalFields.customerBrand) {
+								body.customerBrand = additionalFields.customerBrand;
+						}
+						if (additionalFields.registrationNo) {
+								body.registrationNo = additionalFields.registrationNo;
+						}
+						if (additionalFields.vatNo) {
+								body.vatNo = additionalFields.vatNo;
+						}
+						if (additionalFields.seller) {
+								body.seller = additionalFields.seller;
+						}
+						if (additionalFields.mandateIdentification) {
+								body.mandateIdentification = additionalFields.mandateIdentification;
+						}
+						if (additionalFields.mandateDate) {
+								body.mandateDate = additionalFields.mandateDate;
+						}
+						if (additionalFields.caStatus) {
+								body.caStatus = additionalFields.caStatus;
+						}
+						if (additionalFields.creditCategory) {
+								body.creditCategory = additionalFields.creditCategory;
+						}
+						if (additionalFields.dateStatus) {
+								body.dateStatus = additionalFields.dateStatus;
+						}
+						if (additionalFields.dateDunningLevel) {
+								body.dateDunningLevel = additionalFields.dateDunningLevel;
+						}
+						if (additionalFields.dunningLevel) {
+								body.dunningLevel = additionalFields.dunningLevel;
+						}
+						if (additionalFields.paymentTerms) {
+								body.paymentTerms = additionalFields.paymentTerms;
+						}
+						if (additionalFields.billingCycle) {
+								body.billingCycle = additionalFields.billingCycle;
+						}
+						if (additionalFields.nextInvoiceDate) {
+								body.nextInvoiceDate = additionalFields.nextInvoiceDate;
+						}
+						if (additionalFields.electronicBilling) {
+								body.electronicBilling = additionalFields.electronicBilling;
+						}
+						if (additionalFields.baStatus) {
+								body.baStatus = additionalFields.baStatus;
+						}
+						if (additionalFields.invoicingThreshold) {
+								body.invoicingThreshold = additionalFields.invoicingThreshold;
+						}
+						if (additionalFields.uaStatus) {
+								body.uaStatus = additionalFields.uaStatus;
+						}
+						if (additionalFields.mailingType) {
+								body.mailingType = additionalFields.mailingType;
+						}
+						if (additionalFields.emailTemplate) {
+								body.emailTemplate = additionalFields.emailTemplate;
+						}
+						if (additionalFields.ccedEmails) {
+								body.ccedEmails = additionalFields.ccedEmails;
+						}
+						if (additionalFields.customerInvoicingThreshold) {
+								body.customerInvoicingThreshold = additionalFields.customerInvoicingThreshold;
+						}
+						if (additionalFields.customerAccountInvoicingThreshold) {
+								body.customerAccountInvoicingThreshold = additionalFields.customerAccountInvoicingThreshold;
+						}
+						if (additionalFields.checkThreshold) {
+								body.checkThreshold = additionalFields.checkThreshold;
+						}
+						if (additionalFields.customerAccountCheckThreshold) {
+								body.customerAccountCheckThreshold = additionalFields.customerAccountCheckThreshold;
+						}
+						if (additionalFields.customerCheckThreshold) {
+								body.customerCheckThreshold = additionalFields.customerCheckThreshold;
+						}
+						if (additionalFields.taxCategoryCode) {
+								body.taxCategoryCode = additionalFields.taxCategoryCode;
+						}
+						if (additionalFields.thresholdPerEntity) {
+								body.thresholdPerEntity = additionalFields.thresholdPerEntity;
+						}
+						if (additionalFields.customerAccountThresholdPerEntity) {
+								body.customerAccountThresholdPerEntity = additionalFields.customerAccountThresholdPerEntity;
+						}
+						if (additionalFields.customerThresholdPerEntity) {
+								body.customerThresholdPerEntity = additionalFields.customerThresholdPerEntity;
+						}
+						if (additionalFields.company) {
+								body.company = additionalFields.company;
+						}
+
+						//Parse custom fields
+						const customFields = this.getNodeParameter('customFieldsUI',i) as IDataObject;
+						const customFieldsValues = customFields.customFieldsValues as IDataObject[];
+
+						//Not all fields should be sent to the api. Only the relevant ones.
+						let customFieldsToSend:IDataObject[] = [];
+
+						if(customFieldsValues) {
+							for(const cf of customFieldsValues) {
+
+								let currentCf:IDataObject = {
+									code:cf.code,
+									fieldType: cf.fieldType,
+								}
+
+								switch(String(cf.fieldType)) {
+
+									case 'LIST':
+									case 'CHECKBOX_LIST':
+										//convert list values to the format expected by the api aka "value":[{"value":"VAL1"},{"value":"VAL2"}]
+										const valueField = cf.value as string[];
+										if(valueField && valueField.toString() !== '') {
+											//Multiple values case
+											if(Array.isArray(valueField)) {
+												const valueList:IDataObject[] = [];
+												for(const value of valueField) {
+													valueList.push({
+														'value':value,
+													});
+												}
+												currentCf.value = valueList;
+											}
+											//Single values case
+											else {
+												let value = cf.value
+												currentCf.value = [{
+													'value':value,
+												}];
+											}
+										}
+										break;
+
+									case 'STRING':
+									case 'TEXT_AREA':
+										currentCf.stringValue = cf.stringValue;
+										break;
+									case 'DATE':
+										currentCf.dateValue = cf.dateValue;
+										break;
+									case 'BOOLEAN':
+										currentCf.booleanValue = cf.booleanValue;
+										break;
+									case 'LONG':
+										currentCf.longValue = cf.longValue;
+										break;
+									case 'DOUBLE':
+										currentCf.doubleValue = cf.doubleValue;
+										break;
+									default:
+										throw new NodeApiError(this.getNode(), {error: `Custom field type unsupported: ${cf.type}`});
+								}
+
+								if(cf.code) {
+									//Remove everything after | in 'code'
+									currentCf.code = String(cf.code).split('|')[0];
+								}
+
+								customFieldsToSend.push(currentCf);
+
+							}
+						}
+
+						body.customFields = {
+							'customField':customFieldsToSend,
+						};
 
 						responseData = await opencellApi.call(this, 'POST', url, body);
 						returnData.push(responseData);
